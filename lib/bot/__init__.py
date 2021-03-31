@@ -16,7 +16,7 @@ from typing import Optional
 import asyncio
 import random
 from prsaw import RandomStuff
-
+from pathlib import Path
 
 # |CUSTOM|
 embed_color = 0x000000
@@ -24,7 +24,7 @@ server_logo = "https://cdn.discordapp.com/attachments/819152230543654933/8191535
 # |CUSTOM|
 
 OWNER_IDS = [726480855689724105]
-COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+COGS = [p.stem for p in Path(".").glob("./lib/cogs/*.py")]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 def get_prefix(bot, message):
