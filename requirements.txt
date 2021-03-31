@@ -1,4 +1,4 @@
-git+https://github.com/Rappt:/discord.py@rewrite
+git+https://github.com/Rapptz:/discord.py@rewrite
 aiofiles
 aiosqlite
 asyncpraw
