@@ -20,7 +20,7 @@ class Info(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def user_info(self, ctx, target: Optional[Member]):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -28,7 +28,7 @@ class Info(Cog):
 			roles = [role for role in reversed(target.roles[1:])]
 
 			embed = Embed(title=f"**{str(target.display_name)}'s Information**", 
-							color =embed_color, timestap=datetime.utcnow())
+							color =0x000000, timestap=datetime.utcnow())
 
 			fields = [("Name", f"{target.mention} __AKA__ {str(target.display_name)}", False),
 						("ID", f"ID {target.id}", False),				
@@ -50,12 +50,12 @@ class Info(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def server_info(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
 			embed = Embed(title=f"**{ctx.guild.name}**", 
-							color =embed_color, timestap=datetime.utcnow())
+							color =0x000000, timestap=datetime.utcnow())
 
 			embed.set_thumbnail(url=ctx.guild.icon_url)
 			embed.set_footer(text=f"ID {ctx.guild.id}")

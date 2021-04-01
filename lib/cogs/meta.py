@@ -24,7 +24,7 @@ class Meta(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def ping(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -40,7 +40,7 @@ class Meta(Cog):
 	@cooldown(3, 3599, BucketType.user)
 	async def info(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:

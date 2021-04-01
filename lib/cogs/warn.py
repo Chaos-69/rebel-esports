@@ -7,6 +7,7 @@ from discord import Embed
 from discord.ext.commands import CheckFailure
 from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
+from datetime import datetime
 
 class Warn(Cog):
 	def __init__(self, bot):
@@ -80,10 +81,10 @@ class Warn(Cog):
 		await member.send(embed=member_embed)
 
 		embed=Embed(title="Member Warned", color=0xff0000, timestamp=datetime.utcnow())
-		embed.set_thumbnail(url=target.avatar_url)
+		embed.set_thumbnail(url=member.avatar_url)
 		
 		fields = [("Member", f"{member.mention} __**AKA**__ {member.display_name}", False),
-			("Actioned By",f"{admin.mention} __**AKA**__ {admin.display_name}" , False),
+			("Actioned By",f"{ctx.author.mention} __**AKA**__ {ctx.author.display_name}" , False),
 			("Reason", reason , False)]
 		for name , value, inline in fields:
 			embed.add_field(name=name, value=value, inline=inline)
@@ -107,11 +108,12 @@ class Warn(Cog):
 			await ctx.reply(embed=embed,delete_after=10)	    		
 		try:
 			count = self.warnings[ctx.guild.id][member.id][0]
+			
 			embed = discord.Embed(title=f"Warnings For {member.name} [{count}] ", description="", colour=0xff0000)
 			i = 1
 			for admin_id, reason in self.warnings[ctx.guild.id][member.id][1]:
 				admin = ctx.guild.get_member(admin_id)
-				embed.description += f"**Warning {i}** \n__Given By__ :- {admin.mention}  \n__For__ :- `{reason}`\n"
+				embed.description += f"**Warning {i}** \n__Given By__ :- {admin.mention}  \n__For__ :- `{reason}`\n \n"
 				i += 1
 				embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
 			await ctx.reply(embed=embed)
@@ -130,34 +132,39 @@ class Warn(Cog):
 	@command(name="delwarn", aliases=["clearwarn", "removewarn"], brief="Delete User Warns", help="Deletes previously added warnings for users", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive', 'Management', 'Moderator')
 	async def del_warn(self, ctx, member: discord.Member=None, index=None):
-		given_index = 1 
-		index = given_index - 1
+		index -= 1
 
-		if index < len(self.warnings[ctx.guild.id][member.id]):
-				self.warnings[ctx.guild.id][member.id][0] -= 1 
-				self.warnings[ctx.guild.id][member.id][1].pop(index)
-				embed = Embed(description=f"***Warning removed for {member.mention}***")
-				await ctx.reply(embed=embed)
-
+		if index < len(self.warnings[ctx.guild.id][member.id]) and index is not None:
+			self.warnings[ctx.guild.id][member.id][0] -= 1
+			self.warnings[ctx.guild.id][member.id][1].pop(index)
+		
+			async with aiofiles.open(str(ctx.guild.id)+".txt", mode="w") as file:
+				for member_id in self.warnings[ctx.guild.id]:
+					count, data = self.warnings[ctx.guild.id][member_id]
+					for admin_id, reason in data:
+						admin = ctx.guild.get_member(admin_id)
+						await file.write(f"{member_id} {admin_id} {reason}\n")
+						embed=Embed(title="Member Warn Removed", color=0xff0000, timestamp=datetime.utcnow())
+						embed.set_thumbnail(url=member.avatar_url)
+						
+						fields = [("Member", f"{member.mention} __**AKA**__ {member.display_name}", False),
+								("Actioned By",f"{admin.mention} __**AKA**__ {admin.display_name}" , False)]
+						for name , value, inline in fields:
+							embed.add_field(name=name, value=value, inline=inline)
+						await self.mod_log_channel.send(embed=embed)
+						member_embed= Embed(title="Warn Report", description=f"Your warn has been **removed** in {member.guild.name}", color=0xff0000)
+						await member.send(embed=member_embed)
+						embed = Embed(description=f"***Warning removed for {member.mention}***", color=0x000000)
+						await ctx.reply(embed=embed)
 		else:
 			embed = Embed(description="**Bad Index Given**", color=0x000000)
 			return await ctx.reply(embed=embed,delete_after=10)
 
-		async with aiofiles.open(str(ctx.guild.id)+".txt", mode="w") as file:
-			for member_id in self.warnings[ctx.guild.id]:
-				count, data = self.warnings[ctx.guild.id][member_id]
-				for admin_id, reason in data:
-					await file.write(f"{member_id} {admin_id} {reason}\n")
-					embed=Embed(title="Member Warne Removed", color=0xff0000, timestamp=datetime.utcnow())
-					embed.set_thumbnail(url=target.avatar_url)
-					
-					fields = [("Member", f"{member.mention} __**AKA**__ {member.display_name}", False),
-						("Actioned By",f"{admin.mention} __**AKA**__ {admin.display_name}" , False)]
-					for name , value, inline in fields:
-						embed.add_field(name=name, value=value, inline=inline)
-					await self.mod_log_channel.send(embed=embed)
-					member_embed= Embed(title="Warn Report", description=f"Your warn has been **removed** in {member.guild.name}", color=0xff0000)
-					await member.send(embed=member_embed)
+		if self.warnings[ctx.guild.id][member.id][0] == 0:
+			self.warnings[ctx.guild.id].pop(member.id)
+			embed = Embed(description="**This user has no warnings**", color=0x000000)
+			await ctx.reply(embed=embed,delete_after=10)
+
 
 	@del_warn.error
 	async def del_warn_error(self, ctx, exc):

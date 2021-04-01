@@ -18,7 +18,7 @@ class Aichat(Cog):
 	@cooldown(3, 120, BucketType.user)
 	async def meme(self, ctx, subred = "memes"):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:

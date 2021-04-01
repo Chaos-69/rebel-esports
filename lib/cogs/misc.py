@@ -6,6 +6,8 @@ from discord.ext.commands import cooldown, BucketType
 from discord import Embed
 from discord.ext.commands import has_role, has_any_role
 from discord import Member
+import asyncio
+import discord
 
 # |CUSTOM|
 embed_color = 0x000000
@@ -72,7 +74,7 @@ class Misc(Cog):
 		else:
 			for target in targets:
 				self.bot.banlist.remove(target.id)
-				embed = Embed(description=f"**Removed {target.mention} to banlist**", color=0x000000)
+				embed = Embed(description=f"**Removed {target.mention} from banlist**", color=0x000000)
 			await ctx.reply(embed = embed)
 	
 	@delban_command.error
@@ -108,6 +110,37 @@ class Misc(Cog):
 			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
 			await ctx.message.delete(delay=60)
 			await ctx.reply(embed=embed,delete_after=10)
+	
+	#NUKE COMAMND
+	@command(name="nuke", brief="Nuke Channels", help="Nukes all messages in a channel", hidden=True)
+	@has_any_role(818242893805912067,"Admin")
+	async def nuke(self, ctx, channel: discord.TextChannel = None):
+		if channel == None:
+			embed = Embed(description=f"**You did not mention a channel\n For example {ctx.channel.mention}**", color=0x000000)
+			await ctx.reply(embed =embed)
+			return
+
+		nuke_channel = discord.utils.get(ctx.guild.channels, name=channel.name)
+
+		if nuke_channel is not None:
+			new_channel = await nuke_channel.clone(reason="Has been Nuked!")
+			await nuke_channel.delete()
+			nuke_channel_embed = Embed(description="**This channel has been nuked**",color=0x000000)
+			nuke_channel_embed.set_image(url="https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif")
+			await new_channel.send(embed=nuke_channel_embed)
+			embed=Embed(description=f"**{new_channel.mention}  Has been nuked sucessfully**", color=0x000000)
+			await ctx.reply(embed=embed)
+
+		else:
+			emebd = Embed(description=f"**No channel named {channel.name} was found!**")
+			await ctx.reply(embed =embed)
+
+	@nuke.error
+	async def nuke_error(self, ctx, exc):
+		if isinstance(exc, CheckFailure):
+			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
+			await ctx.message.delete(delay=60)
+			await ctx.reply(embed=embed,delete_after=10)	                
 
 	@Cog.listener()
 	async def on_ready(self):

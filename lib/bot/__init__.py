@@ -202,23 +202,24 @@ class Bot(BotBase):
 	#PING BOT
 	async def on_message(self, message):
 		if self.user.mentioned_in(message) and message.content.startswith("<") and message.content.endswith(">"):
-			if message.channel.id == (803031892235649044) or (803033569445675029):
-				prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
-				embed=Embed(title="You pinged me!", color=0x000000, timestamp=datetime.utcnow())
-				fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
-					("Tip", "If you dont remember my prefix, you can mention me instead and use the command! \nFor example, `@CHΛD丨BӨT#9795 help`" , False),
-					("Help", "Need help? just use the `?help` command " , False),
-					("More Info", "For more info about me, use the command `?info`" , False)]
-				for name , value, inline in fields:
-					embed.add_field(name=name, value=value, inline=inline)			
-				embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
-				embed.set_author(name="CHΛD丨BӨT",icon_url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
-				await message.delete(delay=120)
-				await message.channel.send(message.author.mention,embed=embed, delete_after=120)
-		
-			else:
-				embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for pings, please ping me in <#803031892235649044> instead**", color=0x000000)
-				await ctx.reply(embed=embed)
+			if not self.user == message.author:
+				if message.channel.id == (803031892235649044) or (803033569445675029):
+					prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
+					embed=Embed(title="You pinged me!", color=0x000000, timestamp=datetime.utcnow())
+					fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
+						("Tip", "If you dont remember my prefix, you can mention me instead and use the command! \nFor example, `@CHΛD丨BӨT#9795 help`" , False),
+						("Help", "Need help? just use the `?help` command " , False),
+						("More Info", "For more info about me, use the command `?info`" , False)]
+					for name , value, inline in fields:
+						embed.add_field(name=name, value=value, inline=inline)			
+					embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
+					embed.set_author(name="CHΛD丨BӨT",icon_url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
+					await message.delete(delay=120)
+					await message.channel.send(message.author.mention,embed=embed, delete_after=120)
+				
+				else:
+					embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for pings, please ping me in <#803031892235649044> instead**", color=0x000000)
+					await ctx.reply(embed=embed)	
 			
 		#MODMAIL SYSTEM
 		if not message.author.bot:

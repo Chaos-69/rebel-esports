@@ -352,12 +352,12 @@ class Mod(Cog):
 	async def snipe(self, message):
 		if not message.author.bot and snipe_message_content == None:
 			embed=Embed(description="**Nothing to snipe!**", color=0x000000)
-			await message.channel.reply(embed=embed)
+			await message.channel.send(embed=embed)
 		else:
 			embed=Embed(description=f"{snipe_message_content}", color=0x000000)
 			embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
 			embed.set_author(name=f"{snipe_message_author}#{snipe_message_author_discriminator}", icon_url=f"{snipe_message_author_url}")		
-			await message.channel.reply(embed=embed, delete_after=200)
+			await message.channel.send(embed=embed, delete_after=200)
 			return
 	
 	@snipe.error

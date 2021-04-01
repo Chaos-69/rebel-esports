@@ -29,7 +29,7 @@ class Fun(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def flip(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -44,7 +44,7 @@ class Fun(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def roll(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -58,7 +58,7 @@ class Fun(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def say_hello(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -71,7 +71,7 @@ class Fun(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "for no reason"):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -105,7 +105,7 @@ class Fun(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def member_count(self,ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000, timestamp=datetime.utcnow())
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000, timestamp=datetime.utcnow())
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -153,7 +153,7 @@ class Fun(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def say_bye(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
@@ -196,13 +196,13 @@ class Fun(Cog):
 						await ctx.send(f"API returned a {response.status} status.",color=0x000000)
 				
 			else:
-				embed=Embed(title="Something Went Wrong",description="You have either entered an invalid animal or some arguments are missing. Try one of the avalaible animals in __lowercase__, which include **cat, dog, bird and koala.**",color=0x000000)
+				embed=Embed(title="Something Went Wrong",description="You have either entered an invalid animal or some arguments are missing.\n Try one of the avalaible animals in lowercase, which include __*cat, dog, bird and koala*__",color=0x000000)
 				embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 								 icon_url=f"{ctx.author.avatar_url}")
 				await ctx.reply(embed=embed)
 
 		else:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 	
 	@Cog.listener()

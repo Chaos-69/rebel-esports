@@ -76,11 +76,10 @@ class Help(Cog):
 		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		 826442024927363072, 818444886243803216)
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
-			await ctx.message.delete(delay=60)
 			if cmd is None:
 					embed=Embed(title="Help Categories", description="Below are all the categories assigned to specific commands.", color=0x000000)
 					embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
@@ -110,11 +109,10 @@ class Help(Cog):
 		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		 826442024927363072, 818444886243803216)
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
-			await ctx.message.delete(delay=60)
 			if cmd is None:
 				commands_to_always_hide = ["help", "helpmisc", "helpmod", "shutdown"]
 				commands = []
@@ -124,7 +122,8 @@ class Help(Cog):
 					menu = MenuPages(source=HelpMenu(ctx, list(commands)),
 									delete_message_after=True,
 									timeout=60.0)
-				await ctx.reply(embed = await menu.start(ctx))
+				await ctx.send(f"||{ctx.author.mention}||")
+				await menu.start(ctx)
 
 
 	#MODERATION HELP COMMAND
@@ -134,11 +133,10 @@ class Help(Cog):
 		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		 826442024927363072, 818444886243803216)
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for bot commands, please use <@&803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
 		else:
-			await ctx.message.delete(delay=60)
 			if cmd is None:
 				commands_to_always_hide = ["help", "helpmisc", "helpmod", "shutdown"]
 				commands = []
@@ -148,7 +146,8 @@ class Help(Cog):
 					menu = MenuPages(source=HelpMenu(ctx, list(commands)),
 									delete_message_after=True,
 									timeout=60.0)
-				await ctx.reply(embed = await menu.start(ctx))
+				await ctx.send(f"||{ctx.author.mention}||")
+				await menu.start(ctx)
 	
 
 	@Cog.listener()
