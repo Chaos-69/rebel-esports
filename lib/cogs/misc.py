@@ -52,9 +52,14 @@ class Misc(Cog):
 			await ctx.reply(embed=embed,delete_after=10)
 
 		else:
-			self.bot.banlist.extend([t.id for t in targets])
-			embed = Embed(description=f"**Added {target.mention} to banlist**", color=0x000000)
-			await ctx.reply(embed = embed)
+			for target in targets:
+				if not target.id in self.bot.banlist:
+					self.bot.banlist.extend([t.id for t in targets])
+					embed = Embed(description=f"**Added {target.mention} to banlist**", color=0x000000)
+					await ctx.reply(embed = embed)
+				else:
+					embed = Embed(description="**That user is already banned**", color=0x000000)
+					await ctx.reply(embed = embed)
 	
 	@addban_command.error
 	async def addban_command_error(self, ctx, exc):
@@ -73,9 +78,14 @@ class Misc(Cog):
 
 		else:
 			for target in targets:
-				self.bot.banlist.remove(target.id)
-				embed = Embed(description=f"**Removed {target.mention} from banlist**", color=0x000000)
-			await ctx.reply(embed = embed)
+				if target.id in self.bot.banlist:
+						self.bot.banlist.remove(target.id)
+						embed = Embed(description=f"**Removed {target.mention} from banlist**", color=0x000000)
+						await ctx.reply(embed = embed)
+			
+				else:
+					embed = Embed(description="**That user is already unbanned**", color=0x000000)
+					await ctx.reply(embed = embed)
 	
 	@delban_command.error
 	async def delban_command_error(self, ctx, exc):

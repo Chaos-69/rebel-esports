@@ -1,6 +1,6 @@
 from discord.ext.commands import Cog
 from discord.ext.commands import CheckFailure
-from discord.ext.commands import command, has_permissions
+from discord.ext.commands import command, has_permissions, Greedy
 from ..db import db
 from discord.ext.commands import cooldown, BucketType
 from discord import Embed, Member
@@ -19,7 +19,7 @@ class Picture(Cog):
 		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		    826442024927363072, 818444886243803216)
 
-	@command(name="wanted", brief="Wanted Member", help="Shows the user as wanted")
+	@command(name="wanted", brief="Wanted Command", help="Displays the user as wanted")
 	@cooldown(3, 60, BucketType.user)
 	async def wanted(self, ctx, user: discord.Member = None):
 		if ctx.channel.id not in self.allowed_channels:
@@ -41,6 +41,7 @@ class Picture(Cog):
 			wanted.save("profile.png")
 
 			await ctx.reply(file= discord.File("profile.png"))
+
 
 	@Cog.listener()
 	async def on_ready(self):

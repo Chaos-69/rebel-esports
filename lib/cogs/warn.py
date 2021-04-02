@@ -8,6 +8,7 @@ from discord.ext.commands import CheckFailure
 from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 from datetime import datetime
+import datetime as dt
 
 class Warn(Cog):
 	def __init__(self, bot):
@@ -38,13 +39,14 @@ class Warn(Cog):
 						member_id = int(data[0])
 						admin_id = int(data[1])
 						reason = " ".join(data[2:]).strip("\n")
+						time = datetime.utcnow()
 
 						try:
 							self.warnings[guild.id][member_id][0] += 1
-							self.warnings[guild.id][member_id][1].append((admin_id, reason))
+							self.warnings[guild.id][member_id][1].append((admin_id, reason, time))
 
 						except KeyError:
-							self.warnings[guild.id][member_id] = [1, [(admin_id, reason)]]
+							self.warnings[guild.id][member_id] = [1, [(admin_id, reason, time)]]
 	
 	@Cog.listener()
 	async def on_guild_join(self, guild):
@@ -52,7 +54,7 @@ class Warn(Cog):
 
 
     #WARN COMMAND
-	@command(name="warn", brief="Warn users", help="Warns users and adds it to the user profile", hidden=True)
+	@command(name="warn", brief="Warn Command", help="Warns users and adds it to the user profile", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive', 'Management', 'Moderator')
 	async def warn(self, ctx, member: discord.Member=None, *, reason: Optional[str] = "No reason provided"):
 		if member is None:
@@ -64,17 +66,21 @@ class Warn(Cog):
 
 		try:
 			first_warning = False
+			for time in self.warnings:
+				time = datetime.utcnow()
 			self.warnings[ctx.guild.id][member.id][0] += 1
-			self.warnings[ctx.guild.id][member.id][1].append((ctx.author.id, reason))
+			self.warnings[ctx.guild.id][member.id][1].append((ctx.author.id, reason, time))
 
 		except KeyError:
 			first_warning = True
-			self.warnings[ctx.guild.id][member.id] = [1, [(ctx.author.id, reason)]]
+			for time in self.warnings:
+				time = datetime.utcnow()
+			self.warnings[ctx.guild.id][member.id] = [1, [(ctx.author.id, reason, time)]]
 
 		count = self.warnings[ctx.guild.id][member.id][0]
 
 		async with aiofiles.open(f"{ctx.guild.id}.txt", mode="a") as file:
-			await file.write(f"{member.id} {ctx.author.id} {reason}\n")
+			await file.write(f"{member.id} {ctx.author.id} {reason} {time}\n")
 		embed = Embed(description=f"***{member.mention} has been warned***", color=0xff0000)
 		await ctx.send(embed=embed, delete_after=120)
 		member_embed= Embed(title="Warn Report", description=f"You have been **warned** in {member.guild.name} due to __**{reason}**__", color=0xff0000)
@@ -97,7 +103,7 @@ class Warn(Cog):
 			await ctx.reply(embed=embed,delete_after=10)
 
     #WARNINGS COMMAND
-	@command(name="warnings", brief="Check User Warnings",help="Displays all of the users warnings", hidden=True)
+	@command(name="warnings", brief="Check Warnings Command",help="Displays all of the users warnings", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive', 'Management', 'Moderator')
 	async def warnings(self, ctx, member: discord.Member=None):
 		if member is None:
@@ -106,14 +112,16 @@ class Warn(Cog):
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)			
 			await ctx.reply(embed=embed,delete_after=10)	    		
+		
 		try:
 			count = self.warnings[ctx.guild.id][member.id][0]
 			
 			embed = discord.Embed(title=f"Warnings For {member.name} [{count}] ", description="", colour=0xff0000)
 			i = 1
-			for admin_id, reason in self.warnings[ctx.guild.id][member.id][1]:
+			for admin_id, reason, time in self.warnings[ctx.guild.id][member.id][1]:
 				admin = ctx.guild.get_member(admin_id)
-				embed.description += f"**Warning {i}** \n__Given By__ :- {admin.mention}  \n__For__ :- `{reason}`\n \n"
+				time = time
+				embed.description += f"**__Warning {i}__** \n**Moderator**:- {admin.mention}  \n**Reason**:- `{reason}`\n**Time**:- {time.strftime('%d/%m/%Y')} \n \n"
 				i += 1
 				embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
 			await ctx.reply(embed=embed)
@@ -129,21 +137,26 @@ class Warn(Cog):
 			await ctx.reply(embed=embed,delete_after=10)
 	
 	#DELETE WARN COMMAND
-	@command(name="delwarn", aliases=["clearwarn", "removewarn"], brief="Delete User Warns", help="Deletes previously added warnings for users", hidden=True)
+	@command(name="delwarn", brief="Delete Warn Command", help="Deletes previously added warnings for users", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive', 'Management', 'Moderator')
 	async def del_warn(self, ctx, member: discord.Member=None, index=None):
-		index -= 1
+		index = int(index) - 1
 
-		if index < len(self.warnings[ctx.guild.id][member.id]) and index is not None:
+		if index > len(self.warnings[ctx.guild.id][member.id]) and index is not None:
+			embed = Embed(description="**Bad Index Given**", color=0x000000)
+			return await ctx.reply(embed=embed,delete_after=10)
+		
+		else:
 			self.warnings[ctx.guild.id][member.id][0] -= 1
 			self.warnings[ctx.guild.id][member.id][1].pop(index)
 		
 			async with aiofiles.open(str(ctx.guild.id)+".txt", mode="w") as file:
 				for member_id in self.warnings[ctx.guild.id]:
 					count, data = self.warnings[ctx.guild.id][member_id]
-					for admin_id, reason in data:
+					for admin_id, reason, time in data:
 						admin = ctx.guild.get_member(admin_id)
-						await file.write(f"{member_id} {admin_id} {reason}\n")
+						time = time
+						await file.write(f"{member_id} {admin_id} {reason} {time}\n")
 						embed=Embed(title="Member Warn Removed", color=0xff0000, timestamp=datetime.utcnow())
 						embed.set_thumbnail(url=member.avatar_url)
 						
@@ -155,16 +168,12 @@ class Warn(Cog):
 						member_embed= Embed(title="Warn Report", description=f"Your warn has been **removed** in {member.guild.name}", color=0xff0000)
 						await member.send(embed=member_embed)
 						embed = Embed(description=f"***Warning removed for {member.mention}***", color=0x000000)
-						await ctx.reply(embed=embed)
-		else:
-			embed = Embed(description="**Bad Index Given**", color=0x000000)
-			return await ctx.reply(embed=embed,delete_after=10)
+						return await ctx.reply(embed=embed)
 
 		if self.warnings[ctx.guild.id][member.id][0] == 0:
 			self.warnings[ctx.guild.id].pop(member.id)
 			embed = Embed(description="**This user has no warnings**", color=0x000000)
 			await ctx.reply(embed=embed,delete_after=10)
-
 
 	@del_warn.error
 	async def del_warn_error(self, ctx, exc):

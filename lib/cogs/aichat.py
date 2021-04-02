@@ -1,7 +1,7 @@
 from discord.ext.commands import command
 from prsaw import RandomStuff
 from discord.ext.commands import Cog
-import praw
+import asyncpraw
 from datetime import datetime
 import random
 from discord import Embed
@@ -12,36 +12,35 @@ class Aichat(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.rs = RandomStuff(async_mode = True)
-	
+		self.reddit = asyncpraw.Reddit(
+							client_id = "OS1rZE67Bn0mMw",
+							client_secret = "hdLS0IWqdkzJWmRQr7XbBhgUNaDoyw",
+							username = "chad-bot-69",
+							password = "chad-bot-69",
+							user_agent = "Chad | Bot")
 	#REDDIT COMMAND
-	@command(name="reddit", brief="Reddit Memes", help="Displays top upvoted memes from Reddit")
+	@command(name="reddit", brief="Reddit Command", help="Displays top posts from Reddit")
 	@cooldown(3, 120, BucketType.user)
 	async def meme(self, ctx, subred = "memes"):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed)
 		
-		else:
-			reddit = praw.Reddit(client_id = "KDoL_zsPlOTBfA",
-								client_secret = "7Rcw8OU9g-AFQxPvcf_cxB7GawxkuQ",
-								username = "LorddChaos69",
-								password = "#ahmedfahhamg16#",
-								user_agent = "LorddChaos69")		
-			
-			subreddit = reddit.subreddit(subred)
+		else:			
+			subreddit = await self.reddit.subreddit(subred)
 			all_subs = []
-			top = subreddit.top(limit = 1)
+			top = subreddit.top(limit = 50)
 			
-			for submission in top:
+			async for submission in top:
 				all_subs.append(submission)
-				random_sub = random.choice(all_subs)
-				name = random_sub.title
-				url = random_sub.url
+			random_sub = random.choice(all_subs)
+			name = random_sub.title
+			url = random_sub.url
 
-				embed = Embed(title=name, color=0x000000, timestamp=datetime.utcnow())
-				embed.set_image(url= url)
-				embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url= ctx.author.avatar_url)
-				await ctx.reply(embed = embed)
+			embed = Embed(title=name, color=0x000000, timestamp=datetime.utcnow())
+			embed.set_image(url= url)
+			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url= ctx.author.avatar_url)
+			await ctx.reply(embed = embed)
 
 	@Cog.listener()
 	async def on_message(self,message):

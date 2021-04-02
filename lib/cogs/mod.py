@@ -50,7 +50,7 @@ class Mod(Cog):
 					embed=Embed(title="Member Kicked", color=0xff0000, timestamp=datetime.utcnow())
 					embed.set_thumbnail(url=target.avatar_url)
 					fields = [("Member", f"{target.mention} __**AKA**__ {target.display_name}", False),
-							("Actioned By", f"{target.mention} __**AKA**__ {target.display_name}" , False),
+							("Actioned By", f"{ctx.author.mention} __**AKA**__ {ctx.author.display_name}" , False),
 							("Reason", reason , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
@@ -366,6 +366,13 @@ class Mod(Cog):
 			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
 			await ctx.reply(embed=embed,delete_after=10)
 	
+	@command(name="roles", brief="Roles Command", help="List all the roles present in the guild", hidden=True)
+	async def roles(self, ctx):
+		roles = [role for role in reversed(ctx.guild.roles[1:])]
+		embed = Embed(description=(" \n ".join(([role.mention for role in roles]))), color=0x000000)
+		await ctx.send(embed =embed)
+
+
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:

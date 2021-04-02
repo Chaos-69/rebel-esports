@@ -11,6 +11,15 @@ import random
 from discord.ext.commands import has_any_role, has_role
 import discord
 from datetime import datetime
+import asyncio
+from discord.ext import commands, menus
+import discord
+import random
+import logging
+from urllib.parse import quote as uriquote
+import yarl
+import io
+import re
 
 # |CUSTOM|
 embed_color = 0x000000
@@ -37,6 +46,26 @@ class Fun(Cog):
 			description="Heads" if n == 1 else "Tails"
 			embed = Embed(description=f"**You flipped {description}!**", color=embed_color)
 			await ctx.reply(embed=embed)
+
+
+	#URBAN COMMAND
+	@command(name="urban", brief="Urban Command", he="Sends meaning of any word", hidden=False)
+	@cooldown(3, 30, BucketType.user)
+	async def _urban(self, ctx, *, word):
+		url = 'http://api.urbandictionary.com/v0/define'
+		async with ctx.session.get(url, params={'term': word}) as resp:
+			if resp.status != 200:
+				return await ctx.send(f'An error occurred: {resp.status} {resp.reason}')
+			js = await resp.json()
+			data = js.get('list', [])
+			if not data:
+				return await ctx.send('No results found, sorry.')
+
+		pages = RoboPages(UrbanDictionaryPageSource(data))
+		try:
+			await pages.start(ctx)
+		except menus.MenuError as e:
+			await ctx.send(e)
 
 
 	#ROLL COMMAND
