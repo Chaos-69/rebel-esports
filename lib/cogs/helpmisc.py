@@ -122,7 +122,8 @@ class Helpmisc(Cog):
 							commands.append(command)
 					menu = MenuPages(source=HelpMenu(ctx, list(commands)),
 									delete_message_after=True,
-									timeout=60.0)
+									timeout=60.0,
+									await clear_reactions())
 				await ctx.send(f"||{ctx.author.mention}||")
 				await menu.start(ctx)
 

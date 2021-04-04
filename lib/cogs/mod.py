@@ -379,7 +379,7 @@ class Mod(Cog):
 	async def on_ready(self):
 		if not self.bot.ready:
 			self.log_channel = self.bot.get_channel(821175745182695434) #YOUR CHANNEL HERE
-			self.mute_role = self.bot.get_guild(795726142161944637).get_role(821503690405183501)  #MUTE ROLE HERE
+			self.mute_role = self.bot.get_guild(803028981698789407).get_role(803137120079839243)  #MUTE ROLE HERE
 			self.role = self.bot.get_guild(795726142161944637).get_role(818950383216623696)  #COMMUNITY ROLE HERE
 			self.mod_log_channel = self.bot.get_channel(816751322581303306)
 			self.bot.cogs_ready.ready_up("mod")
