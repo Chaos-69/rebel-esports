@@ -29,10 +29,10 @@ class Meta(Cog):
 		
 		else:
 			start = time.time()
-			embed = Embed(title="Pong!", description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms**",color=0x000000)
+			embed = Embed(title="🏓 Pong!", description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms**",color=0x000000)
 			message = await ctx.reply(embed=embed)
 			end = time.time()
-			embed = Embed(title="Pong!",description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms** \nResponse time: **{(end-start)*1000:,.0f} ms**", color=0x000000)
+			embed = Embed(title="🏓 Pong!",description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms** \nResponse time: **{(end-start)*1000:,.0f} ms**", color=0x000000)
 			await message.edit(embed=embed)
 
 	#INFO COMMAND
@@ -52,12 +52,12 @@ class Meta(Cog):
 
 			embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 								 icon_url=f"{ctx.author.avatar_url}")
-			fields = [("Bot Version", f"Version : {self.bot.VERSION}", False),
+			fields = [("Bot Tag", "CHΛD丨BӨT#9795", False),
 					("Developer", "Lord Chaos#9958", False),
 					("Prefix", ctx.prefix, False),
 					("Servers",len(self.bot.guilds), True),
 					("Users", f"{self.bot.guild.member_count:,}", True),
-					("Versions", f"Python Version : {python_version()}\n Discord.py Version : {discord_version}", False),
+					("Versions", f"Bot Version : {self.bot.VERSION}\nPython Version : {python_version()}\n Discord.py Version : {discord_version}", False),
 					("Uptime", uptime ,False),
 					("Chads' Den Invite", "[Server Link](https://discord.gg/3J92CWNXCK)", False)]
 			for name, value, inline in fields:
@@ -66,7 +66,7 @@ class Meta(Cog):
 			await ctx.reply(embed=embed)
 
 
-	@command(name="shutdown",)
+	@command(name="shutdown",brief="Shutdown The Bot", help="Kills the bot like you expect it to")
 	@has_any_role('Chad', 'Admin')
 	async def shutdown(self, ctx):
 		embed = Embed(description="**Shutting Down...**", color=0x000000)

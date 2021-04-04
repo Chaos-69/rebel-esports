@@ -7,7 +7,7 @@ from discord import Embed, File
 from discord.ext.commands import Context
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext.commands import Bot as BotBase
-from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument, CommandOnCooldown, DisabledCommand
+from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument, CommandOnCooldown, DisabledCommand, RoleNotFound
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import when_mentioned_or, command, has_permissions
 from ..db import db
@@ -137,6 +137,11 @@ class Bot(BotBase):
 		if isinstance(exc, DisabledCommand):
 			embed = Embed(description="**That command is disabled for now, try again later**", color=0x000000)
 			await ctx.reply(embed=embed, delete_after=60)
+		
+		if isinstance(exc, RoleNotFound):
+			embed = Embed(description="**That role does not exist**", color=0x000000)
+			await ctx.reply(embed=embed, delete_after=60)
+		
 		if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
 			pass
 

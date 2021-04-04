@@ -60,7 +60,5 @@ class Aichat(Cog):
 			self.ai_chat_channel = self.bot.get_channel(826537727104253993)
 			self.bot.cogs_ready.ready_up("aichat")
 
-
-
 def setup(bot):
 	bot.add_cog(Aichat(bot))

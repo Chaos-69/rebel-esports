@@ -17,13 +17,9 @@ from discord.ext import commands
 from discord import utils
 import discord
 
-numbers = ("1️⃣", "2⃣", "3⃣", "4⃣", "5⃣",
-		   "6⃣", "7⃣", "8⃣", "9⃣", "🔟")
-
 class Reactions(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.polls = []
 		self.giveaways = []
 
 	async def getemote(self, arg):
@@ -150,44 +146,6 @@ class Reactions(Cog):
 				await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
 				await message.delete()
 
-
-	# POLL COMMAND
-	@command(name="poll", aliases=["mkpoll"], brief="Make Polls", help="Runs a poll for a given time and displays the results after the deadline", hidden=True)
-	@has_any_role('Chad', 'Admin', 'Executive')
-	async def create_poll(self, ctx, hours: int, question: str, *options):
-		if len(options) > 10:
-			embed = Embed(description="You can only supply a maximum of 10 options.",color=0xffec00)
-			await ctx.send(embed=embed)
-
-		else:
-			embed = Embed(title="Poll",
-						  description=f"__{question}__",
-						  colour=0x000000,
-						  timestamp=datetime.utcnow())
-
-			fields = [("Instructions", f"React to cast a vote! Results will be out in **{hours}** hour(s)", False),
-					  ("Options", "\n".join([f"{numbers[idx]} {option}" for idx, option in enumerate(options)]), False)]
-
-			for name, value, inline in fields:
-				embed.add_field(name=name, value=value, inline=inline)
-
-			message = await ctx.send(embed=embed)
-
-			for emoji in numbers[:len(options)]:
-				await message.add_reaction(emoji)
-
-			self.polls.append((message.channel.id, message.id))
-
-			self.bot.scheduler.add_job(self.complete_poll, "date", run_date=datetime.now()+timedelta(seconds=hours),
-									   args=[message.channel.id, message.id])
-
-	async def complete_poll(self, channel_id, message_id):
-			message = await self.bot.get_channel(channel_id).fetch_message(message_id)
-
-			most_voted = max(message.reactions, key=lambda r: r.count)
-			embed = Embed(title="Results", description=f"The results are in! Option {most_voted.emoji} was the most popular with **{most_voted.count-1:,}** votes!", color=0x000000)
-			await message.channel.send(embed=embed)
-			self.polls.remove((message.channel.id, message.id))
 	
 	def convert(self, time):
 		pos = ["s","m","h","d"]
@@ -267,7 +225,7 @@ class Reactions(Cog):
 		confirmation_embed = Embed(description=f"The giveaway will be in {channel.mention} for **{prize}** and will last for **{answers[1]}**", color=0x000000)
 		await ctx.send(embed = confirmation_embed)
 
-		embed = Embed(title = "🎉 Giveaway!", description = f"{prize}", color = ctx.author.color)
+		embed = Embed(title = "🎉 Giveaway!", description = f"🎁 {prize}", color = ctx.author.color)
 
 		embed.add_field(name = "Hosted by:", value = ctx.author.mention)
 
@@ -285,8 +243,8 @@ class Reactions(Cog):
 		users.pop(users.index(self.bot.user))
 
 		winner = random.choice(users)
-		embed = Embed(title="🎉 Giveaway Results", description=f"Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
-		await channel.send(embed=embed)
+		embed = Embed(title="🎉 Giveaway Results", description=f"🏆 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
+		await channel.send(f"||{winner.mention}||", embed=embed)
 	
 	#GIVEAWAY REROLL COMMAND
 	@command(name="greroll",help="Reroll recently conducted giveaways", brief="Reroll Giveaways", hidden=True)
@@ -302,8 +260,8 @@ class Reactions(Cog):
 
 		winner = random.choice(users)
 
-		embed = Embed(title="🎉 Giveaway Results", description=f"Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
-		await channel.send(embed = embed)
+		embed = Embed(title="🎉 Giveaway Results", description=f"🎉 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
+		await channel.send(f"||{winner.mention}||",embed = embed)
 
 
 	@Cog.listener()
@@ -313,9 +271,6 @@ class Reactions(Cog):
 			await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
 			await payload.memeber.remove_roles(self.verification_pending_role)
 			await self.reaction_message.remove_reaction(payload.emoji, payload.member)
-
-		elif payload.message_id in (poll[1] for poll in self.polls):
-			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
 
 			for reaction in message.reactions:
 				if (not payload.member.bot

@@ -140,10 +140,21 @@ class Warn(Cog):
 	@command(name="delwarn", brief="Delete Warn Command", help="Deletes previously added warnings for users", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive', 'Management', 'Moderator')
 	async def del_warn(self, ctx, member: discord.Member=None, index=None):
-		index = int(index) - 1
+		if member is None:
+			embed = Embed(title="Delete Warn", description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)
+			fields = [("Syntax", "```?delwarn <target> [warn-number]```", False)]
+			for name, value, inline in fields:
+				embed.add_field(name=name, value=value, inline=inline)			
+			return await ctx.reply(embed=embed,delete_after=10)
 
-		if index > len(self.warnings[ctx.guild.id][member.id]) and index is not None:
-			embed = Embed(description="**Bad Index Given**", color=0x000000)
+		else:
+			index = int(index) - 1
+		if index == None:
+			embed = Embed(description="**You need to provide a warn number in order for this to work**", color=0x000000)
+			return await ctx.reply(embed=embed,delete_after=10)
+
+		if index > len(self.warnings[ctx.guild.id][member.id]):
+			embed = Embed(description="**You need to provide a valid warn number in order for this to work**", color=0x000000)
 			return await ctx.reply(embed=embed,delete_after=10)
 		
 		else:

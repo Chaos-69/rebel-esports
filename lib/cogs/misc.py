@@ -4,7 +4,7 @@ from discord.ext.commands import command, has_permissions, Greedy
 from ..db import db
 from discord.ext.commands import cooldown, BucketType
 from discord import Embed
-from discord.ext.commands import has_role, has_any_role
+from discord.ext.commands import has_role, has_any_role, MissingRequiredArgument, Greedy
 from discord import Member
 import asyncio
 import discord
@@ -68,6 +68,7 @@ class Misc(Cog):
 			await ctx.message.delete(delay=60)
 			await ctx.reply(embed=embed,delete_after=10)
 
+	
 	#DELETE BAN COMMAND
 	@command(name="delban",brief="Unban Users From Commands", help="Removes blacklisted users from being able to use bot commands", hidden=True)
 	@has_any_role('Chad', 'Admin')
@@ -94,8 +95,9 @@ class Misc(Cog):
 			await ctx.message.delete(delay=60)
 			await ctx.reply(ctx.author.mention,embed=embed,delete_after=10)
     
+	
 	#TOGGLE COMMAND
-	@command(name="toggle", description="Enable or Disable Commands", help="Enables or Disables commands for all users", hidden=True)
+	@command(name="toggle", brief="Enable or Disable Commands", help="Enables or Disables commands for all users", hidden=True)
 	@has_any_role('Chad', 'Admin')
 	async def toggle(self, ctx, *, command):
 		command = self.bot.get_command(command)
@@ -120,6 +122,7 @@ class Misc(Cog):
 			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
 			await ctx.message.delete(delay=60)
 			await ctx.reply(embed=embed,delete_after=10)
+	
 	
 	#NUKE COMAMND
 	@command(name="nuke", brief="Nuke Channels", help="Nukes all messages in a channel", hidden=True)
@@ -150,7 +153,51 @@ class Misc(Cog):
 		if isinstance(exc, CheckFailure):
 			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
 			await ctx.message.delete(delay=60)
-			await ctx.reply(embed=embed,delete_after=10)	                
+			await ctx.reply(embed=embed,delete_after=10)	                			
+
+	
+	#ADD ROLE COMMAND
+	@command(name="addrole", brief="Add Roles To Users", help="Adds the given role to the provided user", hidden=True)
+	@has_any_role('Admin', 'Chad', 'Executive')
+	async def add_role(self, ctx, role: discord.Role, targets: Greedy[Member]):
+		for target in targets:
+			if not role in target.roles:
+				await target.add_roles(role)
+				embed = Embed(description=f"Added {role.mention} to {target.mention}", color=0x000000)
+				await ctx.reply(embed=embed)
+
+			else:
+				embed = Embed(description=f"**{target.mention} alreadys has {role.mention} role**")
+				await ctx.reply(embed=embed)
+		
+	@add_role.error
+	async def add_role_error(self, ctx, exc):
+		if isinstance(exc, CheckFailure):
+			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
+			await ctx.message.delete(delay=60)
+			await ctx.reply(embed=embed,delete_after=10)
+
+
+	#ROMOVE ROLE COMMAND
+	@command(name="removerole", brief="Remove Roles From Users", help="Removes the given role from the provided user", hidden=True)
+	@has_any_role('Admin', 'Chad', 'Executive')
+	async def remove_role(self, ctx, role:discord.Role = None, targets: Greedy[Member] = None):
+		for target in targets:
+			if role in target.roles:
+				await target.remove_roles(role)
+				embed = Embed(description=f"Removed {role.mention} from {target.mention}", color=0x000000)
+				await ctx.reply(embed=embed)
+
+			else:
+				embed = Embed(description=f"**{target.mention} does not have {role.mention} role**")
+				await ctx.reply(embed=embed)
+	
+	@remove_role.error
+	async def eremove_role_error(self, ctx, exc):
+		if isinstance(exc, CheckFailure):
+			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
+			await ctx.message.delete(delay=60)
+			await ctx.reply(embed=embed,delete_after=10)
 
 	@Cog.listener()
 	async def on_ready(self):

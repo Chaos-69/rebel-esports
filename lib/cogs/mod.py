@@ -366,10 +366,12 @@ class Mod(Cog):
 			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
 			await ctx.reply(embed=embed,delete_after=10)
 	
+
+	#ROLES COMMAND
 	@command(name="roles", brief="Roles Command", help="List all the roles present in the guild", hidden=True)
 	async def roles(self, ctx):
 		roles = [role for role in reversed(ctx.guild.roles[1:])]
-		embed = Embed(description=(" \n ".join(([role.mention for role in roles]))), color=0x000000)
+		embed = Embed(title=f"All Roles in {ctx.guild} [{len(roles)}]",description=(" \n ".join(([role.mention for role in roles]))), color=0x000000)
 		await ctx.send(embed =embed)
 
 

@@ -4,34 +4,128 @@ from aiohttp import request
 from discord.ext.commands import BadArgument
 from discord import Member, Embed
 from discord.errors import HTTPException
-from discord.ext.commands import Cog, BucketType
-from discord.ext.commands import command, cooldown, has_permissions
-from discord.ext.commands import CheckFailure
-import random
-from discord.ext.commands import has_any_role, has_role
+from discord.ext.commands import command, cooldown, has_permissions, has_any_role, has_role, CheckFailure, Cog, BucketType
 import discord
 from datetime import datetime
 import asyncio
 from discord.ext import commands, menus
-import discord
 import random
-import logging
-from urllib.parse import quote as uriquote
-import yarl
-import io
-import re
+import aiohttp
+import asyncio
+import discord
+from random import choice as randchoice
+import time
+from datetime import timedelta
 
 # |CUSTOM|
 embed_color = 0x000000
 server_logo = "https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png"
 # |CUSTOM|
 
-#IMPPORTANT | All the details for command help (for example command description or command brief) is written WITH THE COMMAND ITSELF-
 class Fun(Cog):
 	def __init__(self, bot):
 		self.bot = bot
+		self.bot.session = aiohttp.ClientSession()
+		self.ball = ["As I see it, yes", "It is certain", "It is decidedly so", "Most likely", "Outlook good",
+			"Sources point to yes", "Without a doubt", "Yes", "Yes – definitely", "You may rely on it", "Reply hazy, try again",
+			"Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again",
+			"Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
 		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
-		 826442024927363072, 818444886243803216)
+		826442024927363072, 818444886243803216)
+		self.stopwatches = {}
+	
+
+	#8BALL COMMAND    
+	@command(name="8ball")
+	async def _8ball(self,ctx,*question):
+		question = "  ".join(question)
+		embed = Embed(description=f"**{randchoice(self.ball)}**", color=0x00000)
+		return await ctx.reply(embed=embed)
+
+	#RPS COMMAND
+	@command(name="rps")
+	async def rps(self, ctx, choice : str):
+		author = ctx.message.author
+		rpsbot = {"rock" : ":moyai:",
+			"paper": ":page_facing_up:",
+			"scissors":":scissors:"}
+		choice = choice.lower()
+		if choice in rpsbot.keys():
+			botchoice = randchoice(list(rpsbot.keys()))
+			msgs = {
+ 				"win": " You win {}!".format(author.mention),
+				"square": " We're square {}!".format(author.mention),
+				"lose": " You lose {}!".format(author.mention)
+			}
+			if choice == botchoice:
+				embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
+				await ctx.reply(embed = embed)
+			elif choice == "rock" and botchoice == "paper":
+				embed = Embed(description= rpsbot[botchoice] + msgs["lose"], color=0x000000)
+				await ctx.reply(embed=embed)
+			elif choice == "rock" and botchoice == "scissors":
+				embed = Embed(description= rpsbot[botchoice] + msgs["win"], color=0x000000)
+				await ctx.reply(embed=embed)
+			elif choice == "paper" and botchoice == "rock":
+				embed = Embed(description= rpsbot[botchoice] + msgs["win"], color=0x000000)
+				await ctx.reply(embed=embed)
+			elif choice == "paper" and botchoice == "scissors":
+				embed = Embed(description= rpsbot[botchoice] + msgs["lose"], color=0x000000)
+				await ctx.reply(embed=embed)
+			elif choice == "scissors" and botchoice == "rock":
+				embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
+				await ctx.reply(embed=embed)
+			elif choice == "scissors" and botchoice == "paper":
+				embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
+				await ctx.reply(embed=embed)
+		else:
+			embed = Embed(description= "**Choose either rock, paper or scissors**", color=0x000000)
+			await ctx.reply(embed=embed)
+
+
+	#STOPWATCH COMAND
+	@command(name="stopwatch")
+	async def stopwatch(self, ctx):
+		author = ctx.message.author
+		if not author.id in self.stopwatches:
+			self.stopwatches[author.id] = int(time.perf_counter())
+			embed = Embed(description="**Stopwatch Started!**", color=0x000000)
+			await ctx.reply(embed=embed)
+		else:
+			tmp = abs(self.stopwatches[author.id] - int(time.perf_counter()))
+			tmp = str(timedelta(seconds=tmp))
+			embed = Embed(description= author.mention  + " Stopwatch stopped! Time: **" + str(tmp) + "**", color=0x000000)
+			await ctx.reply(embed=embed)
+			self.stopwatches.pop(author.id, None)
+	
+
+	#URBAN COMMAND
+	@command(name="urban")
+	async def urban(self, ctx, *, search_terms : str):
+		search_terms = search_terms.split(" ")
+		search_terms = "+".join(search_terms)
+		search = "http://api.urbandictionary.com/v0/define?term=" + search_terms
+		try:
+			async with aiohttp.ClientSession() as a:
+				async with a.get(search) as r:
+					result = await r.json()
+			if result["list"] != []:
+				definition = result['list'][0]['definition']
+				example = result['list'][0]['example']
+				a = definition.replace("[", "")
+				b = example.replace("]", "")
+				embed = Embed(title=f"Search Results For {search_terms}", color=0x000000)
+				fields = [("Defination", a.replace("]", ""), False),
+						("Example", b.replace("[","") , False)]
+				for name , value, inline in fields:
+					embed.add_field(name=name, value=value, inline=inline)
+					embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
+				await ctx.reply(embed=embed)
+			else:
+				await ctx.reply("Your search terms gave no results.")
+		except:
+			await ctx.reply("The API retured nothing!")
+
 
 	#FLIP COMMAND
 	@command(name="flip", brief="Flip a Coin", help="Flips either Heads or Tails")
@@ -46,27 +140,6 @@ class Fun(Cog):
 			description="Heads" if n == 1 else "Tails"
 			embed = Embed(description=f"**You flipped {description}!**", color=embed_color)
 			await ctx.reply(embed=embed)
-
-
-	#URBAN COMMAND
-	@command(name="urban", brief="Urban Command", he="Sends meaning of any word", hidden=False)
-	@cooldown(3, 30, BucketType.user)
-	async def _urban(self, ctx, *, word):
-		url = 'http://api.urbandictionary.com/v0/define'
-		async with ctx.session.get(url, params={'term': word}) as resp:
-			if resp.status != 200:
-				return await ctx.send(f'An error occurred: {resp.status} {resp.reason}')
-			js = await resp.json()
-			data = js.get('list', [])
-			if not data:
-				return await ctx.send('No results found, sorry.')
-
-		pages = RoboPages(UrbanDictionaryPageSource(data))
-		try:
-			await pages.start(ctx)
-		except menus.MenuError as e:
-			await ctx.send(e)
-
 
 	#ROLL COMMAND
 	@command(name="roll", brief="Roll A Number", help="Rolls a random number in between 1-100")
