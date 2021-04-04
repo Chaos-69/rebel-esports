@@ -50,11 +50,15 @@ class Exp(Cog):
 		xp, lvl, xplock = db.record("SELECT XP, Level, XPLock FROM exp WHERE UserID = ?", message.author.id)
 
 		if datetime.utcnow() > datetime.fromisoformat(xplock):
-			await self.add_xp(message, xp, lvl)
-
+			if message.channel.id == (803028981698789410):
+				await self.add_xp(message, xp, lvl)
+				print("XP added")
+			else:
+				return
+	
 	async def add_xp(self, message, xp, lvl):
 		xp_to_add = randint(10, 20)
-		new_lvl = int(((xp+xp_to_add)//42) ** 0.55)
+		new_lvl = int(((xp+xp_to_add)//42) ** 0.45)
 
 		db.execute("UPDATE exp SET XP = XP + ?, Level = ?, XPLock = ? WHERE UserID = ?",
 				   xp_to_add, new_lvl, (datetime.utcnow()+timedelta(seconds=1)).isoformat(), message.author.id)

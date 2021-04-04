@@ -9,6 +9,7 @@ from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 from datetime import datetime
 import datetime as dt
+from discord.errors import HTTPException, Forbidden
 
 class Warn(Cog):
 	def __init__(self, bot):
@@ -57,13 +58,26 @@ class Warn(Cog):
 	@command(name="warn", brief="Warn Command", help="Warns users and adds it to the user profile", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive', 'Management', 'Moderator')
 	async def warn(self, ctx, member: discord.Member=None, *, reason: Optional[str] = "No reason provided"):
-		if member is None:
-			embed = Embed(title="Warn", description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)
-			fields = [("Syntax", "```?warn <target> [reason]```", False)]
-			for name, value, inline in fields:
-				embed.add_field(name=name, value=value, inline=inline)			
-			return await ctx.reply(embed=embed,delete_after=10)
+		guild = ctx.guild #self.bot.get_guild(803028981698789407)
+		if member == None:
+				embed = Embed(title="Warn", description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)
+				fields = [("Syntax", "```?warn <target> [reason]```", False)]
+				for name, value, inline in fields:
+					embed.add_field(name=name, value=value, inline=inline)			
+				return await ctx.reply(embed=embed,delete_after=10)
 
+		if member == guild.me:
+  			embed = Embed(description="**You cannot warn the bot**", color=0x000000)
+  			return await ctx.reply(embed=embed)
+		
+#		elif member == ctx.author:
+#			embed = Embed(description="**You cannot warn yourself**", color=0x000000)
+#			return await ctx.reply(embed=embed)
+
+		if (ctx.guild.me.top_role.position < member.top_role.position and member.guild_permissions.administrator):
+			embed=Embed(title="Task Unsuccessful", description=f":x: **You are unable to warn **{member.display_name}**.", color=0xffec00)
+			return await ctx.reply(embed=embed,delete_after=10)
+		
 		try:
 			first_warning = False
 			for time in self.warnings:
@@ -102,6 +116,7 @@ class Warn(Cog):
 			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
 			await ctx.reply(embed=embed,delete_after=10)
 
+    
     #WARNINGS COMMAND
 	@command(name="warnings", brief="Check Warnings Command",help="Displays all of the users warnings", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive', 'Management', 'Moderator')
@@ -121,7 +136,7 @@ class Warn(Cog):
 			for admin_id, reason, time in self.warnings[ctx.guild.id][member.id][1]:
 				admin = ctx.guild.get_member(admin_id)
 				time = time
-				embed.description += f"**__Warning {i}__** \n**Moderator**:- {admin.mention}  \n**Reason**:- `{reason}`\n**Time**:- {time.strftime('%d/%m/%Y')} \n \n"
+				embed.description += f"**__Warning {i}__** \n**Moderator**:- {admin.mention}  \n**Reason**:- `{reason}`\n**Date**:- {time.strftime('%d/%m/%Y')} \n \n"
 				i += 1
 				embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=ctx.author.avatar_url)
 			await ctx.reply(embed=embed)
@@ -147,45 +162,39 @@ class Warn(Cog):
 				embed.add_field(name=name, value=value, inline=inline)			
 			return await ctx.reply(embed=embed,delete_after=10)
 
-		else:
-			index = int(index) - 1
-		if index == None:
-			embed = Embed(description="**You need to provide a warn number in order for this to work**", color=0x000000)
-			return await ctx.reply(embed=embed,delete_after=10)
-
-		if index > len(self.warnings[ctx.guild.id][member.id]):
-			embed = Embed(description="**You need to provide a valid warn number in order for this to work**", color=0x000000)
-			return await ctx.reply(embed=embed,delete_after=10)
+		if self.warnings[ctx.guild.id][member.id][0] != 0:
+			count = self.warnings[ctx.guild.id][member.id][0]
+			if index is not None and len(index) < count:
+				index = int(index) - 1
+				self.warnings[ctx.guild.id][member.id][0] -= 1
+				self.warnings[ctx.guild.id][member.id][1].pop(index)
+			
+				async with aiofiles.open(str(ctx.guild.id)+".txt", mode="w") as file:
+					for member_id in self.warnings[ctx.guild.id]:
+						count, data = self.warnings[ctx.guild.id][member_id]
+						for admin_id, reason, time in data:
+							admin = ctx.guild.get_member(admin_id)
+							time = time
+							await file.write(f"{member_id} {admin_id} {reason} {time}\n")
+							embed=Embed(title="Member Warn Removed", color=0xff0000, timestamp=datetime.utcnow())
+							embed.set_thumbnail(url=member.avatar_url)
+							
+							fields = [("Member", f"{member.mention} __**AKA**__ {member.display_name}", False),
+									("Actioned By",f"{ctx.author.mention} __**AKA**__ {ctx.author.display_name}" , False)]
+							for name , value, inline in fields:
+								embed.add_field(name=name, value=value, inline=inline)
+							await self.mod_log_channel.send(embed=embed)
+							embed = Embed(description=f"***Warning removed for {member.mention}***", color=0x000000)
+							return await ctx.reply(embed=embed)
+			else:
+				embed = Embed(description="**Provide a valid warn number**", color=0x000000)
+				return await ctx.reply(embed=embed,delete_after=10)
+				
 		
 		else:
-			self.warnings[ctx.guild.id][member.id][0] -= 1
-			self.warnings[ctx.guild.id][member.id][1].pop(index)
-		
-			async with aiofiles.open(str(ctx.guild.id)+".txt", mode="w") as file:
-				for member_id in self.warnings[ctx.guild.id]:
-					count, data = self.warnings[ctx.guild.id][member_id]
-					for admin_id, reason, time in data:
-						admin = ctx.guild.get_member(admin_id)
-						time = time
-						await file.write(f"{member_id} {admin_id} {reason} {time}\n")
-						embed=Embed(title="Member Warn Removed", color=0xff0000, timestamp=datetime.utcnow())
-						embed.set_thumbnail(url=member.avatar_url)
-						
-						fields = [("Member", f"{member.mention} __**AKA**__ {member.display_name}", False),
-								("Actioned By",f"{admin.mention} __**AKA**__ {admin.display_name}" , False)]
-						for name , value, inline in fields:
-							embed.add_field(name=name, value=value, inline=inline)
-						await self.mod_log_channel.send(embed=embed)
-						member_embed= Embed(title="Warn Report", description=f"Your warn has been **removed** in {member.guild.name}", color=0xff0000)
-						await member.send(embed=member_embed)
-						embed = Embed(description=f"***Warning removed for {member.mention}***", color=0x000000)
-						return await ctx.reply(embed=embed)
-
-		if self.warnings[ctx.guild.id][member.id][0] == 0:
-			self.warnings[ctx.guild.id].pop(member.id)
 			embed = Embed(description="**This user has no warnings**", color=0x000000)
-			await ctx.reply(embed=embed,delete_after=10)
-
+			return await ctx.reply(embed=embed,delete_after=10)
+			
 	@del_warn.error
 	async def del_warn_error(self, ctx, exc):
 		if isinstance(exc, CheckFailure):

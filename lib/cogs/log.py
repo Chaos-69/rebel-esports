@@ -23,7 +23,7 @@ class Log(Cog):
 	@Cog.listener()
 	async def on_user_update(self, before, after):
 		if before.avatar_url != after.avatar_url:
-			embed= Embed(title="Avatar Changed", description=f"Avatar Changed for {after.mention} __AKA__ **{after.display_name}**  __**Image below is new**__", color=0x002eff, timestap=datetime.utcnow())
+			embed= Embed(title="Avatar Changed", description=f"Avatar Changed for {after.mention} __AKA__ **{after.display_name}**  \n__**Image below is new**__\n  [Before]({before.avatar_url}) --> [After]({after.avatar_url})", color=0x002eff, timestap=datetime.utcnow())
 			embed.set_thumbnail(url=before.avatar_url)
 			embed.set_image(url=after.avatar_url)
 			await self.audit_log_channel.send(embed=embed)

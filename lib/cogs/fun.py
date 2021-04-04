@@ -177,8 +177,8 @@ class Fun(Cog):
 			await ctx.reply(embed=embed)
 		
 		else:
-			embed=Embed(title=(f":flushed: {ctx.author.display_name} slapped you {reason}"),color=embed_color)		
-			await ctx.send(ctx.author.mention,embed=embed)
+			embed=Embed(description=(f":flushed: **{ctx.author.display_name}** slapped you **{reason}**"),color=embed_color)		
+			await ctx.send(member.mention,embed=embed)
 
 	@slap_member.error
 	async def slap_member_error (self, ctx, exc):

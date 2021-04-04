@@ -54,9 +54,16 @@ class Misc(Cog):
 		else:
 			for target in targets:
 				if not target.id in self.bot.banlist:
-					self.bot.banlist.extend([t.id for t in targets])
-					embed = Embed(description=f"**Added {target.mention} to banlist**", color=0x000000)
-					await ctx.reply(embed = embed)
+					if target == self.bot or ctx.author:
+						embed = Embed(description="**You cannot ban yourself or the bot**", color=0x000000)
+						await ctx.reply(embed=embed)
+						
+					else:
+						self.bot.banlist.extend([t.id for t in targets])
+						embed = Embed(description=f"**Added {target.mention} to banlist**", color=0x000000)
+						await ctx.reply(embed = embed)
+						
+				
 				else:
 					embed = Embed(description="**That user is already banned**", color=0x000000)
 					await ctx.reply(embed = embed)
@@ -80,10 +87,15 @@ class Misc(Cog):
 		else:
 			for target in targets:
 				if target.id in self.bot.banlist:
+					if target == self.bot or ctx.author:
+						embed = Embed(description="**You cannot unban yourself or the bot**", color=0x000000)
+						await ctx.reply(embed=embed)
+						
+					else:
 						self.bot.banlist.remove(target.id)
 						embed = Embed(description=f"**Removed {target.mention} from banlist**", color=0x000000)
 						await ctx.reply(embed = embed)
-			
+						
 				else:
 					embed = Embed(description="**That user is already unbanned**", color=0x000000)
 					await ctx.reply(embed = embed)

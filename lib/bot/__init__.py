@@ -7,7 +7,7 @@ from discord import Embed, File
 from discord.ext.commands import Context
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext.commands import Bot as BotBase
-from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument, CommandOnCooldown, DisabledCommand, RoleNotFound
+from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument, CommandOnCooldown, DisabledCommand, RoleNotFound, MemberNotFound
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import when_mentioned_or, command, has_permissions
 from ..db import db
@@ -106,7 +106,8 @@ class Bot(BotBase):
 
 		if ctx.command is not None and ctx.guild is not None:
 			if message.author.id in self.banlist:
-				await ctx.send("You are banned from using commands.")
+				embed = Embed(description="**You are banned from using commands**", color=0x000000)
+				await ctx.reply(embed=embed)
 
 			elif not self.ready:
 				await ctx.send("I'm not ready to receive commands. Please wait a few seconds.")
@@ -135,38 +136,37 @@ class Bot(BotBase):
 
 	async def on_command_error(self, ctx, exc):
 		if isinstance(exc, DisabledCommand):
-			embed = Embed(description="**That command is disabled for now, try again later**", color=0x000000)
+			embed = Embed(description="**That command is disabled for now, try again later**", color=0xffec00)
 			await ctx.reply(embed=embed, delete_after=60)
 		
 		if isinstance(exc, RoleNotFound):
-			embed = Embed(description="**That role does not exist**", color=0x000000)
+			embed = Embed(description="**That role does not exist**", color=0xffec00)
 			await ctx.reply(embed=embed, delete_after=60)
 		
 		if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
 			pass
-
+		
 		elif isinstance(exc, MissingRequiredArgument):
-			embed=Embed(description="**One or more required arguments are missing!**",color=embed_color)
+			embed=Embed(description="**One or more required arguments are missing!**",color=0xffec00)
 			await ctx.reply(embed=embed, delete_after=60)
 
 		elif isinstance(exc, CommandOnCooldown):
 			cd = round(exc.retry_after)
 			minutes = str(cd // 60)
 			seconds = str(cd % 60)
-			embed=Embed(description=f"That command is on **{str(exc.cooldown.type).split('.')[-1]} cooldown**... Try again in **{minutes}:{seconds}**",color=embed_color)
+			embed=Embed(description=f"That command is on **{str(exc.cooldown.type).split('.')[-1]} cooldown**... Try again in **{minutes}:{seconds}**",color=0xffec00)
 			await ctx.reply(embed=embed, delete_after=60)
-
-		elif hasattr(exc, "original"):
-			#elif isinstance(exc.original, HTTPException):
-			#	await ctx.send("Unable to send massage.")
-
-			if isinstance(exc.original, Forbidden):
-				embed=Embed(title="I do not have permission to do that.",color=embed_color)
-				await ctx.send(embed=embed, delete_after=60)
-			
-			else:
-				raise exc.original
-
+		
+		if isinstance(exc.original, MemberNotFound):
+			embed = Embed(description="**Unable to find that member!**", color=0xffec00)
+			await ctx.send(embed=embed, delete_after=60) 
+		
+		if isinstance(exc.original, HTTPException):
+			embed = Embed(description="***Moderation has been logged, user DMs are disabled***", color=0xff0000)
+			await ctx.send(embed=embed, delete_after=60)
+		else:
+			raise exc
+	
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(803028981698789407) #SERVER ID HERE
@@ -210,15 +210,15 @@ class Bot(BotBase):
 			if not self.user == message.author:
 				if message.channel.id == (803031892235649044) or (803033569445675029):
 					prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
-					embed=Embed(title="You pinged me!", color=0x000000, timestamp=datetime.utcnow())
+					embed=Embed(title="<:D_peepoPing:824976504114774017> You Pinged Me", color=0x000000, timestamp=datetime.utcnow())
 					fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
-						("Tip", "If you dont remember my prefix, you can mention me instead and use the command! \nFor example, `@CHΛD丨BӨT#9795 help`" , False),
+						("Tip", "If you dont remember my prefix, you can mention me with the comand instead! \nFor example, `@CHΛD丨BӨT#9795 help` , `@CHΛD丨BӨT#9795 flip`" , False),
 						("Help", "Need help? just use the `?help` command " , False),
 						("More Info", "For more info about me, use the command `?info`" , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)			
 					embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
-					embed.set_author(name="CHΛD丨BӨT",icon_url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
+					embed.set_thumbnail(url=server_logo)
 					await message.delete(delay=120)
 					await message.channel.send(message.author.mention,embed=embed, delete_after=120)
 				
