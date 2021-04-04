@@ -32,7 +32,7 @@ class Info(Cog):
 
 			fields = [("Name", f"{target.mention} __AKA__ {str(target.display_name)}", False),
 						("ID", f"ID {target.id}", False),				
-						(f"Roles [{len(roles)}]", ("  ".join(([role.mention for role in roles]))), False),
+						(f"Roles [{len(roles)}]", ("   ".join(([role.mention for role in roles]))), False),
 						("Joined at", target.joined_at.strftime("%d/%m/%Y | %H:%M:%S"), True),
 						("Create at", target.created_at.strftime("%d/%m/%Y | %H:%M:%S"), True),									
 						("Activity", f"{str(target.activity.type).split('.')[-1].title() if target.activity else 'N/A'} {target.activity.name if target.activity else ''} ", False),
@@ -66,7 +66,7 @@ class Info(Cog):
 
 			fields = [("Owner", ctx.guild.owner, True),
 					("Region", ctx.guild.region, True ),
-					("Statuses", f"**Online** {statuses[0]} **Idle** {statuses[1]} **DnD** {statuses[2]} **Offline** {statuses[3]}", False),				
+					("Statuses", f"**Online**  {statuses[0]} **Idle**  {statuses[1]}  **DnD**  {statuses[2]} **Offline**  {statuses[3]}", False),				
 					("Members", len(ctx.guild.members), True),
 					("Humans", len(list(filter(lambda m: not m.bot, ctx.guild.members))), True),
 					("Bots", len(list(filter(lambda m: m.bot, ctx.guild.members))), True),

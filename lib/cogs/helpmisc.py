@@ -88,6 +88,7 @@ class Helpmisc(Cog):
 					fields = [("Total Commands",f"**CHΛD丨BӨT** has a total of **{len(self.bot.commands)}** commands" , False),
 								("Miscellaneous","To view all the miscellaneous commands, use the following syntax ```?helpmisc ```" , False),
 								("Moderation","To view all the moderation commands, use the following syntax ```?helpmod ```" , False),
+								("All Commmands","To view all the commands available in CHΛD丨BӨT,\nUse the following syntax ```?commands ```" , False),
 								("Individual Commands", "To view help for individual commands, use the following syntax ```?help <command>```", False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
@@ -114,7 +115,7 @@ class Helpmisc(Cog):
 		
 		else:
 			if cmd is None:
-				commands_to_always_hide = ["help", "helpmisc", "helpmod", "shutdown"]
+				commands_to_always_hide = ["help", "helpmisc", "helpmod", "commands"]
 				commands = []
 				for command in self.bot.commands:
 					if not command.hidden and not command.name in commands_to_always_hide:

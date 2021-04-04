@@ -81,8 +81,10 @@ class Helpall(Cog):
 		else:
 			if cmd is None:
 				commands = []
+				commands_to_always_hide = ["help", "helpmisc", "helpmod", "commands"]
 				for command in self.bot.commands:
-						commands.append(command)
+					if not command.name in commands_to_always_hide:
+							commands.append(command)
 				menu = MenuPages(source=HelpMenu(ctx, list(commands)),
 									delete_message_after=True,
 									timeout=60.0)

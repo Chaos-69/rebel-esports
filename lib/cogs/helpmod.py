@@ -80,7 +80,7 @@ class Helpmod(Cog):
 		
 		else:
 			if cmd is None:
-				commands_to_always_hide = ["help", "helpmisc", "helpmod", "shutdown"]
+				commands_to_always_hide = ["help", "helpmisc", "helpmod", "commands"]
 				commands = []
 				for command in self.bot.commands:
 					if command.hidden and not command.name in commands_to_always_hide:
