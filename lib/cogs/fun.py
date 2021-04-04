@@ -36,14 +36,14 @@ class Fun(Cog):
 	
 
 	#8BALL COMMAND    
-	@command(name="8ball")
+	@command(name="8ball", brief="Ask 8Ball", help="Ask 8ball any question you want")
 	async def _8ball(self,ctx,*question):
 		question = "  ".join(question)
 		embed = Embed(description=f"**{randchoice(self.ball)}**", color=0x00000)
 		return await ctx.reply(embed=embed)
 
 	#RPS COMMAND
-	@command(name="rps")
+	@command(name="rps", brief="Rock Paper Scissors Command", help="Choose either rock, paper or scissors")
 	async def rps(self, ctx, choice : str):
 		author = ctx.message.author
 		rpsbot = {"rock" : ":moyai:",
@@ -84,7 +84,7 @@ class Fun(Cog):
 
 
 	#STOPWATCH COMAND
-	@command(name="stopwatch")
+	@command(name="stopwatch", brief="Stopwatch Command", help="Record your of any task through stopwatch")
 	async def stopwatch(self, ctx):
 		author = ctx.message.author
 		if not author.id in self.stopwatches:
@@ -100,7 +100,7 @@ class Fun(Cog):
 	
 
 	#URBAN COMMAND
-	@command(name="urban")
+	@command(name="urban", brief="Urban Dictionary", help="Gets definitions of provided words from urban dictionary")
 	async def urban(self, ctx, *, search_terms : str):
 		search_terms = search_terms.split(" ")
 		search_terms = "+".join(search_terms)
