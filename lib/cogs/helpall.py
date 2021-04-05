@@ -6,7 +6,7 @@ from discord.ext.commands import Cog
 from discord.ext.commands import command
 from discord.ext.commands import has_role
 from discord.ext.commands import cooldown, BucketType
-from discord.ext.commands import has_any_role, has_role
+from discord.ext.commands import has_any_role, has_role, is_owner
 
 # |CUSTOM|
 embed_color = 0x000000
@@ -69,8 +69,8 @@ class Helpall(Cog):
 			await ctx.send(ctx.author.mention,embed=embed, delete_after=60)
 
 	#ALL COMMANDS - COMMAND
-	@command(name="commands", brief="Help For Moderation Commands", help="Provides Help For Moderation Commands", hidden=True)
-	@cooldown(3, 60, BucketType.user)
+	@command(name="commands", brief="Help For All Commands", help="Provides Help For All Commands", hidden=True)
+	@is_owner()
 	async def show_help_mod(self, ctx, cmd: Optional[str]):
 		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		 826442024927363072, 818444886243803216)
@@ -81,10 +81,8 @@ class Helpall(Cog):
 		else:
 			if cmd is None:
 				commands = []
-				commands_to_always_hide = ["help", "helpmisc", "helpmod", "commands"]
 				for command in self.bot.commands:
-					if not command.name in commands_to_always_hide:
-							commands.append(command)
+						commands.append(command)
 				menu = MenuPages(source=HelpMenu(ctx, list(commands)),
 									delete_message_after=True,
 									timeout=60.0)

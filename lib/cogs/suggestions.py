@@ -11,10 +11,9 @@ class Suggestions(Cog):
 
 	@Cog.listener()
 	async def on_message(self, message):
-		#COMMUITY SUGGESTIONS CHANNE:
+		#COMMUITY SUGGESTIONS CHANNEL:
 		if not message.author.bot and message.channel.id == (803319938575630376):
 			if not message.content.startswith("?nosuggest"):
-				
 				suggestEmbed=Embed(description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
 				suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")
 				suggestEmbed.set_footer(text="`?nosuggest` also exists")

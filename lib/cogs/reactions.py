@@ -269,7 +269,8 @@ class Reactions(Cog):
 			if not self.community in payload.member.roles:
 				await payload.member.remove_roles(self.verification_pending_role, reason= "Member Verified")
 				await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
-				await self.reaction_message.remove_reaction(payload.emoji, payload.member)
+				await self.reddit_role_message.remove_reaction(payload.emoji, payload.member)
+	
 		
 		elif payload.emoji.name == "⭐":
 			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
@@ -303,6 +304,7 @@ class Reactions(Cog):
 			else:
 				await message.remove_reaction(payload.emoji, payload.member)		
 	
+
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
@@ -311,6 +313,8 @@ class Reactions(Cog):
 			self.starboard_channel = self.bot.get_channel(825162033707483176)		
 			self.verification_pending_role = self.bot.get_guild(803028981698789407).get_role(826575568794943550)
 			self.community = self.bot.get_guild(803028981698789407).get_role(803035221808513025)
+			self.reddit_role_message = await self.bot.get_channel(803031152448372777).fetch_message(828774673910595634)
+			self.reddit_role = self.bot.get_guild(803028981698789407).get_role(803157752414863382)
 			self.bot.cogs_ready.ready_up("reactions")
 
 
