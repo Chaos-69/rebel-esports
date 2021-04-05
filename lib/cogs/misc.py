@@ -173,14 +173,18 @@ class Misc(Cog):
 	@has_any_role('Admin', 'Chad', 'Executive')
 	async def add_role(self, ctx, role: discord.Role, targets: Greedy[Member]):
 		for target in targets:
-			if not role in target.roles:
-				await target.add_roles(role)
-				embed = Embed(description=f"Added {role.mention} to {target.mention}", color=0x000000)
-				await ctx.reply(embed=embed)
-
-			else:
-				embed = Embed(description=f"**{target.mention} alreadys has {role.mention} role**")
-				await ctx.reply(embed=embed)
+			if (ctx.author.top_role.position > target.top_role.position):
+				if not role in target.roles:
+					await target.add_roles(role)
+					embed = Embed(description=f"Added {role.mention} to {target.mention}", color=0x000000)
+					await ctx.reply(embed=embed)
+			
+				else:
+					embed = Embed(description=f"**{target.mention} alreadys has {role.mention} role**")
+					await ctx.reply(embed=embed)
+			else:	
+				embed=Embed(title="Task Unsuccessful", description=f":x: **You cannot edit roles for {target.mention}**.", color=0xffec00)
+				await ctx.reply(embed=embed,delete_after=10)		
 		
 	@add_role.error
 	async def add_role_error(self, ctx, exc):
@@ -195,14 +199,18 @@ class Misc(Cog):
 	@has_any_role('Admin', 'Chad', 'Executive')
 	async def remove_role(self, ctx, role:discord.Role = None, targets: Greedy[Member] = None):
 		for target in targets:
-			if role in target.roles:
-				await target.remove_roles(role)
-				embed = Embed(description=f"Removed {role.mention} from {target.mention}", color=0x000000)
-				await ctx.reply(embed=embed)
-
+			if (ctx.author.top_role.position > target.top_role.position):
+				if role in target.roles:
+					await target.remove_roles(role)
+					embed = Embed(description=f"Removed {role.mention} from {target.mention}", color=0x000000)
+					await ctx.reply(embed=embed)
+			
+				else:
+					embed = Embed(description=f"**{target.mention} does not have {role.mention} role**")
+					await ctx.reply(embed=embed)
 			else:
-				embed = Embed(description=f"**{target.mention} does not have {role.mention} role**")
-				await ctx.reply(embed=embed)
+				embed=Embed(title="Task Unsuccessful", description=f":x: **You cannot edit roles for {target.mention}**.", color=0xffec00)
+				await ctx.reply(embed=embed,delete_after=10)		
 	
 	@remove_role.error
 	async def eremove_role_error(self, ctx, exc):

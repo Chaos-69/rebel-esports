@@ -68,13 +68,15 @@ class Warn(Cog):
 
 		if member == guild.me:
   			embed = Embed(description="**You cannot warn the bot**", color=0x000000)
-  			return await ctx.reply(embed=embed)
+  			message = await ctx.reply(embed=embed)
+  			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 		
-#		elif member == ctx.author:
-#			embed = Embed(description="**You cannot warn yourself**", color=0x000000)
-#			return await ctx.reply(embed=embed)
+		elif member == ctx.author:
+			embed = Embed(description="**You cannot warn yourself**", color=0x000000)
+			message = await ctx.reply(embed=embed)
+			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 
-		if (ctx.guild.me.top_role.position < member.top_role.position and member.guild_permissions.administrator):
+		if (ctx.author.top_role.position < member.top_role.position and member.guild_permissions.administrator):
 			embed=Embed(title="Task Unsuccessful", description=f":x: **You are unable to warn **{member.display_name}**.", color=0xffec00)
 			return await ctx.reply(embed=embed,delete_after=10)
 		

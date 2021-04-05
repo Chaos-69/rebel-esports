@@ -1,7 +1,5 @@
 from discord.ext.commands import Cog
 from discord import Embed
-from better_profanity import profanity 
-profanity.load_censor_words_from_file("./data/profanity.txt")
 from discord.ext.commands import command
 from discord.ext.commands import has_permissions, bot_has_permissions
 from ..db import db

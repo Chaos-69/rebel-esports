@@ -25,7 +25,7 @@ class Mod(Cog):
 		self.url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 		self.images_allowed = (818451301440028686)
 		self.banned_channels = (826442024927363072,803319938575630376,803031892235649044,826537727104253993,813907740173926440)
-		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
+		self.allowed_channels = (827297851116748871 ,803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		    826442024927363072, 818444886243803216)
 	
 	#KICK COMMAND
@@ -45,15 +45,17 @@ class Mod(Cog):
 		for target in targets:
 			if target == guild.me:
 	  			embed = Embed(description="**You cannot kick the bot**", color=0x000000)
-	  			return await ctx.reply(embed=embed)
+	  			message = await ctx.reply(embed=embed)
+	  			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 			
 			elif target == ctx.author:
 				embed = Embed(description="**You cannot kick yourself**", color=0x000000)
-				return await ctx.reply(embed=embed)	
-		
+				message = await ctx.reply(embed=embed)	
+				return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
+			
 			else:
 				for target in targets:
-					if (ctx.guild.me.top_role.position > target.top_role.position
+					if (ctx.author.top_role.position > target.top_role.position
 						and not target.guild_permissions.administrator):
 						target_embed= Embed(title="Kick Report", description=f"You have been **kicked** from {target.guild.name} due to __**{reason}**__", color=0x000000)
 						await target.send(embed=target_embed)
@@ -99,15 +101,17 @@ class Mod(Cog):
 		for target in targets:
 			if target == guild.me:
 					embed = Embed(description="**You cannot ban the bot**", color=0x000000)
-					return await ctx.reply(embed=embed)
+					message = await ctx.reply(embed=embed)
+					return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 			
 			elif target == ctx.author:
 				embed = Embed(description="**You cannot ban yourself**", color=0x000000)
-				return await ctx.reply(embed=embed)	
+				message = await ctx.reply(embed=embed)	
+				return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 			
 			else:
 				for target in targets:
-						if (ctx.guild.me.top_role.position > target.top_role.position
+						if (ctx.author.top_role.position > target.top_role.position
 							and not target.guild_permissions.administrator):
 							embed= Embed(title="Ban Report", description=f"You have been **banned** from {target.guild.name} due to __**{reason}__**", color=0xff0000)
 							await target.send(embed=embed)
@@ -171,11 +175,13 @@ class Mod(Cog):
 		for target in targets:
 			if target == guild.me:
 	  			embed = Embed(description="**You cannot mute the bot**", color=0x000000)
-	  			return await ctx.reply(embed=embed)
+	  			message = await ctx.reply(embed=embed)
+	  			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 			
 			elif target == ctx.author:
 				embed = Embed(description="**You cannot mute yourself**", color=0x000000)
-				return await ctx.reply(embed=embed)
+				message = await ctx.reply(embed=embed)
+				return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 			
 			else:
 				unmutes = []
@@ -183,7 +189,7 @@ class Mod(Cog):
 				for target in targets:
 					if target != self.bot or ctx.author:
 						if not self.mute_role in target.roles:
-							if ctx.guild.me.top_role.position > target.top_role.position:
+							if ctx.author.top_role.position > target.top_role.position:
 								role_ids = ",".join([str(r.id) for r in target.roles])
 								end_time = datetime.utcnow() + timedelta(minutes=minutes) if minutes else None
 
@@ -329,18 +335,20 @@ class Mod(Cog):
 	#PROFANITY DETECTION
 	@Cog.listener()		
 	async def on_message(self, message):
-		if profanity.contains_profanity(message.content):
-			await message.delete()
-			embed=Embed(title="Blacklisted Word Detected", description=f"<:D_stopOfficer:820756718648688660> **{message.author.display_name}** watch your language.", color=0xff0000)
-			await message.channel.send(message.author.mention)
-			await message.channel.send(embed=embed)
+		if not message.author.bot:
+			if profanity.contains_profanity(message.content):
+				await message.delete()
+				embed=Embed(title="Blacklisted Word Detected", description=f"<:D_stopOfficer:820756718648688660> **{message.author.display_name}** watch your language.", color=0xff0000)
+				await message.channel.send(message.author.mention)
+				await message.channel.send(embed=embed)
         
 	
 	@Cog.listener()	
 	async def on_message_delete(self, message):
 		guild = self.bot.get_guild(803028981698789407)
-		if message.mentions:
-			if not message.author == self.bot:
+		if message.mentions and not message.content.startswith("?"):
+			guild = self.bot.get_guild(803028981698789407)
+			if not message.author == guild.me:
 				for role in message.author.roles:
 					if role in self.allowed_roles:
 						return

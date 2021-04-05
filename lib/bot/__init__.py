@@ -7,7 +7,7 @@ from discord import Embed, File
 from discord.ext.commands import Context
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext.commands import Bot as BotBase
-from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument, CommandOnCooldown, DisabledCommand, RoleNotFound, MemberNotFound
+from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument, CommandOnCooldown, DisabledCommand, RoleNotFound, MemberNotFound, MissingAnyRole
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import when_mentioned_or, command, has_permissions
 from ..db import db
@@ -157,15 +157,20 @@ class Bot(BotBase):
 			embed=Embed(description=f"That command is on **{str(exc.cooldown.type).split('.')[-1]} cooldown**... Try again in **{minutes}:{seconds}**",color=0xffec00)
 			await ctx.reply(embed=embed, delete_after=60)
 		
-		if isinstance(exc.original, MemberNotFound):
+		if isinstance(exc, MemberNotFound):
 			embed = Embed(description="**Unable to find that member!**", color=0xffec00)
-			await ctx.send(embed=embed, delete_after=60) 
+			await ctx.reply(embed=embed, delete_after=60) 
 		
-		if isinstance(exc.original, HTTPException):
+		#if isinstance(exc, MissingAnyRole):
+		#	embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
+		#	await ctx.reply(embed=embed,delete_after=10)
+
+		if isinstance(exc, HTTPException):
 			embed = Embed(description="***Moderation has been logged, user DMs are disabled***", color=0xff0000)
 			await ctx.send(embed=embed, delete_after=60)
-		else:
-			raise exc
+		
+		#else:
+		#	raise exc
 	
 	async def on_ready(self):
 		if not self.ready:
