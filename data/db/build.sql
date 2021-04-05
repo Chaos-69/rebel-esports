@@ -22,10 +22,8 @@ CREATE TABLE IF NOT EXISTS starboard (
 	Stars integer DEFAULT 1
 );
 
-CREATE TABLE IF NOT EXISTS preferences (
-    GuildID integer PRIMARY KEY,
-    everyone integer DEFAULT 1,
-    roles integer DEFAULT 1,
-    members integer DEFAULT 0,
-    channel integer DEFAULT 0
+CREATE TABLE IF NOT EXISTS warns (
+	UserID integer PRIMARY KEY,
+	ModID integer,
+	WarnTime text
 );

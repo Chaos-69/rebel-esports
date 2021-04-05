@@ -61,7 +61,7 @@ class Inrole(Cog):
         left = "⏪"
         right = "⏩"
         while True:
-            msg = await ctx.send(embed = pages[(page)])
+            msg = await ctx.send(embed = pages[(page)], delete_after=120)
             l = page != 0
             r = page != len(pages) - 1
             if l:

@@ -14,6 +14,7 @@ from discord.ext.commands import has_any_role, has_role
 from discord.ext import commands
 from discord import utils
 import discord
+from discord.utils import get
 
 class Reactions(Cog):
 	def __init__(self, bot):
@@ -265,34 +266,27 @@ class Reactions(Cog):
 	@Cog.listener()
 	async def on_raw_reaction_add(self, payload):
 		if self.bot.ready and payload.message_id == self.reaction_message.id:
-			await self.reaction_message.add_reaction("☑️")
-			await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
-			await payload.memeber.remove_roles(self.verification_pending_role)
-			await self.reaction_message.remove_reaction(payload.emoji, payload.member)
-
-			for reaction in message.reactions:
-				if (not payload.member.bot
-					and payload.member in await reaction.users().flatten()
-					and reaction.emoji != payload.emoji.name):
-					await message.remove_reaction(reaction.emoji, payload.member)
+			if not self.community in payload.member.roles:
+				await payload.member.remove_roles(self.verification_pending_role, reason= "Member Verified")
+				await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
+				await self.reaction_message.remove_reaction(payload.emoji, payload.member)
 		
 		elif payload.emoji.name == "⭐":
 			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
-			if not message.author.bot and payload.member.id != message.author.id:
-				if len(self.reaction_message.reactions) > 4:
-					message_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?",
-											  message.id) or (None, 0)
-
-					embed = Embed(colour=message.author.colour,
+			star_emoji = discord.utils.get(message.reactions , emoji="⭐")
+			if not message.author.bot and payload.member_id != message.author.id:
+				if star_emoji.count >= 5:
+					msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?",message.id) or (None, 0)
+					embed = Embed(description=f":star: **{stars+1}** ",
+								  colour=message.author.colour,
 								  timestamp=datetime.utcnow())
 
-					fields = [("Stars", stars+1, False),
-							  ("Content", message.content or "Check Attachment", False)]
+					fields = [("Content", message.content or "See attachment", False),
+							("Original Message", f"[Jump!](https://discord.com/channels/803028981698789407/{payload.channel_id}/{payload.message_id})", False)]
 
 					for name, value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
-						embed.set_author(name=f"Message By {message.author.display_name}", icon_url= f"{message.author.avatar_url}")
-
+						embed.set_author(name= f"{message.author.display_name}", icon_url= f"{message.author.avatar_url}")
 					if len(message.attachments):
 						embed.set_image(url=message.attachments[0].url)
 
@@ -302,11 +296,10 @@ class Reactions(Cog):
 								   message.id, star_message.id)
 
 					else:
-						star_message = await self.starboard_channel.fetch_message(message_id)
+						star_message = await self.starboard_channel.fetch_message(msg_id)
 						await star_message.edit(embed=embed)
 						db.execute("UPDATE starboard SET Stars = Stars + 1 WHERE RootMessageID = ?", message.id)
-				else:
-					return
+
 			else:
 				await message.remove_reaction(payload.emoji, payload.member)		
 	
@@ -317,6 +310,7 @@ class Reactions(Cog):
 			self.reaction_message = await self.bot.get_channel(825162415116779541).fetch_message(826457816997822464)
 			self.starboard_channel = self.bot.get_channel(825162033707483176)		
 			self.verification_pending_role = self.bot.get_guild(803028981698789407).get_role(826575568794943550)
+			self.community = self.bot.get_guild(803028981698789407).get_role(803035221808513025)
 			self.bot.cogs_ready.ready_up("reactions")
 
 

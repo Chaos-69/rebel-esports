@@ -4,7 +4,7 @@ from discord.ext.commands import command, has_permissions, Greedy
 from ..db import db
 from discord.ext.commands import cooldown, BucketType
 from discord import Embed
-from discord.ext.commands import has_role, has_any_role, MissingRequiredArgument, Greedy
+from discord.ext.commands import has_role, has_any_role, MissingRequiredArgument, Greedy, is_owner
 from discord import Member
 import asyncio
 import discord
@@ -22,7 +22,7 @@ class Misc(Cog):
 
 	# CHANGE PREFIX COMMAND
 	@command(name="prefix", brief="Change Guild Prefix",help="Changes the guild prefix.", hidden=True)
-	@has_any_role('Chad', 'Admin')
+	@is_owner()
 	async def change_prefix(self, ctx, new: str):
 		if len(new) > 5:
 			embed = Embed(text=":exclamation: The prefix can not be more than 5 characters in length.", color=0xffec00)
@@ -31,8 +31,7 @@ class Misc(Cog):
 
 		else:
 			db.execute("UPDATE guilds SET Prefix = ? WHERE GuildID = ?", new , ctx.guild.id)
-			embed = Embed(title="Prefix Changed", description=f"Guild prefix has been changed to **{new}**" , color=0x000000)
-			embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
+			embed = Embed(description=f"Guild prefix has been changed to **{new}**" , color=0x000000)
 			await ctx.send("@everyone")
 			await ctx.reply(embed=embed)
 
@@ -45,7 +44,7 @@ class Misc(Cog):
 	
 	#ADD BAN COMMAND
 	@command(name="addban",brief="Ban Users From Using Commands", help="Blacklists users from being able to use bot commands", hidden=True)
-	@has_any_role('Chad', 'Admin')
+	@is_owner()
 	async def addban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
 			embed = Embed(description="**No targets specified**", color=0x000000)
@@ -78,7 +77,7 @@ class Misc(Cog):
 	
 	#DELETE BAN COMMAND
 	@command(name="delban",brief="Unban Users From Commands", help="Removes blacklisted users from being able to use bot commands", hidden=True)
-	@has_any_role('Chad', 'Admin')
+	@is_owner()
 	async def delban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
 			embed = Embed(description="**No targets specified**", color=0x000000)
@@ -110,7 +109,7 @@ class Misc(Cog):
 	
 	#TOGGLE COMMAND
 	@command(name="toggle", brief="Enable or Disable Commands", help="Enables or Disables commands for all users", hidden=True)
-	@has_any_role('Chad', 'Admin')
+	@is_owner()
 	async def toggle(self, ctx, *, command):
 		command = self.bot.get_command(command)
 
@@ -138,7 +137,7 @@ class Misc(Cog):
 	
 	#NUKE COMAMND
 	@command(name="nuke", brief="Nuke Channels", help="Nukes all messages in a channel", hidden=True)
-	@has_any_role(818242893805912067,"Admin")
+	@is_owner()
 	async def nuke(self, ctx, channel: discord.TextChannel = None):
 		if channel == None:
 			embed = Embed(description=f"**You did not mention a channel\n For example {ctx.channel.mention}**", color=0x000000)

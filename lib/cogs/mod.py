@@ -24,7 +24,7 @@ class Mod(Cog):
 		self.links_allowed = [(818451301440028686)]
 		self.url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 		self.images_allowed = (818451301440028686)
-		self.banned_channels = (826442024927363072,803319938575630376,803031892235649044,826537727104253993,813907740173926440)
+		self.ping_allowed_channels = (803028981698789410,816818936082989066,818530424196169759,818934074835730463,803143531405377557,804682925945520138,826442024927363072)
 		self.allowed_channels = (827297851116748871 ,803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		    826442024927363072, 818444886243803216)
 	
@@ -354,10 +354,10 @@ class Mod(Cog):
 						return
 				
 				for channel in guild.channels:
-					if message.channel.id in self.banned_channels:
+					if not message.channel.id in self.ping_allowed_channels:
 						return
 				
-				channel_embed=Embed(title="<:cheemsPimg:823973362325651456> Ghost Ping Detected", description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
+				channel_embed=Embed(title="<:cheemsGun:821807384246353981> Ghost Ping Detected", description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
 				channel_embed.set_footer(text=f"By {message.author.name}#{message.author.discriminator}",icon_url=f"{message.author.avatar_url}")
 				await message.channel.send(embed=channel_embed)
 				log_embed=Embed(title="Ghost Ping",color=0xff0000, timestamp=datetime.utcnow())

@@ -32,7 +32,7 @@ class Welcome(Cog):
 		await self.invite_log_channel.send(embed=embed)
 		
 		try:
-			embed=Embed(description=f"Welcome to **{member.guild.name}!** Kindly cope with Discord's Terms Of Services and be sure to read <#820081277376921601>", color=0x000000)
+			embed=Embed(description=f"Welcome to **{member.guild.name}!** Kindly cope with Discord's Terms Of Services and be sure to read <#803029543686242344>", color=0x000000)
 			await member.send(embed=embed)
 
 		except Forbidden:
