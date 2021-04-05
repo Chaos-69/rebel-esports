@@ -52,7 +52,6 @@ class Exp(Cog):
 		if datetime.utcnow() > datetime.fromisoformat(xplock):
 			if message.channel.id == (803028981698789410):
 				await self.add_xp(message, xp, lvl)
-				print("XP added")
 			else:
 				return
 	
