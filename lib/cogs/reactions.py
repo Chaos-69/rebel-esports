@@ -313,8 +313,6 @@ class Reactions(Cog):
 			self.starboard_channel = self.bot.get_channel(825162033707483176)		
 			self.verification_pending_role = self.bot.get_guild(803028981698789407).get_role(826575568794943550)
 			self.community = self.bot.get_guild(803028981698789407).get_role(803035221808513025)
-			self.reddit_role_message = await self.bot.get_channel(803031152448372777).fetch_message(828774673910595634)
-			self.reddit_role = self.bot.get_guild(803028981698789407).get_role(803157752414863382)
 			self.bot.cogs_ready.ready_up("reactions")
 
 
