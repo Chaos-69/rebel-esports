@@ -269,13 +269,13 @@ class Reactions(Cog):
 			if not self.community in payload.member.roles:
 				await payload.member.remove_roles(self.verification_pending_role, reason= "Member Verified")
 				await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
-				await self.reddit_role_message.remove_reaction(payload.emoji, payload.member)
+				await self.reaction_message.remove_reaction(payload.emoji, payload.member)
 	
 		
 		elif payload.emoji.name == "⭐":
 			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
 			star_emoji = discord.utils.get(message.reactions , emoji="⭐")
-			if not message.author.bot and payload.member_id != message.author.id:
+			if not message.author.bot and payload.member.id != message.author.id:
 				if star_emoji.count >= 5:
 					msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?",message.id) or (None, 0)
 					embed = Embed(description=f":star: **{stars+1}** ",
