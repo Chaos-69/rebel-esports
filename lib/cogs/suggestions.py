@@ -4,6 +4,7 @@ from datetime import datetime
 import discord
 from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
+from discord.errors import NotFound
 
 class Suggestions(Cog):
 	def __init__(self, bot):
@@ -12,19 +13,23 @@ class Suggestions(Cog):
 	@Cog.listener()
 	async def on_message(self, message):
 		#COMMUITY SUGGESTIONS CHANNEL:
-		if not message.author.bot and message.channel.id == (803319938575630376):
+		guild = self.bot.get_guild(803028981698789407)
+		if not message.author == guild.me and message.channel.id == (803319938575630376):
 			if not message.content.startswith("?nosuggest"):
-				suggestEmbed=Embed(description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
-				suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")
-				suggestEmbed.set_footer(text="?nosuggest = Simple message")
-				await self.audit_log_channel.send(embed=suggestEmbed)
+				try:
+					suggestEmbed=Embed(description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
+					suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")
+					suggestEmbed.set_footer(text="?nosuggest = Simple message")
+					await self.audit_log_channel.send(embed=suggestEmbed)
+					
+					reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
+					await message.delete()
+					await reaction_message.add_reaction("<:RES_ThumbsUp:824692074615930942>")
+					await reaction_message.add_reaction("<:RES_ThumbsDown:824692213476360292>")
+					await reaction_message.add_reaction("<:pepe_cringe:824692893981736991>")
 				
-				reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
-				await message.delete()
-				await reaction_message.add_reaction("<:RES_ThumbsUp:824692074615930942>")
-				await reaction_message.add_reaction("<:RES_ThumbsDown:824692213476360292>")
-				await reaction_message.add_reaction("<:pepe_cringe:824692893981736991>")
-		
+				except NotFound:
+					pass
 			else:
 				
 				message.content = message.content[10:]
@@ -32,11 +37,15 @@ class Suggestions(Cog):
 				await message.delete()
 		
 		#STAFF SUGGESTIONS
-		if not message.author.bot and message.channel.id == (826792720596860928):
-			await message.add_reaction("<:RES_ThumbsUp:824692074615930942>")
-			await message.add_reaction("<:RES_ThumbsDown:824692213476360292>")
-			await message.add_reaction("<:pepe_cringe:824692893981736991>")
-
+		if not message.author == guild.me and message.channel.id == (826792720596860928):
+			
+			try:
+				await message.add_reaction("<:RES_ThumbsUp:824692074615930942>")
+				await message.add_reaction("<:RES_ThumbsDown:824692213476360292>")
+				await message.add_reaction("<:pepe_cringe:824692893981736991>")
+			
+			except NotFound:
+				pass
 		else:
 			return
 
