@@ -68,17 +68,17 @@ class Exp(Cog):
 
 	async def check_lvl_rewards(self, message, lvl):
 
-#Level 100 = 816781972386873355 [God-Tier]
-#Level 90 = 816815889177116722 [Supreme]
-#Level 80 = 816781981601497178 [Peerless]
-#Level 70 = 816781991650787410 [Titan]
-#Level 60 = 816782007782342729 [Mythic]
-#Level 50 = 816782023846395934 [Legendary]
-#Level 40 = 816782039906517002 [Meme-Lord]
-#Level 30 = 803735334948569118 [Master]
-#Level 20 = 803734111507841024 [Pro]
-#Level 10 = 808302510871019550 [Rookie]
-		
+		#Level 100 = 816781972386873355 [God-Tier]
+		#Level 90 = 816815889177116722 [Supreme]
+		#Level 80 = 816781981601497178 [Peerless]
+		#Level 70 = 816781991650787410 [Titan]
+		#Level 60 = 816782007782342729 [Mythic]
+		#Level 50 = 816782023846395934 [Legendary]
+		#Level 40 = 816782039906517002 [Meme-Lord]
+		#Level 30 = 803735334948569118 [Master]
+		#Level 20 = 803734111507841024 [Pro]
+		#Level 10 = 808302510871019550 [Rookie]
+			
 		if lvl >= 100: # God-Tier [Level 100]
 			if (new_role := message.guild.get_role(816781972386873355)) not in message.author.roles:
 				await message.author.add_roles(new_role)

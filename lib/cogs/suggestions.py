@@ -16,7 +16,7 @@ class Suggestions(Cog):
 			if not message.content.startswith("?nosuggest"):
 				suggestEmbed=Embed(description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
 				suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")
-				suggestEmbed.set_footer(text="`?nosuggest` also exists")
+				suggestEmbed.set_footer(text="?nosuggest = Simple message")
 				await self.audit_log_channel.send(embed=suggestEmbed)
 				
 				reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
@@ -31,25 +31,12 @@ class Suggestions(Cog):
 				await message.channel.send(f"{message.content} • Said By {message.author.mention}")
 				await message.delete()
 		
-		elif not message.author.bot and message.channel.id == (826792720596860928):
-			if not message.content.startswith("?nosuggest"):
-				
-				suggestEmbed=Embed(description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
-				suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")
-				suggestEmbed.set_footer(text="`?nosuggest` also exists")
-				await self.audit_log_channel.send(embed=suggestEmbed)
-				
-				reaction_message = await self.staff_suggestions_channel.send(embed=suggestEmbed)
-				await message.delete()
-				await reaction_message.add_reaction("<:RES_ThumbsUp:824692074615930942>")
-				await reaction_message.add_reaction("<:RES_ThumbsDown:824692213476360292>")
-				await reaction_message.add_reaction("<:pepe_cringe:824692893981736991>")
-		
-			else:
-				
-				message.content = message.content[10:]
-				await message.channel.send(f"{message.content} • Said By {message.author.mention}")
-				await message.delete()
+		#STAFF SUGGESTIONS
+		if not message.author.bot and message.channel.id == (826792720596860928):
+			await message.add_reaction("<:RES_ThumbsUp:824692074615930942>")
+			await message.add_reaction("<:RES_ThumbsDown:824692213476360292>")
+			await message.add_reaction("<:pepe_cringe:824692893981736991>")
+
 		else:
 			return
 
