@@ -23,7 +23,7 @@ class HelpMenu(ListPageSource):
 		embed = Embed(title="XP Leaderboard",
 					  colour=0x000000)
 		embed.set_thumbnail(url=self.ctx.guild.icon_url)
-		embed.set_footer(text=f"{offset:,} - {min(len_data, offset+self.per_page-1):,} of {len_data:,} members.")
+		embed.set_footer(text=f"{offset:,} - {min(len_data, offset+self.per_page-1):,} of {len_data:,} Members")
 
 		for name, value in fields:
 			embed.add_field(name=name, value=value, inline=False)
@@ -34,7 +34,7 @@ class HelpMenu(ListPageSource):
 		offset = (menu.current_page*self.per_page) + 1
 
 		fields = []
-		table = ("\n".join(f"**{idx+offset}.** {self.ctx.bot.guild.get_member(entry[0]).mention} [XP: **{entry[1]}** | Level: **{entry[2]}**]"
+		table = ("\n\n".join(f"**{idx+offset}.** {self.ctx.bot.guild.get_member(entry[0]).mention} \n XP: **{entry[1]}** | Level: **{entry[2]}**"
 				for idx, entry in enumerate(entries)))
 
 		fields.append(("Ranks", table))
@@ -155,9 +155,9 @@ class Exp(Cog):
 				required_xp = (math.ceil((lvl + 1) ** (1/.55)) * 42)
 				embed = Embed(title=f"{target.display_name}'s Rank",color=0x000000)
 				fields = [("Username", f"{target.mention} • **{target.display_name}**",False),
-						("XP", f"{xp:,} / {required_xp:,}" , False),
 						("Level", f"{lvl:,}" , False),
-						("Rank", f"{ids.index(target.id)+1} of {len(ids)}" , False)]
+						("XP", f"{xp:,} / {required_xp:,}" , False),
+						("Rank", f"{ids.index(target.id)+1} of {len(ids)} Members" , False)]
 				for name , value, inline in fields:
 					embed.add_field(name=name, value=value, inline=inline)
 				embed.set_thumbnail(url = target.avatar_url)
