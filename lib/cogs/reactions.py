@@ -83,6 +83,7 @@ class Reactions(Cog):
 			if after.channel.id == (803143634933383218):
 				role = discord.utils.get(member.guild.roles, name="Groovy")
 				await member.add_roles(role)
+				await self.music_commands_channel.send(f"**{member.mention} Welcome to music commands\nYou can use groovy or other music bot commands here!**")
 			else:
 				pass
 	    
@@ -385,6 +386,7 @@ class Reactions(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
+			self.music_commands_channel = self.bot.get_guild(803028981698789407).get_channel(803143531405377557)
 			self.verify = {"☑️": self.bot.get_guild(803028981698789407).get_role(803035221808513025)}
 			self.reaction_message = await self.bot.get_channel(825162415116779541).fetch_message(826457816997822464)
 			self.starboard_channel = self.bot.get_channel(825162033707483176)		

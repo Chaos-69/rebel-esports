@@ -38,7 +38,8 @@ class Mod(Cog):
 		if not len(targets):
 			embed=Embed(title="Kick",description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)
 			
-			fields = [("Syntax", "```?kick | @member | reason```", False)]
+			fields = [("Syntax", "```?kick | @member | reason```", False),
+						("Example", "```?kick @", False)]
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 			await ctx.message.delete(delay=15)
@@ -385,7 +386,7 @@ class Mod(Cog):
 	async def on_message(self, message):
 		if not message.author.bot:
 			if profanity.contains_profanity(message.content):
-				await ctx.message.delete()
+				await message.delete(delay=15)
 				embed=Embed(title="Blacklisted Word Detected", description=f"<:D_stopOfficer:820756718648688660> **{message.author.display_name}** watch your language.", color=0xff0000)
 				await message.channel.send(message.author.mention)
 				await message.channel.send(embed=embed, delete_after=10)
@@ -407,7 +408,7 @@ class Mod(Cog):
 				
 				channel_embed=Embed(title="<:cheemsGun:821807384246353981> Ghost Ping Detected", description=f"{message.content}", color=0x000000, timestamp=datetime.utcnow())
 				channel_embed.set_footer(text=f"By {message.author.name}#{message.author.discriminator}",icon_url=f"{message.author.avatar_url}")
-				await message.channel.send(embed=channel_embed, delete_after=10)
+				await message.channel.send(embed=channel_embed)
 				log_embed=Embed(title="Ghost Ping",color=0xff0000, timestamp=datetime.utcnow())
 				log_embed.set_thumbnail(url=f"{message.author.avatar_url}")
 				fields = [("By", f"{message.author.name}#{message.author.discriminator}", True),
