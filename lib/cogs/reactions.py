@@ -315,12 +315,32 @@ class Reactions(Cog):
 
 	@Cog.listener()
 	async def on_raw_reaction_add(self, payload):
+		#VERIFICATION MESSAGE
 		if self.bot.ready and payload.message_id == self.reaction_message.id:
 			if not self.community in payload.member.roles:
 				await payload.member.remove_roles(self.verification_pending_role, reason= "Member Verified")
 				await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
 				await self.reaction_message.remove_reaction(payload.emoji, payload.member)
-	
+			
+			else:
+				await self.reaction_message.remove_reaction(payload.emoji, payload.member)
+		
+		#COLOR ROLES MESSAGE
+		if self.bot.ready and payload.message_id == self.color_reaction_message.id:
+			#await self.color_reaction_message.add_reaction("🟥")
+			#await self.color_reaction_message.add_reaction("🟨")
+			#await self.color_reaction_message.add_reaction("🟩")
+			#await self.color_reaction_message.add_reaction("🟦")
+			#await self.color_reaction_message.add_reaction("🟪")
+			current_colours = filter(lambda r: r in self.colours.values(), payload.member.roles)
+			await payload.member.remove_roles(*current_colours, reason="Member Reacted To Color Reaction Message")
+			await payload.member.add_roles(self.colours[payload.emoji.name], reason="Member Reacted To Color Reaction Message")
+			await self.color_reaction_message.remove_reaction(payload.emoji, payload.member)
+		
+		#REDDITOR ROLE MESSAGE
+		if self.bot.ready and payload.message_id == self.reddit_message.id:
+			if not self.redditor_role in payload.member.roles:
+				await payload.member.add_roles(self.redditor_role[payload.emoji.name], reason="Member Took Redditor Role")
 		
 		elif payload.emoji.name == "⭐":
 			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
@@ -354,7 +374,14 @@ class Reactions(Cog):
 			else:
 				await message.remove_reaction(payload.emoji, payload.member)		
 	
-
+	@Cog.listener()
+	async def on_raw_reaction_remove(self, payload):
+		if self.bot.ready and payload.message_id == self.reddit_message.id:
+			guild = self.bot.get_guild(803028981698789407)
+			memberwhoreact = await guild.fetch_member(payload.user_id)
+			if self.redditor_role in memberwhoreact.roles:
+				await memberwhoreact.remove_roles(self.redditor_role[payload.emoji.name], reason="Member Removed Redditor Role")
+	
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
@@ -363,6 +390,16 @@ class Reactions(Cog):
 			self.starboard_channel = self.bot.get_channel(825162033707483176)		
 			self.verification_pending_role = self.bot.get_guild(803028981698789407).get_role(826575568794943550)
 			self.community = self.bot.get_guild(803028981698789407).get_role(803035221808513025)
+			self.reddit_message = await self.bot.get_channel(803031152448372777).fetch_message(829401084048310283)
+			self.redditor_role = {"☑️": self.bot.get_guild(803028981698789407).get_role(803157752414863382)}
+			self.color_reaction_message = await self.bot.get_channel(803031152448372777).fetch_message(829400920051417119)
+			self.colours = {
+				"🟥": self.bot.guild.get_role(821054526441652274), # Red
+				"🟨": self.bot.guild.get_role(822069465462079508), # Yellow
+				"🟩": self.bot.guild.get_role(822071713784528906), # Green
+				"🟦": self.bot.guild.get_role(822070495800328192), # Blue
+				"🟪": self.bot.guild.get_role(822073807783198770)  # Purple
+			}
 			self.bot.cogs_ready.ready_up("reactions")
 
 
