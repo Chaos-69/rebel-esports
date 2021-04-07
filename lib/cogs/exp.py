@@ -56,7 +56,7 @@ class Exp(Cog):
 				return
 	
 	async def add_xp(self, message, xp, lvl):
-		xp_to_add = randint(10, 20)
+		xp_to_add = randint(5, 15)
 		new_lvl = int(((xp+xp_to_add)//42) ** 0.45)
 
 		db.execute("UPDATE exp SET XP = XP + ?, Level = ?, XPLock = ? WHERE UserID = ?",
