@@ -143,7 +143,8 @@ class Exp(Cog):
 	async def display_level(self, ctx, target: Optional[Member]):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			target = target or ctx.author
@@ -172,7 +173,8 @@ class Exp(Cog):
 	async def display_leaderboard(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			records = db.records("SELECT UserID, XP, Level FROM exp ORDER BY XP DESC")

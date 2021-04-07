@@ -21,7 +21,8 @@ class Info(Cog):
 	async def user_info(self, ctx, target: Optional[Member]):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			target = target or ctx.author
@@ -46,12 +47,13 @@ class Info(Cog):
 			await ctx.reply(embed=embed)
 
 	
-	@command(name="serverinfo", aliases=["guildinfo", "si", "gi"], help="Displays detailed server info", brief="Server Information")
+	@command(name="serverinfo", aliases=["si"], help="Displays detailed server information", brief="Server Information")
 	@cooldown(3, 60, BucketType.user)
 	async def server_info(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			embed = Embed(title=f"**{ctx.guild.name}**", 
@@ -66,7 +68,7 @@ class Info(Cog):
 
 			fields = [("Owner", ctx.guild.owner, True),
 					("Region", ctx.guild.region, True ),
-					("Statuses", f"**Online**  {statuses[0]} **Idle**  {statuses[1]}  **DnD**  {statuses[2]} **Offline**  {statuses[3]}", False),				
+					("Statuses", f"🟩  {statuses[0]}  🟧  {statuses[1]}  🟥  {statuses[2]}  ⬜  {statuses[3]}", False),				
 					("Members", len(ctx.guild.members), True),
 					("Humans", len(list(filter(lambda m: not m.bot, ctx.guild.members))), True),
 					("Bots", len(list(filter(lambda m: m.bot, ctx.guild.members))), True),

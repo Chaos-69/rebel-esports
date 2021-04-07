@@ -15,6 +15,7 @@ from discord.ext import commands
 from discord import utils
 import discord
 from discord.utils import get
+from discord.errors import NotFound
 
 class Reactions(Cog):
 	def __init__(self, bot):
@@ -95,22 +96,54 @@ class Reactions(Cog):
 	#BOT MESSAGE REACTIONS			
 	@Cog.listener()
 	async def on_message(self, message):
+		
 		if "xp" in message.content:
-			await message.add_reaction(":cheemsPolice:820748937409462279")
+			try:
+				await message.add_reaction(":cheemsPolice:820748937409462279")
+			except NotFound:
+				pass
+		
 		if "Xp" in message.content:
-			await message.add_reaction(":cheemsPolice:820748937409462279")
+			try:
+				await message.add_reaction(":cheemsPolice:820748937409462279")
+			except NotFound:
+				pass
+		
 		if "eggspee" in message.content:
-			await message.add_reaction(":cheemsPolice:820748937409462279")
+			try:
+				await message.add_reaction(":cheemsPolice:820748937409462279")
+			except NotFound:
+				pass
+		
 		if "eggs" in message.content:
-			await message.add_reaction(":cheemsPolice:820748937409462279")
+			try:
+				await message.add_reaction(":cheemsPolice:820748937409462279")
+			except NotFound:
+				pass
+		
 		if "gay" in message.content:
-			await message.add_reaction(":D_weird:820756635609464832")
+			try:
+				await message.add_reaction(":D_weird:820756635609464832")
+			except NotFound:
+				pass
+		
 		if "Gay" in message.content:
-			await message.add_reaction(":D_weird:820756635609464832")
+			try:
+				await message.add_reaction(":D_weird:820756635609464832")
+			except NotFound:
+				pass
+		
 		if "gae" in message.content:
-			await message.add_reaction(":D_weird:820756635609464832")
+			try:
+				await message.add_reaction(":D_weird:820756635609464832")
+			except NotFound:
+				pass
+		
 		if "Gae" in message.content:
-			await message.add_reaction(":D_weird:820756635609464832")
+			try:
+				await message.add_reaction(":D_weird:820756635609464832")
+			except NotFound:
+				pass
 
 		if message.author.bot:
 			return
@@ -221,7 +254,7 @@ class Reactions(Cog):
 			return
 		global prize
 		prize = answers[2]
-		confirmation_embed = Embed(description=f"The giveaway will be in {channel.mention} for **{prize}** and will last for **{answers[1]}**", color=0x000000)
+		confirmation_embed = Embed(description=f"The giveaway will be in {channel.mention} for **{prize}** and will last for **{answers[1]}**", color=0x43b581)
 		await ctx.send(embed = confirmation_embed)
 
 		embed = Embed(title = "🎉 Giveaway!", description = f"🎁 {prize}", color = ctx.author.color)
@@ -245,6 +278,15 @@ class Reactions(Cog):
 		embed = Embed(title="🎉 Giveaway Results", description=f"🏆 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
 		await channel.send(f"||{winner.mention}||", embed=embed)
 	
+	
+	@giveaway.error
+	async def giveaway_error(self, ctx, exc):
+		if isinstance(exc, CheckFailure):
+			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
+			await ctx.message.delete(delay=15)
+			await ctx.reply(embed=embed,delete_after=10)
+
+
 	#GIVEAWAY REROLL COMMAND
 	@command(name="greroll",help="Reroll recently conducted giveaways", brief="Reroll Giveaways", hidden=True)
 	@has_any_role('Chad', 'Admin', 'Executive')
@@ -261,6 +303,14 @@ class Reactions(Cog):
 
 		embed = Embed(title="🎉 Giveaway Results", description=f"🎉 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
 		await channel.send(f"||{winner.mention}||",embed = embed)
+
+
+	@reroll.error
+	async def reroll_error(self, ctx, exc):
+		if isinstance(exc, CheckFailure):
+			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
+			await ctx.message.delete(delay=15)
+			await ctx.reply(embed=embed,delete_after=10)
 
 
 	@Cog.listener()

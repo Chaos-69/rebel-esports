@@ -9,7 +9,8 @@ from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 from datetime import datetime
 import datetime as dt
-from discord.errors import HTTPException, Forbidden
+from discord.errors import Forbidden
+from discord.errors import NotFound
 
 class Warn(Cog):
 	def __init__(self, bot):
@@ -64,20 +65,24 @@ class Warn(Cog):
 				fields = [("Syntax", "```?warn <target> [reason]```", False)]
 				for name, value, inline in fields:
 					embed.add_field(name=name, value=value, inline=inline)			
+				await ctx.message.delete(delay=15)
 				return await ctx.reply(embed=embed,delete_after=10)
-
+		
 		if member == guild.me:
-			embed = Embed(description="**You cannot warn the bot**", color=0x000000)
-			message = await ctx.reply(embed=embed)
+			embed = Embed(description="**:x: You cannot warn the bot**", color=0xffec00)
+			message = await ctx.message.delete(delay=15)
+			await ctx.reply(embed=embed,delete_after=10)
 			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 	
 		elif member == ctx.author:
-			embed = Embed(description="**You cannot warn yourself**", color=0x000000)
-			message = await ctx.reply(embed=embed)
+			embed = Embed(description="**:x: You cannot warn yourself**", color=0xffec00)
+			message = await ctx.message.delete(delay=15)
+			await ctx.reply(embed=embed,delete_after=10)
 			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 
 		if (ctx.author.top_role.position < member.top_role.position and member.guild_permissions.administrator):
-			embed=Embed(title="Task Unsuccessful", description=f":x: **You are unable to warn **{member.display_name}**.", color=0xffec00)
+			embed=Embed(title="Task Unsuccessful", description=f":x: **You are unable to warn {member.display_name}**.", color=0xffec00)
+			await ctx.message.delete(delay=15)
 			return await ctx.reply(embed=embed,delete_after=10)
 	
 		try:
@@ -97,11 +102,17 @@ class Warn(Cog):
 
 		async with aiofiles.open(f"{ctx.guild.id}.txt", mode="a") as file:
 			await file.write(f"{member.id} {ctx.author.id} {reason} {time}\n")
-			embed = Embed(description=f"***{member.mention} has been warned***", color=0xff0000)
+			embed = Embed(description=f"***{member.mention} has been warned***", color=0x43b581)
 			await ctx.send(embed=embed, delete_after=120)
-			member_embed= Embed(title="Warn Report", description=f"You have been **warned** in {member.guild.name} due to __**{reason}**__", color=0xff0000)
-			await member.send(embed=member_embed)
-
+			
+			try:
+			
+				member_embed= Embed(title="Warn Report", description=f"You have been **warned** in {member.guild.name} due to __**{reason}**__", color=0xff0000)
+				await member.send(embed=member_embed)
+			
+			except Forbidden:
+				pass
+			
 			embed=Embed(title="Member Warned", color=0xff0000, timestamp=datetime.utcnow())
 			embed.set_thumbnail(url=member.avatar_url)
 			
@@ -116,6 +127,7 @@ class Warn(Cog):
 	async def warn_error(self, ctx, exc):
 		if isinstance(exc, CheckFailure):
 			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
+			await ctx.message.delete(delay=15)
 			await ctx.reply(embed=embed,delete_after=10)
 
    
@@ -128,6 +140,7 @@ class Warn(Cog):
 			fields = [("Syntax", "```?warnings <target>```", False)]
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)			
+			await ctx.message.delete(delay=15)
 			await ctx.reply(embed=embed,delete_after=10)	    		
 		
 		try:
@@ -145,12 +158,14 @@ class Warn(Cog):
 
 		except KeyError:
 			embed = Embed(description="**This user has no warnings**", color=0x000000)
+			await ctx.message.delete(delay=15)
 			await ctx.reply(embed=embed,delete_after=10)
 
 	@warnings.error
 	async def warnings_error(self, ctx, exc):
 		if isinstance(exc, CheckFailure):
 			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
+			await ctx.message.delete(delay=15)
 			await ctx.reply(embed=embed,delete_after=10)
 	
 	#DELETE WARN COMMAND
@@ -162,6 +177,7 @@ class Warn(Cog):
 			fields = [("Syntax", "```?delwarn <target> [warn-number]```", False)]
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)			
+			await ctx.message.delete(delay=15)
 			return await ctx.reply(embed=embed,delete_after=10)
 
 		if self.warnings[ctx.guild.id][member.id][0] != 0:
@@ -186,24 +202,25 @@ class Warn(Cog):
 							for name , value, inline in fields:
 								embed.add_field(name=name, value=value, inline=inline)
 							await self.mod_log_channel.send(embed=embed)
-							embed = Embed(description=f"***Warning removed for {member.mention}***", color=0x000000)
+							embed = Embed(description=f"***Warning removed for {member.mention}***", color=0x43b581)
 							return await ctx.reply(embed=embed)
 			else:
 				embed = Embed(description="**Provide a valid warn number**", color=0x000000)
+				await ctx.message.delete(delay=15)
 				return await ctx.reply(embed=embed,delete_after=10)
 				
 		
 		else:
 			embed = Embed(description="**This user has no warnings**", color=0x000000)
+			await ctx.message.delete(delay=15)
 			return await ctx.reply(embed=embed,delete_after=10)
 			
 	@del_warn.error
 	async def del_warn_error(self, ctx, exc):
 		if isinstance(exc, CheckFailure):
 			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
+			await ctx.message.delete(delay=15)
 			await ctx.reply(embed=embed,delete_after=10)
-		else:
-			raise exc
 
 def setup(bot):
 	bot.add_cog(Warn(bot))

@@ -34,97 +34,139 @@ class Fun(Cog):
 		826442024927363072, 818444886243803216)
 		self.stopwatches = {}
 	
+	#AV COMMAND
+	@command(name="av", brief="View User Avatar", help="Displays user avatar")
+	@cooldown(3, 60, BucketType.user)
+	async def display_avatar(self, ctx, target: Optional[Member]):
+			target = target or ctx.author
+			embed = Embed(title=f"{target.display_name}'s Avatar", color=0x000000)
+			embed.set_image(url=f"{target.avatar_url}")
+			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
+			await ctx.reply(embed = embed)
+	
 
 	#8BALL COMMAND    
-	@command(name="8ball", brief="Ask 8Ball", help="Ask 8ball any question you want")
+	@command(name="8ball", brief="Ask 8Ball Questions", help="Ask 8ball any question you want")
+	@cooldown(3, 60, BucketType.user)
 	async def _8ball(self,ctx,*question):
-		question = "  ".join(question)
-		embed = Embed(description=f"**{randchoice(self.ball)}**", color=0x00000)
-		return await ctx.reply(embed=embed)
-
-	#RPS COMMAND
-	@command(name="rps", brief="Rock Paper Scissors Command", help="Choose either rock, paper or scissors")
-	async def rps(self, ctx, choice : str):
-		author = ctx.message.author
-		rpsbot = {"rock" : ":moyai:",
-			"paper": ":page_facing_up:",
-			"scissors":":scissors:"}
-		choice = choice.lower()
-		if choice in rpsbot.keys():
-			botchoice = randchoice(list(rpsbot.keys()))
-			msgs = {
- 				"win": " You win {}!".format(author.mention),
-				"square": " We're square {}!".format(author.mention),
-				"lose": " You lose {}!".format(author.mention)
-			}
-			if choice == botchoice:
-				embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
-				await ctx.reply(embed = embed)
-			elif choice == "rock" and botchoice == "paper":
-				embed = Embed(description= rpsbot[botchoice] + msgs["lose"], color=0x000000)
-				await ctx.reply(embed=embed)
-			elif choice == "rock" and botchoice == "scissors":
-				embed = Embed(description= rpsbot[botchoice] + msgs["win"], color=0x000000)
-				await ctx.reply(embed=embed)
-			elif choice == "paper" and botchoice == "rock":
-				embed = Embed(description= rpsbot[botchoice] + msgs["win"], color=0x000000)
-				await ctx.reply(embed=embed)
-			elif choice == "paper" and botchoice == "scissors":
-				embed = Embed(description= rpsbot[botchoice] + msgs["lose"], color=0x000000)
-				await ctx.reply(embed=embed)
-			elif choice == "scissors" and botchoice == "rock":
-				embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
-				await ctx.reply(embed=embed)
-			elif choice == "scissors" and botchoice == "paper":
-				embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
-				await ctx.reply(embed=embed)
+		if ctx.channel.id not in self.allowed_channels:
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
+		
 		else:
-			embed = Embed(description= "**Choose either rock, paper or scissors**", color=0x000000)
-			await ctx.reply(embed=embed)
+			question = "  ".join(question)
+			embed = Embed(description=f"**{randchoice(self.ball)}**", color=0x00000)
+			await ctx.message.delete(delay=120)
+			return await ctx.reply(embed=embed, delete_after=120)
+
+	
+	#RPS COMMAND
+	@command(name="rps", brief="Play Rock Paper Scissors", help="Choose either rock, paper or scissors")
+	@cooldown(3, 60, BucketType.user)
+	async def rps(self, ctx, choice : str):
+		if ctx.channel.id not in self.allowed_channels:
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
+		
+		else:
+			author = ctx.message.author
+			rpsbot = {"rock" : ":moyai:",
+				"paper": ":page_facing_up:",
+				"scissors":":scissors:"}
+			choice = choice.lower()
+			if choice in rpsbot.keys():
+				botchoice = randchoice(list(rpsbot.keys()))
+				msgs = {
+	 				"win": " You win {}!".format(author.mention),
+					"square": " We're square {}!".format(author.mention),
+					"lose": " You lose {}!".format(author.mention)
+				}
+				if choice == botchoice:
+					embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
+					await ctx.reply(embed = embed)
+				elif choice == "rock" and botchoice == "paper":
+					embed = Embed(description= rpsbot[botchoice] + msgs["lose"], color=0x000000)
+					await ctx.reply(embed=embed)
+				elif choice == "rock" and botchoice == "scissors":
+					embed = Embed(description= rpsbot[botchoice] + msgs["win"], color=0x000000)
+					await ctx.reply(embed=embed)
+				elif choice == "paper" and botchoice == "rock":
+					embed = Embed(description= rpsbot[botchoice] + msgs["win"], color=0x000000)
+					await ctx.reply(embed=embed)
+				elif choice == "paper" and botchoice == "scissors":
+					embed = Embed(description= rpsbot[botchoice] + msgs["lose"], color=0x000000)
+					await ctx.reply(embed=embed)
+				elif choice == "scissors" and botchoice == "rock":
+					embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
+					await ctx.reply(embed=embed)
+				elif choice == "scissors" and botchoice == "paper":
+					embed = Embed(description= rpsbot[botchoice] + msgs["square"], color=0x000000)
+					await ctx.reply(embed=embed)
+			else:
+				embed = Embed(description= "**:x: Choose either rock, paper or scissors**", color=0xffec00)
+				await ctx.delete(delay=15)
+				await ctx.reply(embed=embed, delete_after=10)
 
 
 	#STOPWATCH COMAND
-	@command(name="stopwatch", brief="Stopwatch Command", help="Record your of any task through stopwatch")
+	@command(name="stopwatch", brief="Start A Timer", help="Record your of any task through stopwatch")
+	@cooldown(6, 60, BucketType.user)
 	async def stopwatch(self, ctx):
-		author = ctx.message.author
-		if not author.id in self.stopwatches:
-			self.stopwatches[author.id] = int(time.perf_counter())
-			embed = Embed(description="**Stopwatch Started!**", color=0x000000)
-			await ctx.reply(embed=embed)
+		if ctx.channel.id not in self.allowed_channels:
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
+		
 		else:
-			tmp = abs(self.stopwatches[author.id] - int(time.perf_counter()))
-			tmp = str(timedelta(seconds=tmp))
-			embed = Embed(description= author.mention  + " Stopwatch stopped! Time: **" + str(tmp) + "**", color=0x000000)
-			await ctx.reply(embed=embed)
-			self.stopwatches.pop(author.id, None)
+			author = ctx.message.author
+			if not author.id in self.stopwatches:
+				self.stopwatches[author.id] = int(time.perf_counter())
+				embed = Embed(description="**Stopwatch Started!**", color=0x000000)
+				await ctx.reply(embed=embed)
+			
+			else:
+				tmp = abs(self.stopwatches[author.id] - int(time.perf_counter()))
+				tmp = str(timedelta(seconds=tmp))
+				embed = Embed(description= author.mention  + " Stopwatch stopped! Time: **" + str(tmp) + "**", color=0x000000)
+				await ctx.reply(embed=embed)
+				self.stopwatches.pop(author.id, None)
 	
 
 	#URBAN COMMAND
-	@command(name="urban", brief="Urban Dictionary", help="Gets definitions of provided words from urban dictionary")
+	@command(name="urban", brief="Urban Dictionary Search", help="Gets definitions of provided words from urban dictionary")
+	@cooldown(3, 60, BucketType.user)
 	async def urban(self, ctx, *, search_terms : str):
-		search_terms = search_terms.split(" ")
-		search_terms = "+".join(search_terms)
-		search = "http://api.urbandictionary.com/v0/define?term=" + search_terms
-		try:
-			async with aiohttp.ClientSession() as a:
-				async with a.get(search) as r:
-					result = await r.json()
-			if result["list"] != []:
-				definition = result['list'][0]['definition']
-				example = result['list'][0]['example']
-				a = definition.replace("[", "")
-				b = example.replace("]", "")
-				embed = Embed(title=f"Search Results For {search_terms}", color=0x000000)
-				fields = [("Defination", a.replace("]", ""), False),
-						("Example", b.replace("[","") , False)]
-				for name , value, inline in fields:
-					embed.add_field(name=name, value=value, inline=inline)
-					embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
-				await ctx.reply(embed=embed)
-			else:
-				await ctx.reply("Your search terms gave no results.")
-		except:
-			await ctx.reply("The API retured nothing!")
+		if ctx.channel.id not in self.allowed_channels:
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
+		
+		else:
+			search_terms = search_terms.split(" ")
+			search_terms = "+".join(search_terms)
+			search = "http://api.urbandictionary.com/v0/define?term=" + search_terms
+			try:
+				async with aiohttp.ClientSession() as a:
+					async with a.get(search) as r:
+						result = await r.json()
+				if result["list"] != []:
+					definition = result['list'][0]['definition']
+					example = result['list'][0]['example']
+					a = definition.replace("[", "")
+					b = example.replace("]", "")
+					embed = Embed(title=f"Search Results For {search_terms}", color=0x000000)
+					fields = [("Defination", a.replace("]", ""), False),
+							("Example", b.replace("[","") , False)]
+					for name , value, inline in fields:
+						embed.add_field(name=name, value=value, inline=inline)
+						embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
+					await ctx.reply(embed=embed)
+				else:
+					await ctx.reply("Your search terms gave no results.", delete_after=10)
+			except:
+				await ctx.reply("The API retured nothing!", delete_after=10)
 
 
 	#FLIP COMMAND
@@ -133,7 +175,8 @@ class Fun(Cog):
 	async def flip(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			n = random.randint(0, 1)
@@ -142,34 +185,22 @@ class Fun(Cog):
 			await ctx.reply(embed=embed)
 
 	#ROLL COMMAND
-	@command(name="roll", brief="Roll A Number", help="Rolls a random number in between 1-100")
+	@command(name="roll", brief="Roll A Number", help="Rolls a random number in between 1-10")
 	@cooldown(3, 60, BucketType.user)
 	async def roll(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
-			n = random.randrange(1, 101)
+			n = random.randrange(1, 11)
 			embed = Embed(description=f"You rolled **{n}**", color=embed_color)
 			await ctx.reply(embed=embed)
-    
-
-    #HELLO COMMAND
-	@command(name="hello", aliases=["hi"], brief="Say Hello ",help="Sends a greeting!")
-	@cooldown(3, 60, BucketType.user)
-	async def say_hello(self, ctx):
-		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
-		
-		else:
-			embed=Embed(title=f"{choice(('Hows it going?', 'Hey mate, sup?', 'Hows it hanging?', 'Yo Yo Yo'))}",color=embed_color)		
-			await ctx.reply(embed=embed)
-
+ 
 
 	#SLAP COMMAND
-	@command(name="slap", aliases=["hit"], brief="Slap A Member",help="Slaps a guild member.")
+	@command(name="slap", brief="Slap A Member",help="Slaps a guild member.")
 	@cooldown(3, 60, BucketType.user)
 	async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "for no reason"):
 		if ctx.channel.id not in self.allowed_channels:
@@ -184,31 +215,17 @@ class Fun(Cog):
 	async def slap_member_error (self, ctx, exc):
 		if isinstance(exc, BadArgument):
 			embed=Embed(title="I cant find that member.",color=embed_color)			
-			await ctx.reply(embed=embed)
-
-	#PING MUTED MEMBERS COMMAND
-	@command(name="pingmuted", aliases=["pingm"],brief="Ping Muted Members", help="Pings muted members so that they can recieve the gulag role", hidden=True)
-	@has_any_role('Chad', 'Admin', 'Executive')
-	async def ping_muted(self, ctx):
-		embed = Embed(title="Welcome To The Gulag", 
-					description="In order to unlock the gulag text and voice channel, React to the bots **Reaction message** .\nScroll up or click this link. \nhttps://discord.com/channels/803028981698789407/816992178877366282/816992939912986666\nGood luck begging for mercy...",
-					color = 0x000000)
-		await ctx.message.delete()
-		await self.gulag_channel.send("<@&821503690405183501>", embed=embed, delete_after=86400)
-	
-	@ping_muted.error
-	async def ping_muted_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed,delete_after=10)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 
 	#MEMBER COUNT COMMAND
-	@command(name="membercount", aliases=["members"], brief="Member Count", help="Displays the number of members present in the server")
+	@command(name="membercount", brief="Member Count", help="Displays the number of members present in the server")
 	@cooldown(3, 60, BucketType.user)
 	async def member_count(self,ctx):
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000, timestamp=datetime.utcnow())
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			embed = Embed(title="Member Count", color=0x000000)
@@ -234,7 +251,8 @@ class Fun(Cog):
 		if isinstance(exc, CheckFailure):
 			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
 			await ctx.message.delete(delay=60)
-			await ctx.reply(ctx.author.mention,embed=embed,delete_after=10)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
     
 
     #SEND MESSAGES COMMAND
@@ -248,19 +266,8 @@ class Fun(Cog):
 	async def say_message_error(self, ctx, exc):
 		if isinstance(exc, CheckFailure):
 			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed,delete_after=10)
-
-    #BYE COMMAND
-	@command(name="bye", aliases=["later"],brief="Say Bye ",help="Sends a farewell message!")
-	@cooldown(3, 60, BucketType.user)
-	async def say_bye(self, ctx):
-		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
-		
-		else:
-			embed=Embed(title=(f"{choice(('Catch you later!', 'See you soon!', 'Have a good one!', 'Bye!!', 'See you around!'))}"),color=0x000000)		
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 
 
     #API | ANIMAL FACTS
@@ -298,19 +305,20 @@ class Fun(Cog):
 						await ctx.send(f"API returned a {response.status} status.",color=0x000000)
 				
 			else:
-				embed=Embed(title="Something Went Wrong",description="You have either entered an invalid animal or some arguments are missing.\n Try one of the avalaible animals in lowercase, which include __*cat, dog, bird and koala*__",color=0x000000)
+				embed=Embed(title="Something Went Wrong",description="You have either entered an invalid animal or some arguments are missing.\n Try one of the avalaible animals in lowercase, which include *cat, dog, bird and koala*",color=0x000000)
 				embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 								 icon_url=f"{ctx.author.avatar_url}")
 				await ctx.reply(embed=embed)
 
 		else:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 	
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.gulag_channel = self.bot.get_channel(816992178877366282)
+			self.gulag_channel = self.bot.get_channel(829062770309070908)
 			self.bot.cogs_ready.ready_up("fun") #IMPORTANT! - ("Fun") is the FILE NAME, NOT print name. 
 
 def setup(bot):

@@ -67,7 +67,7 @@ class Helpmisc(Cog):
 			embed.add_field(name="Command description", value=command.help)
 			embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 							 icon_url=f"{ctx.author.avatar_url}")
-			await ctx.send(ctx.author.mention,embed=embed, delete_after=60)
+			await ctx.send(embed=embed, delete_after=60)
 
 	#GENERAL HELP COMMAND
 	@command(name="help", brief="Help Categories", help="Displays all the categories assigned with commands.")
@@ -77,7 +77,8 @@ class Helpmisc(Cog):
 		 826442024927363072, 818444886243803216)
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			if cmd is None:
@@ -88,6 +89,7 @@ class Helpmisc(Cog):
 					fields = [("Total Commands",f"**CHΛD丨BӨT** has a total of **{len(self.bot.commands)}** commands" , False),
 								("Miscellaneous","To view all the miscellaneous commands, use the following syntax ```?helpmisc ```" , False),
 								("Moderation","To view all the moderation commands, use the following syntax ```?helpmod ```" , False),
+								("Admin","To view all the admin commands, use the following syntax ```?helpadmin ```" , False),
 								("Individual Commands", "To view help for individual commands, use the following syntax ```?help <command>```", False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
@@ -110,19 +112,22 @@ class Helpmisc(Cog):
 		 826442024927363072, 818444886243803216)
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			if cmd is None:
-				commands_to_always_hide = ["help", "helpmisc", "helpmod", "commands"]
+				commands_to_always_hide = ["help", "helpmisc", "helpmod", "helpadmin"]
 				commands = []
-				for command in self.bot.commands:
+				for command in ["ping","flip","roll","rps","slap","stopwatch","8ball","afact","wanted","urban","reddit","av","info","userinfo","serverinfo","membercount","rank","leaderboard"]:  
+					command = self.bot.get_command(command)
 					if not command.hidden and not command.name in commands_to_always_hide:
 							commands.append(command)
 					menu = MenuPages(source=HelpMenu(ctx, list(commands)),
 									delete_message_after=True,
 									timeout=60.0)
-				await ctx.send(f"||{ctx.author.mention}||")
+				await ctx.message.delete(delay=60)
+				await ctx.send(f"||{ctx.author.mention}||", delete_after=60)
 				await menu.start(ctx)
 
 	@Cog.listener()

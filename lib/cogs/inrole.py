@@ -26,7 +26,8 @@ class Inrole(Cog):
         return check
 
     #INROLE COMMAND
-    @command(name = "inrole",brief="Inrole Command", help="Shows all the members with a specific role", hidden=True)
+    @command(name = "inrole",brief="Inrole Users", help="Shows all the members with a specific role", hidden=True)
+    @has_any_role('Chad', 'Admin', 'Executive')
     async def inrole(self, ctx, *role):
         server = self.bot.get_guild(803028981698789407)
         role_name = (' '.join(role))
@@ -78,7 +79,14 @@ class Inrole(Cog):
                 page += 1
 
             await msg.delete()
-
+    
+    @inrole.error
+    async def inrole_error(self, ctx, exc):
+        if isinstance(exc, CheckFailure):
+            embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)           
+            await ctx.reply(embed=embed, delete_after=10)
+            await ctx.message.delete(delay=15)
+    
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:

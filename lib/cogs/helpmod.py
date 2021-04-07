@@ -76,19 +76,22 @@ class Helpmod(Cog):
 		 826442024927363072, 818444886243803216)
 		if ctx.channel.id not in self.allowed_channels:
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
-			await ctx.reply(embed=embed)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
 		
 		else:
 			if cmd is None:
-				commands_to_always_hide = ["help", "helpmisc", "helpmod", "commands"]
+				commands_to_always_hide = ["help", "helpmisc", "helpmod", "helpadmin"]
 				commands = []
-				for command in self.bot.commands:
+				for command in ["say","embed","snipe","purge","poll","gstart","greroll","roles","inrole","addrole","removerole","warn","warnings","delwarn","mute","unmute","kick","ban"]:  
+					command = self.bot.get_command(command)
 					if command.hidden and not command.name in commands_to_always_hide:
 							commands.append(command)
 					menu = MenuPages(source=HelpMenu(ctx, list(commands)),
 									delete_message_after=True,
 									timeout=60.0)
-				await ctx.send(f"||{ctx.author.mention}||")
+				await ctx.message.delete(delay=60)
+				await ctx.send(f"||{ctx.author.mention}||", delete_after=60)
 				await menu.start(ctx)
 
 	@Cog.listener()

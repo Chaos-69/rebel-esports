@@ -157,20 +157,19 @@ class Bot(BotBase):
 			embed=Embed(description=f"That command is on **{str(exc.cooldown.type).split('.')[-1]} cooldown**... Try again in **{minutes}:{seconds}**",color=0xffec00)
 			await ctx.reply(embed=embed, delete_after=60)
 		
-		if isinstance(exc, MemberNotFound):
-			embed = Embed(description="**Unable to find that member!**", color=0xffec00)
-			await ctx.reply(embed=embed, delete_after=60) 
-		
-		#if isinstance(exc, MissingAnyRole):
-		#	embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-		#	await ctx.reply(embed=embed,delete_after=10)
+		elif hasattr(exc, "original"):
+			# if isinstance(exc.original, HTTPException):
+			# 	await ctx.send("Unable to send message.")
 
-		if isinstance(exc, HTTPException):
-			embed = Embed(description="***Moderation has been logged, user DMs are disabled***", color=0xff0000)
-			await ctx.send(embed=embed, delete_after=60)
-		
-		#else:
-		#	raise exc
+			if isinstance(exc.original, Forbidden):
+				await ctx.send("I do not have permission to do that.")
+
+			else:
+				raise exc.original
+
+		else:
+			raise exc
+	
 	
 	async def on_ready(self):
 		if not self.ready:
