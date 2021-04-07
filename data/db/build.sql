@@ -21,9 +21,3 @@ CREATE TABLE IF NOT EXISTS starboard (
 	StarMessageID integer,
 	Stars integer DEFAULT 1
 );
-
-CREATE TABLE IF NOT EXISTS warns (
-	UserID integer PRIMARY KEY,
-	ModID integer,
-	WarnTime text
-);
