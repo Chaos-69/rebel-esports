@@ -338,18 +338,6 @@ class Reactions(Cog):
 			await payload.member.add_roles(self.colours[payload.emoji.name], reason="Member Reacted To Color Reaction Message")
 			await self.color_reaction_message.remove_reaction(payload.emoji, payload.member)
 		
-		#REDDITOR ROLE MESSAGE
-		if self.bot.ready and payload.message_id == self.reddit_message.id:
-			for roles in payload.member.roles:
-				if self.redditor in payload.member.roles:
-					print("Role Found")
-					await payload.member.remove_roles(self.redditor_role[payload.emoji.name], reason="Member Removed Redditor Role") 
-					return await self.reddit_message.remove_reaction(payload.emoji, payload.member)
-				else:
-					print("Role Not Found")
-					await payload.member.add_roles(self.redditor_role[payload.emoji.name], reason="Member Took Redditor Role")
-					return await self.reddit_message.remove_reaction(payload.emoji, payload.member)
-		
 		elif payload.emoji.name == "⭐":
 			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
 			star_emoji = discord.utils.get(message.reactions , emoji="⭐")
@@ -392,9 +380,6 @@ class Reactions(Cog):
 			self.starboard_channel = self.bot.get_channel(825162033707483176)		
 			self.verification_pending_role = self.bot.get_guild(803028981698789407).get_role(826575568794943550)
 			self.community = self.bot.get_guild(803028981698789407).get_role(803035221808513025)
-			self.reddit_message = await self.bot.get_channel(803031152448372777).fetch_message(829401084048310283)
-			self.redditor_role = {"☑️": self.bot.get_guild(803028981698789407).get_role(803157752414863382)}
-			self.redditor = self.bot.get_guild(803028981698789407).get_role(803157752414863382)
 			self.color_reaction_message = await self.bot.get_channel(803031152448372777).fetch_message(829400920051417119)
 			self.colours = {
 				"🟥": self.bot.guild.get_role(821054526441652274), # Red
