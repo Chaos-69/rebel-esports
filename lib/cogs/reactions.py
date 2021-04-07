@@ -278,14 +278,6 @@ class Reactions(Cog):
 		winner = random.choice(users)
 		embed = Embed(title="🎉 Giveaway Results", description=f"🏆 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
 		await channel.send(f"||{winner.mention}||", embed=embed)
-	
-	
-	@giveaway.error
-	async def giveaway_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
 
 
 	#GIVEAWAY REROLL COMMAND
@@ -304,14 +296,6 @@ class Reactions(Cog):
 
 		embed = Embed(title="🎉 Giveaway Results", description=f"🎉 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
 		await channel.send(f"||{winner.mention}||",embed = embed)
-
-
-	@reroll.error
-	async def reroll_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
 
 
 	@Cog.listener()

@@ -8,6 +8,7 @@ from discord.ext.commands import has_role, has_any_role, MissingRequiredArgument
 from discord import Member
 import asyncio
 import discord
+from discord.ext.commands.errors import MissingAnyRole
 
 # |CUSTOM|
 embed_color = 0x000000
@@ -34,13 +35,6 @@ class Misc(Cog):
 			embed = Embed(description=f"Guild prefix has been changed to **{new}**" , color=0x000000)
 			await ctx.send("@everyone")
 			await ctx.reply(embed=embed)
-
-	@change_prefix.error
-	async def change_prefix_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title=":x: You dont have permissions to do that.", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
 	
 	
 	#ADD BAN COMMAND
@@ -70,13 +64,7 @@ class Misc(Cog):
 					embed = Embed(description="**That user is already banned**", color=0x000000)
 					await ctx.reply(embed=embed, delete_after=10)
 					await ctx.message.delete(delay=15)
-	
-	@addban_command.error
-	async def addban_command_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
+
 
 	
 	#DELETE BAN COMMAND
@@ -105,13 +93,6 @@ class Misc(Cog):
 					embed = Embed(description="**That user is already unbanned**", color=0x000000)
 					await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
-	
-	@delban_command.error
-	async def delban_command_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
     
 	
 	#TOGGLE COMMAND
@@ -134,13 +115,6 @@ class Misc(Cog):
 			ternary = "enabled" if command.enabled else "disabled"
 			embed = Embed(description=f"**I have successfully {ternary} {command.qualified_name}**", color=0x000000)
 			await ctx.reply(embed=embed)
-	
-	@toggle.error
-	async def toggle_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
 	
 	
 	#NUKE COMAMND
@@ -167,14 +141,7 @@ class Misc(Cog):
 		else:
 			emebd = Embed(description=f"**No channel named {channel.name} was found!**")
 			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
-
-	@nuke.error
-	async def nuke_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)	                			
+			await ctx.message.delete(delay=15)             			
 
 	
 	#ADD ROLE COMMAND
@@ -196,13 +163,6 @@ class Misc(Cog):
 				embed=Embed(title="Task Unsuccessful", description=f":x: **You cannot edit roles for {target.mention}**.", color=0xffec00)
 				await ctx.reply(embed=embed, delete_after=10)
 				await ctx.message.delete(delay=15)		
-		
-	@add_role.error
-	async def add_role_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
 
 
 	#ROMOVE ROLE COMMAND
@@ -224,14 +184,22 @@ class Misc(Cog):
 				embed=Embed(title="Task Unsuccessful", description=f":x: **You cannot edit roles for {target.mention}**.", color=0xffec00)
 				await ctx.reply(embed=embed, delete_after=10)
 				await ctx.message.delete(delay=15)		
-	
-	@remove_role.error
-	async def eremove_role_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
 
+	#SLOW MODE COMMAND
+	@command(name="slowmode", brief="Set Slowmode", help="Sets slowmode for a desired channel in seconds", hidden=True)
+	@has_any_role('Admin', 'Chad', 'Executive')
+	async def slowmode(self, ctx, seconds: int):
+			guild = self.bot.get_guild(803028981698789407)
+			for channels in guild.channels:
+				if seconds != 0:
+					await ctx.channel.edit(slowmode_delay=seconds)
+					embed = Embed(description=f"**Slowmode for {ctx.channel.mention} has been set to {seconds} seconds**", color=0x000000)
+					return await ctx.send(embed=embed)
+				else:
+					await ctx.channel.edit(slowmode_delay=seconds)
+					embed = Embed(description=f"**Slowmode for {ctx.channel.mention} has been removed**", color=0x000000)
+					return await ctx.send(embed=embed)
+	
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:

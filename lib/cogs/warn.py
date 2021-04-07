@@ -122,13 +122,6 @@ class Warn(Cog):
 			for name , value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 			await self.mod_log_channel.send(embed=embed)
-	
-	@warn.error
-	async def warn_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
 
    
     #WARNINGS COMMAND
@@ -158,13 +151,6 @@ class Warn(Cog):
 
 		except KeyError:
 			embed = Embed(description="**This user has no warnings**", color=0x000000)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
-
-	@warnings.error
-	async def warnings_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
 			await ctx.message.delete(delay=15)
 			await ctx.reply(embed=embed,delete_after=10)
 	
@@ -214,13 +200,6 @@ class Warn(Cog):
 			embed = Embed(description="**This user has no warnings**", color=0x000000)
 			await ctx.message.delete(delay=15)
 			return await ctx.reply(embed=embed,delete_after=10)
-			
-	@del_warn.error
-	async def del_warn_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
 
 def setup(bot):
 	bot.add_cog(Warn(bot))

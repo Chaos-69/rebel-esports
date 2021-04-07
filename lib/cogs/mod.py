@@ -91,13 +91,6 @@ class Mod(Cog):
 						await ctx.message.delete(delay=15)
 						await ctx.reply(embed=embed,delete_after=10)
 	
-	@kick_members.error
-	async def kick_members_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
-	
 
 	#BAN COMMAND
 	@command(name="ban", brief="Ban Members", help="Bans members from the current guild.", hidden=True)
@@ -159,13 +152,6 @@ class Mod(Cog):
 							await ctx.message.delete(delay=15)
 							await ctx.reply(embed=embed,delete_after=10)
 	
-	@ban_members.error
-	async def ban_members_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
-	
 
 	#PURGE COMMAND
 	@command(name="purge", brief="Purge Messages",help="Deletes optional number of messages.", hidden=True)
@@ -177,14 +163,6 @@ class Mod(Cog):
 				deleted = await ctx.channel.purge(limit=limit, after=datetime.utcnow()-timedelta(days=14))
 				embed=Embed(title="Action Successful", description=f":white_check_mark: Successfully deleted **{len(deleted):,}** messages.", color=0x43b581)
 				await ctx.send(embed=embed, delete_after=3)
-	
-	@clear_messages.error
-	async def clear_messages_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
-	
 
 
 	#MUTE COMMAND
@@ -265,14 +243,7 @@ class Mod(Cog):
 				
 				if len(unmutes):
 					await sleep(minutes*60)
-					await self.unmute(ctx, targets)				
-
-	@mute_members.error
-	async def mute_members_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)				
+					await self.unmute(ctx, targets)								
 
 	
 	async def unmute(self, ctx, targets, *, reason="Mute time expired."):
@@ -331,13 +302,6 @@ class Mod(Cog):
 
 			else:
 				await self.unmute(ctx, targets, reason=reason)
-	
-	@unmute_members.error
-	async def unmute_members_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
 
 	
 	#ADD BLACKLIST WORDS COMMAND
@@ -352,12 +316,6 @@ class Mod(Cog):
 		embed=Embed(title="Blacklist Words Added", description=":white_check_mark: Blacklist words have been successfully added. \n**Warn dialog will appear for confirmation.**", color=0x43b581)
 		await ctx.reply(embed=embed)	
 
-	@add_profanity.error
-	async def add_profanity_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
 	
 	#DELETE BLACKLISTED WORDS COMMAND
 	@command(name="delprofanity", brief="Remove Blacklisted Words", help="Removes blacklisted words for the current guild",hidden=True)	
@@ -373,13 +331,7 @@ class Mod(Cog):
 		
 		embed=Embed(title="Blacklist Words Removed.", description=":white_check_mark: Blacklist words have been successfully removed.", color=0x43b581)
 		await ctx.reply(embed=embed)	
-	
-	@remove_profanity.error
-	async def remove_profanity_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
+
 
 	#PROFANITY DETECTION
 	@Cog.listener()		
@@ -445,14 +397,6 @@ class Mod(Cog):
 			embed.set_author(name=f"{snipe_message_author}#{snipe_message_author_discriminator}", icon_url=f"{snipe_message_author_url}")		
 			await message.channel.send(embed=embed, delete_after=60)
 			return
-	
-	@snipe.error
-	async def snipe_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
-	
 
 	#ROLES COMMAND
 	@command(name="roles", brief="Roles Command", help="List all the roles present in the guild", hidden=True)
@@ -463,12 +407,6 @@ class Mod(Cog):
 		await ctx.message.delete(delay=15)
 		await ctx.send(embed =embed, delete_after=60)
 
-	@roles.error
-	async def roles_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
 
 	@Cog.listener()
 	async def on_ready(self):

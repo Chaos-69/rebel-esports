@@ -83,7 +83,7 @@ class Helpadmin(Cog):
 			if cmd is None:
 				commands_to_always_hide = ["help", "helpmisc", "helpmod", "helpadmin"]
 				commands = []
-				for command in ["prefix","toggle","addban","delban","addprofanity","delprofanity","nuke","shutdown"]:  
+				for command in ["prefix","toggle","slowmode","addban","delban","addprofanity","delprofanity","nuke","shutdown"]:  
 					command = self.bot.get_command(command)
 					if command.hidden and not command.name in commands_to_always_hide:
 							commands.append(command)

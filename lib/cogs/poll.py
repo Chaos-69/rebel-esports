@@ -27,6 +27,7 @@ class Poll(commands.Cog):
         self.bot = bot
 
     @command(name="poll", brief="Poll Command", help="Create polls", hidden=True)
+    @has_any_role('Admin', 'Chad', "Executive")
     async def poll(self, ctx, *, question):            
         if question is None:
             embed=Embed(title="Poll",description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)
@@ -122,14 +123,6 @@ class Poll(commands.Cog):
             for emoji, _ in (answers):
                 await actual_poll.add_reaction(emoji)
             await ctx.send(f"**Poll has been sucessfully created in {channel.mention}**")
-
-    
-    @poll.error
-    async def poll_error(self, ctx, exc):
-        if isinstance(exc, CheckFailure):
-            embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-            await ctx.reply(embed=embed, delete_after=10)
-            await ctx.message.delete(delay=15)
 
     @Cog.listener()
     async def on_ready(self):

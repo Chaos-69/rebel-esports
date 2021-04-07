@@ -80,13 +80,6 @@ class Inrole(Cog):
 
             await msg.delete()
     
-    @inrole.error
-    async def inrole_error(self, ctx, exc):
-        if isinstance(exc, CheckFailure):
-            embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)           
-            await ctx.reply(embed=embed, delete_after=10)
-            await ctx.message.delete(delay=15)
-    
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:

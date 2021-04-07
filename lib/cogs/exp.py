@@ -145,7 +145,7 @@ class Exp(Cog):
 			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
-		
+			
 		else:
 			target = target or ctx.author
 

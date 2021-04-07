@@ -214,7 +214,7 @@ class Fun(Cog):
 	@slap_member.error
 	async def slap_member_error (self, ctx, exc):
 		if isinstance(exc, BadArgument):
-			embed=Embed(title="I cant find that member.",color=embed_color)			
+			embed=Embed(title="I cant find that member",color=embed_color)			
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 
@@ -245,15 +245,7 @@ class Fun(Cog):
 		embed=Embed(description=f"{message}",color=embed_color)
 		await ctx.send(embed=embed)
 		await ctx.message.delete()
-	
-	@say_embed.error
-	async def say_embed_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.message.delete(delay=60)
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
-    
+
 
     #SEND MESSAGES COMMAND
 	@command(name="say",brief="Send Messages",help="Send a message throught the bot.", hidden=True)
@@ -261,13 +253,6 @@ class Fun(Cog):
 	async def say_message(self, ctx,*, message):		
 		await ctx.send(f"{message}")
 		await ctx.message.delete()
-
-	@say_message.error
-	async def say_message_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed = Embed(title="Permission Not Granted",description=":x: **Insufficient permissions to perform that task**", color=0x002eff)			
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
 
 
     #API | ANIMAL FACTS

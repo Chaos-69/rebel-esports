@@ -81,13 +81,6 @@ class Meta(Cog):
 		self.bot.scheduler.shutdown()
 		await self.bot.logout()
 
-	@shutdown.error
-	async def shutdown_error(self, ctx, exc):
-		if isinstance(exc, CheckFailure):
-			embed= Embed(title="Permission Not Granted", description=":x: **Insufficient permissions to perform that task**", color=0x002eff)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
-	
 
 	@Cog.listener()
 	async def on_ready(self):
