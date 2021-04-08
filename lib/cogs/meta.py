@@ -54,12 +54,12 @@ class Meta(Cog):
 
 			embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 								 icon_url=f"{ctx.author.avatar_url}")
-			fields = [("Bot Tag", "CHΛD丨BӨT#9795", False),
+			fields = [("Bot Tag", "CHAD丨BӨT#9795", False),
 					("Developer", "Lord Chaos#9958", False),
 					("Prefix", ctx.prefix, False),
 					("Servers",len(self.bot.guilds), True),
 					("Users", f"{self.bot.guild.member_count:,}", True),
-					("Versions", f"Bot Version : {self.bot.VERSION}\nPython Version : {python_version()}\n Discord.py Version : {discord_version}", False),
+					("Versions", f"**Bot Version:** {self.bot.VERSION}\n**Python Version:** {python_version()}\n **Discord.py Version:** {discord_version}", False),
 					("Uptime", uptime ,False),
 					("Chads' Den Invite", "[Server Link](https://discord.gg/3J92CWNXCK)", False)]
 			for name, value, inline in fields:
