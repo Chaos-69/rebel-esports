@@ -6,6 +6,7 @@ from discord import Embed
 from datetime import datetime
 from discord.ext.commands import has_any_role, has_role
 from random import choice as randchoice
+import discord
 
 # |CUSTOM|
 embed_color = 0x000000
@@ -43,7 +44,6 @@ class Welcome(Cog):
 		embed.set_author(name=f"Welcome {member.display_name}!", icon_url=f"{self.guild.icon_url}")
 		embed.set_footer(text=f"ID: {member.id}")
 		await self.gateway.send(embed=embed)
-		
 		try:
 			embed=Embed(description=f"**Welcome to {member.guild.name}! Kindly cope with Discord's Terms Of Services and be sure to read <#803029543686242344>**", color=0x000000)
 			await member.send(embed=embed)

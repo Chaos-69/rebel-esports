@@ -11,7 +11,7 @@ from discord.ext.commands import has_any_role, has_role
 class Aichat(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.rs = RandomStuff(async_mode = True)
+		self.rs = RandomStuff(async_mode= True, api_key= "WjGcchHanX" )
 		self.reddit = asyncpraw.Reddit(
 							client_id = "OS1rZE67Bn0mMw",
 							client_secret = "hdLS0IWqdkzJWmRQr7XbBhgUNaDoyw",
@@ -45,7 +45,9 @@ class Aichat(Cog):
 	@Cog.listener()
 	async def on_message(self,message):
 		if not self.bot.user == message.author and message.channel == self.ai_chat_channel:
-			response = await self.rs.get_ai_response(message.content)
+			api_key = "WjGcchHanX"
+			rs = RandomStuff(api_key = api_key)
+			response = rs.get_ai_response(message.content)
 			
 			await message.reply(response)
 		
