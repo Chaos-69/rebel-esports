@@ -17,8 +17,6 @@ from discord.ext import tasks
 class Meta(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-#		self.test_channel = self.bot.get_guild(803028981698789407).get_channel(829693613465141298)
-#		self.my_loop.start()
 		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
 		    826442024927363072, 818444886243803216)
 	
@@ -83,11 +81,6 @@ class Meta(Cog):
 		db.commit()
 		self.bot.scheduler.shutdown()
 		await self.bot.logout()
-
-	#NSFW LOOP
-#	@tasks.loop(seconds=20)
-#	async def my_loop(self):
-#		await self.test_channel.send("Test", delete_after=5)
 	
 	@Cog.listener()
 	async def on_ready(self):

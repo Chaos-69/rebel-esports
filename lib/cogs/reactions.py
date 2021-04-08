@@ -322,6 +322,17 @@ class Reactions(Cog):
 			await payload.member.add_roles(self.colours[payload.emoji.name], reason="Member Reacted To Color Reaction Message")
 			await self.color_reaction_message.remove_reaction(payload.emoji, payload.member)
 		
+		#NSFW ROLE MESSAGE
+		if self.bot.ready and payload.message_id == self.nsfw_role_message.id:
+			for roles in payload.member.roles:
+				if not self.nsfw in payload.member.roles:
+					await payload.member.add_roles(self.nsfw_role[payload.emoji.name], reason="Member Took Nsfw Role")
+					return await self.nsfw_role_message.remove_reaction(payload.emoji, payload.member)
+
+				else:
+					await payload.member.remove_roles(self.nsfw, reason= "Member Removed Nsfw Role")
+					return await self.nsfw_role_message.remove_reaction(payload.emoji, payload.member)
+		
 		elif payload.emoji.name == "⭐":
 			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
 			star_emoji = discord.utils.get(message.reactions , emoji="⭐")
@@ -358,6 +369,7 @@ class Reactions(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
+			self.guild = self.bot.get_guild(803028981698789407)
 			self.music_commands_channel = self.bot.get_guild(803028981698789407).get_channel(803143531405377557)
 			self.verify = {"☑️": self.bot.get_guild(803028981698789407).get_role(803035221808513025)}
 			self.reaction_message = await self.bot.get_channel(825162415116779541).fetch_message(826457816997822464)
@@ -372,6 +384,9 @@ class Reactions(Cog):
 				"🟦": self.bot.guild.get_role(822070495800328192), # Blue
 				"🟪": self.bot.guild.get_role(822073807783198770)  # Purple
 			}
+			self.nsfw_role = {"☑️": self.bot.get_guild(803028981698789407).get_role(829441062207488010)}
+			self.nsfw_role_message = await self.bot.get_channel(803031152448372777).fetch_message(829810783075696660)
+			self.nsfw = self.bot.get_guild(803028981698789407).get_role(829441062207488010)
 			self.bot.cogs_ready.ready_up("reactions")
 
 
