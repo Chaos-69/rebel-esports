@@ -65,7 +65,7 @@ class Mod(Cog):
 						
 						try:
 
-							target_embed= Embed(title="Kick Report", description=f"You have been **kicked** from {target.guild.name} due to __**{reason}**__", color=0x000000)
+							target_embed= Embed(title="Kick Report", description=f"You have been **kicked** from {target.guild.name}\n**Reason:** {reason}", color=0x000000)
 							await target.send(embed=target_embed)
 						
 						except Forbidden:
@@ -127,7 +127,7 @@ class Mod(Cog):
 							
 							try:
 							
-								embed= Embed(title="Ban Report", description=f"You have been **banned** from {target.guild.name} due to __**{reason}__**", color=0xff0000)
+								embed= Embed(title="Ban Report", description=f"You have been **banned** from {target.guild.name}\n**Reason:** {reason}", color=0x000000)
 								await target.send(embed=embed)
 							
 							except Forbidden:
@@ -217,7 +217,7 @@ class Mod(Cog):
 							await self.mod_log_channel.send(embed=embed)
 							
 							try:
-								embed= Embed(title="Mute Report", description=f"You have been **muted** in {target.guild.name} due to __**{reason}**__", color=0xff0000)
+								embed= Embed(title="Mute Report", description=f"You have been **muted** in {target.guild.name}\n**Reason:** {reason}", color=0x000000)
 								await target.send(embed=embed)
 							
 							except Forbidden:
@@ -268,7 +268,7 @@ class Mod(Cog):
 					
 					try:
 
-						embed= Embed(title="Unmute Report", description=f"You have been **unmuted** in {target.guild.name} due to **{reason}**", color=0x11ff00)
+						embed= Embed(title="Unmute Report", description=f"You have been **unmuted** in {target.guild.name}\n**Reason:** {reason}", color=0x000000)
 						await target.send(embed=embed)
 					
 					except Forbidden:
@@ -340,7 +340,7 @@ class Mod(Cog):
 			if profanity.contains_profanity(message.content):
 				await message.delete(delay=15)
 				embed=Embed(title="Blacklisted Word Detected", description=f"<:D_stopOfficer:820756718648688660> **{message.author.display_name}** watch your language.", color=0xff0000)
-				await message.channel.send(message.author.mention)
+				await message.channel.send(message.author.mention, delete_after=10)
 				await message.channel.send(embed=embed, delete_after=10)
         
 	

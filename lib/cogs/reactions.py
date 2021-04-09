@@ -83,7 +83,7 @@ class Reactions(Cog):
 			if after.channel.id == (803143634933383218):
 				role = discord.utils.get(member.guild.roles, name="Groovy")
 				await member.add_roles(role)
-				await self.music_commands_channel.send(f"**{member.mention} Welcome to music commands\nYou can use groovy or other music bot commands here!**")
+				await self.music_commands_channel.send(f"**{member.mention} Welcome to music commands\nYou can use groovy or other music bot commands here!\n Prefix for Groovy is `-`**")
 			else:
 				pass
 	    
@@ -302,6 +302,7 @@ class Reactions(Cog):
 	async def on_raw_reaction_add(self, payload):
 		#VERIFICATION MESSAGE
 		if self.bot.ready and payload.message_id == self.reaction_message.id:
+			#await self.reaction_message.add_reaction("☑️")
 			if not self.community in payload.member.roles:
 				await payload.member.remove_roles(self.verification_pending_role, reason= "Member Verified")
 				await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
@@ -372,7 +373,7 @@ class Reactions(Cog):
 			self.guild = self.bot.get_guild(803028981698789407)
 			self.music_commands_channel = self.bot.get_guild(803028981698789407).get_channel(803143531405377557)
 			self.verify = {"☑️": self.bot.get_guild(803028981698789407).get_role(803035221808513025)}
-			self.reaction_message = await self.bot.get_channel(825162415116779541).fetch_message(826457816997822464)
+			self.reaction_message = await self.bot.get_channel(825162415116779541).fetch_message(830132775859257445)
 			self.starboard_channel = self.bot.get_channel(825162033707483176)		
 			self.verification_pending_role = self.bot.get_guild(803028981698789407).get_role(826575568794943550)
 			self.community = self.bot.get_guild(803028981698789407).get_role(803035221808513025)

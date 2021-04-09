@@ -4,7 +4,7 @@ from aiohttp import request
 from discord.ext.commands import BadArgument
 from discord import Member, Embed
 from discord.errors import HTTPException
-from discord.ext.commands import command, cooldown, has_permissions, has_any_role, has_role, CheckFailure, Cog, BucketType
+from discord.ext.commands import command, cooldown, has_permissions, has_any_role, has_role, CheckFailure, Cog, BucketType, is_owner
 import discord
 from datetime import datetime
 import asyncio
