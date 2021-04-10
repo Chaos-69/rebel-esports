@@ -17,24 +17,23 @@ from discord.ext import tasks
 class Meta(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
-		    826442024927363072, 818444886243803216)
+		self.allowed_channels = (830188895374278686,771083740217999371)
 	
 	#PING COMMAND
 	@command(name="ping", brief="Ping-Pong!", help="Displays the bots current latency")
 	@cooldown(3, 60, BucketType.user)
 	async def ping(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 		
 		else:
 			start = time.time()
-			embed = Embed(title="🏓 Pong!", description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms**",color=0x000000)
+			embed = Embed(title="🏓 Pong!", description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms**",color=0xBC0808)
 			message = await ctx.reply(embed=embed)
 			end = time.time()
-			embed = Embed(title="🏓 Pong!",description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms** \nResponse time: **{(end-start)*1000:,.0f} ms**", color=0x000000)
+			embed = Embed(title="🏓 Pong!",description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms** \nResponse time: **{(end-start)*1000:,.0f} ms**", color=0xBC0808)
 			await message.edit(embed=embed)
 
 	#INFO COMMAND
@@ -42,7 +41,7 @@ class Meta(Cog):
 	@cooldown(3, 3599, BucketType.user)
 	async def info(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 		
@@ -50,7 +49,7 @@ class Meta(Cog):
 			current_time = time.time()
 			difference = int(round(current_time - start_time))
 			uptime = str(datetime.timedelta(seconds=difference))	
-			embed = Embed(title="CHΛD丨BӨT INFO", color=0x000000)	
+			embed = Embed(title="CHΛD丨BӨT INFO", color=0xBC0808)	
 			embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
 
 			embed.set_footer(text =f"Requested By {ctx.author.display_name}",
@@ -70,9 +69,9 @@ class Meta(Cog):
 
 
 	@command(name="shutdown",brief="Shutdown The Bot", help="Kills the bot like you expect it to")
-	@has_any_role('Chad', 'Admin')
+	@has_any_role("Chad.exe")
 	async def shutdown(self, ctx):
-		embed = Embed(description="**Shutting Down...**", color=0x000000)
+		embed = Embed(description="**Shutting Down...**", color=0xBC0808)
 		await ctx.reply(embed = embed)
 
 		with open("./data/banlist.txt", "w", encoding="utf-8") as f:

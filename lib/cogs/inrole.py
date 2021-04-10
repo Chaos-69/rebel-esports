@@ -27,7 +27,7 @@ class Inrole(Cog):
 
     #INROLE COMMAND
     @command(name = "inrole",brief="Inrole Users", help="Shows all the members with a specific role", hidden=True)
-    @has_any_role('Chad', 'Admin', 'Executive')
+    @has_any_role("Chad.exe", "RES | Executives", "RES | Management")
     async def inrole(self, ctx, *role):
         server = self.bot.get_guild(803028981698789407)
         role_name = (' '.join(role))
@@ -37,7 +37,7 @@ class Inrole(Cog):
                 role_id = role
                 break
         else:
-            embed = Embed(description="**Either that role does not exist or you provided the role mention\n Use the role name instead of the role mention**\n This is to prevent unnecessary role mentions", color=0x000000)
+            embed = Embed(description="**Either that role does not exist or you provided the role mention\n Use the role name instead of the role mention**\n This is to prevent unnecessary role mentions", color=0xBC0808)
             await ctx.send(embed = embed)
             return
         n = 0
@@ -53,7 +53,7 @@ class Inrole(Cog):
             string = ""
             for element in elements:
                 string = string + element
-            embedVar = discord.Embed(title=f"List of users with {role} - {n}", colour=0x000000)
+            embedVar = discord.Embed(title=f"List of users with {role} - {n}", colour=0xBC0808)
             embedVar.add_field(name = "Members", value = string)
             embedVar.set_thumbnail(url=ctx.guild.icon_url)
             pages.append(embedVar)
@@ -84,8 +84,7 @@ class Inrole(Cog):
     async def on_ready(self):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("inrole")
-            self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
-            826442024927363072, 818444886243803216)
+            self.allowed_channels = (830188895374278686,771083740217999371)
 
 def setup(bot):
     bot.add_cog(Inrole(bot))

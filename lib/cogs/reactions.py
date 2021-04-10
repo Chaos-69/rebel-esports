@@ -76,76 +76,9 @@ class Reactions(Cog):
 
 		return ret
 
-
-	@Cog.listener()
-	async def on_voice_state_update(self, member, before, after):
-		if not before.channel and after.channel:
-			if after.channel.id == (803143634933383218):
-				role = discord.utils.get(member.guild.roles, name="Groovy")
-				await member.add_roles(role)
-				await self.music_commands_channel.send(f"**{member.mention} Welcome to music commands\nYou can use groovy or other music bot commands here!\n Prefix for Groovy is `-`**")
-			else:
-				pass
-	    
-		elif before.channel and not after.channel:
-			if before.channel.id == (803143634933383218):
-				role = discord.utils.get(member.guild.roles, name="Groovy")
-				await member.remove_roles(role)
-			else:
-				pass
-	
 	#BOT MESSAGE REACTIONS			
 	@Cog.listener()
 	async def on_message(self, message):
-		
-		if "xp" in message.content:
-			try:
-				await message.add_reaction(":cheemsPolice:820748937409462279")
-			except NotFound:
-				pass
-		
-		if "Xp" in message.content:
-			try:
-				await message.add_reaction(":cheemsPolice:820748937409462279")
-			except NotFound:
-				pass
-		
-		if "eggspee" in message.content:
-			try:
-				await message.add_reaction(":cheemsPolice:820748937409462279")
-			except NotFound:
-				pass
-		
-		if "eggs" in message.content:
-			try:
-				await message.add_reaction(":cheemsPolice:820748937409462279")
-			except NotFound:
-				pass
-		
-		if "gay" in message.content:
-			try:
-				await message.add_reaction(":D_weird:820756635609464832")
-			except NotFound:
-				pass
-		
-		if "Gay" in message.content:
-			try:
-				await message.add_reaction(":D_weird:820756635609464832")
-			except NotFound:
-				pass
-		
-		if "gae" in message.content:
-			try:
-				await message.add_reaction(":D_weird:820756635609464832")
-			except NotFound:
-				pass
-		
-		if "Gae" in message.content:
-			try:
-				await message.add_reaction(":D_weird:820756635609464832")
-			except NotFound:
-				pass
-
 		if message.author.bot:
 			return
 
@@ -198,18 +131,18 @@ class Reactions(Cog):
 
 	#GIVEAWAY COMMAND
 	@command(name="gstart", brief="Conduct Giveaways", help="Makes giveaways and picks a random winner", hidden=True)
-	@has_any_role('Chad', 'Admin', 'Executive')
+	@has_any_role("Chad.exe", "RES | Executives")
 	async def giveaway(self, ctx):
-		start_embed = Embed(title="🎉 Giveay Initiated", description="Let's start with this giveaway! Answer these questions within **15 seconds**!",color=0x000000)
+		start_embed = Embed(title="🎉 Giveay Initiated", description="Let's start with this giveaway! Answer these questions within **15 seconds**!",color=0xBC0808)
 		await ctx.send(embed=start_embed)
 		
-		channel_embed = Embed(title="🎉 Select A Channel",description=f"Which **channel** should it be hosted in? Mention a channel like {ctx.channel.mention}", color=0x000000)
+		channel_embed = Embed(title="🎉 Select A Channel",description=f"Which **channel** should it be hosted in? Mention a channel like {ctx.channel.mention}", color=0xBC0808)
 		channel_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
 		
-		duration_embed = Embed(title="🎉 Select The Duration",description="What should be the **duration** of the giveaway? \nReply **(s|m|h|d)** at the end of an integer \n For example `2h`, `60s` , `4d` , `30m` ", color=0x000000)
+		duration_embed = Embed(title="🎉 Select The Duration",description="What should be the **duration** of the giveaway? \nReply **(s|m|h|d)** at the end of an integer \n For example `2h`, `60s` , `4d` , `30m` ", color=0xBC0808)
 		duration_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
 
-		prize_embed = Embed(title="🎉 Select A Prize", description="What is the prize of the giveaway?", color=0x000000)
+		prize_embed = Embed(title="🎉 Select A Prize", description="What is the prize of the giveaway?", color=0xBC0808)
 		prize_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
 
 		questions = [channel_embed , duration_embed , prize_embed]
@@ -225,12 +158,12 @@ class Reactions(Cog):
 			try:
 				msg = await self.bot.wait_for('message', timeout=15.0, check=check)
 			except asyncio.TimeoutError:
-				embed = Embed(title="✅ Process Canceled", description="You didn\'t answer in the given time!\nPlease answer in under **15 seconds** next time!",color=0x000000)
+				embed = Embed(title="✅ Process Canceled", description="You didn\'t answer in the given time!\nPlease answer in under **15 seconds** next time!",color=0xBC0808)
 				await ctx.send(embed = embed,delete_after=10)
 				return
 			else:
 				if msg.content == "cancel":
-					embed = Embed(title="✅ Process Canceled",description="Process has been canceled sucessfully", color=0x000000)
+					embed = Embed(title="✅ Process Canceled",description="Process has been canceled sucessfully", color=0xBC0808)
 					await ctx.send(embed = embed,delete_after=10)
 					return
 				answers.append(msg.content)
@@ -238,7 +171,7 @@ class Reactions(Cog):
 		try:
 			c_id = int(answers[0][2:-1])
 		except:
-			embed = Embed(title="✅ Process Canceled", description=f"You didn't mention a channel properly\nMention the channel like this {ctx.channel.mention} next time.",color=0x000000)
+			embed = Embed(title="✅ Process Canceled", description=f"You didn't mention a channel properly\nMention the channel like this {ctx.channel.mention} next time.",color=0xBC0808)
 			await ctx.send(embed=embed,delete_after=10)
 			return
 
@@ -246,11 +179,11 @@ class Reactions(Cog):
 
 		time = self.convert(answers[1])
 		if time == -1:
-			embed = Embed(title="✅ Process Canceled",description=f"You didn't answer with a proper unit! Use either **(s|m|h|d)**\n For example `2h` , `4d` , `30m`", color=0x000000)
+			embed = Embed(title="✅ Process Canceled",description=f"You didn't answer with a proper unit! Use either **(s|m|h|d)**\n For example `2h` , `4d` , `30m`", color=0xBC0808)
 			await ctx.send(embed=embed,delete_after=10)
 			return
 		elif time == -2:
-			embed = Embed(title="✅ Process Canceled", description=f"The time must be an integer. Please enter an integer next time.",color=0x000000)
+			embed = Embed(title="✅ Process Canceled", description=f"The time must be an integer. Please enter an integer next time.",color=0xBC0808)
 			await ctx.send(embed =embed,delete_after=10)
 			return
 		global prize
@@ -276,118 +209,32 @@ class Reactions(Cog):
 		users.pop(users.index(self.bot.user))
 
 		winner = random.choice(users)
-		embed = Embed(title="🎉 Giveaway Results", description=f"🏆 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
+		embed = Embed(title="🎉 Giveaway Results", description=f"🏆 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0xBC0808)
 		await channel.send(f"||{winner.mention}||", embed=embed)
 
 
 	#GIVEAWAY REROLL COMMAND
 	@command(name="greroll",help="Reroll recently conducted giveaways", brief="Reroll Giveaways", hidden=True)
-	@has_any_role('Chad', 'Admin', 'Executive')
+	@has_any_role("Chad.exe", "RES | Executives")
 	async def reroll(self, ctx, channel : discord.TextChannel, id_ : int):		
 		try:
 			new_msg = await channel.fetch_message(id_)
 		except:
-			embed = Embed(description="**The provided ID was incorrect, make sure you have entered the correct giveaway message ID\n Do not enter the ID of a reroll message either**", color=0x000000)
+			embed = Embed(description="**The provided ID was incorrect, make sure you have entered the correct giveaway message ID\n Do not enter the ID of a reroll message either**", color=0xBC0808)
 			await ctx.send(embed =embed)
 		users = await new_msg.reactions[0].users().flatten()
 		users.pop(users.index(self.bot.user))
 
 		winner = random.choice(users)
 
-		embed = Embed(title="🎉 Giveaway Results", description=f"🎉 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0x000000)
+		embed = Embed(title="🎉 Giveaway Results", description=f"🎉 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0xBC0808)
 		await channel.send(f"||{winner.mention}||",embed = embed)
 
-
-	@Cog.listener()
-	async def on_raw_reaction_add(self, payload):
-		#VERIFICATION MESSAGE
-		if self.bot.ready and payload.message_id == self.reaction_message.id:
-			#await self.reaction_message.add_reaction("☑️")
-			if not self.community in payload.member.roles:
-				await payload.member.remove_roles(self.verification_pending_role, reason= "Member Verified")
-				await payload.member.add_roles(self.verify[payload.emoji.name], reason="Member Verified")
-				await self.reaction_message.remove_reaction(payload.emoji, payload.member)
-			
-			else:
-				await self.reaction_message.remove_reaction(payload.emoji, payload.member)
-		
-		#COLOR ROLES MESSAGE
-		if self.bot.ready and payload.message_id == self.color_reaction_message.id:
-			#await self.color_reaction_message.add_reaction("🟥")
-			#await self.color_reaction_message.add_reaction("🟨")
-			#await self.color_reaction_message.add_reaction("🟩")
-			#await self.color_reaction_message.add_reaction("🟦")
-			#await self.color_reaction_message.add_reaction("🟪")
-			current_colours = filter(lambda r: r in self.colours.values(), payload.member.roles)
-			await payload.member.remove_roles(*current_colours, reason="Member Reacted To Color Reaction Message")
-			await payload.member.add_roles(self.colours[payload.emoji.name], reason="Member Reacted To Color Reaction Message")
-			await self.color_reaction_message.remove_reaction(payload.emoji, payload.member)
-		
-		#NSFW ROLE MESSAGE
-		if self.bot.ready and payload.message_id == self.nsfw_role_message.id:
-			for roles in payload.member.roles:
-				if not self.nsfw in payload.member.roles:
-					await payload.member.add_roles(self.nsfw_role[payload.emoji.name], reason="Member Took Nsfw Role")
-					return await self.nsfw_role_message.remove_reaction(payload.emoji, payload.member)
-
-				else:
-					await payload.member.remove_roles(self.nsfw, reason= "Member Removed Nsfw Role")
-					return await self.nsfw_role_message.remove_reaction(payload.emoji, payload.member)
-		
-		elif payload.emoji.name == "⭐":
-			message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
-			star_emoji = discord.utils.get(message.reactions , emoji="⭐")
-			if not message.author.bot and payload.member.id != message.author.id:
-				if star_emoji.count >= 5:
-					msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?",message.id) or (None, 0)
-					embed = Embed(description=f":star: **{stars+1}** ",
-								  colour=message.author.colour,
-								  timestamp=datetime.utcnow())
-
-					fields = [("Content", message.content or "See attachment", False),
-							("Original Message", f"[Jump!](https://discord.com/channels/803028981698789407/{payload.channel_id}/{payload.message_id})", False)]
-
-					for name, value, inline in fields:
-						embed.add_field(name=name, value=value, inline=inline)
-						embed.set_author(name= f"{message.author.display_name}", icon_url= f"{message.author.avatar_url}")
-					if len(message.attachments):
-						embed.set_image(url=message.attachments[0].url)
-
-					if not stars:
-						star_message = await self.starboard_channel.send(embed=embed)
-						db.execute("INSERT INTO starboard (RootMessageID, StarMessageID) VALUES (?, ?)",
-								   message.id, star_message.id)
-
-					else:
-						star_message = await self.starboard_channel.fetch_message(msg_id)
-						await star_message.edit(embed=embed)
-						db.execute("UPDATE starboard SET Stars = Stars + 1 WHERE RootMessageID = ?", message.id)
-
-			else:
-				await message.remove_reaction(payload.emoji, payload.member)		
-	
 	
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.guild = self.bot.get_guild(803028981698789407)
-			self.music_commands_channel = self.bot.get_guild(803028981698789407).get_channel(803143531405377557)
-			self.verify = {"☑️": self.bot.get_guild(803028981698789407).get_role(803035221808513025)}
-			self.reaction_message = await self.bot.get_channel(825162415116779541).fetch_message(830132775859257445)
-			self.starboard_channel = self.bot.get_channel(825162033707483176)		
-			self.verification_pending_role = self.bot.get_guild(803028981698789407).get_role(826575568794943550)
-			self.community = self.bot.get_guild(803028981698789407).get_role(803035221808513025)
-			self.color_reaction_message = await self.bot.get_channel(803031152448372777).fetch_message(829400920051417119)
-			self.colours = {
-				"🟥": self.bot.guild.get_role(821054526441652274), # Red
-				"🟨": self.bot.guild.get_role(822069465462079508), # Yellow
-				"🟩": self.bot.guild.get_role(822071713784528906), # Green
-				"🟦": self.bot.guild.get_role(822070495800328192), # Blue
-				"🟪": self.bot.guild.get_role(822073807783198770)  # Purple
-			}
-			self.nsfw_role = {"☑️": self.bot.get_guild(803028981698789407).get_role(829441062207488010)}
-			self.nsfw_role_message = await self.bot.get_channel(803031152448372777).fetch_message(829810783075696660)
-			self.nsfw = self.bot.get_guild(803028981698789407).get_role(829441062207488010)
+			self.guild = self.bot.get_guild(736258866504925306)
 			self.bot.cogs_ready.ready_up("reactions")
 
 

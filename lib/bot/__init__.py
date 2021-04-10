@@ -19,8 +19,7 @@ from prsaw import RandomStuff
 from pathlib import Path
 
 # |CUSTOM|
-embed_color = 0x000000
-server_logo = "https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png"
+embed_color = 0xBC0808
 # |CUSTOM|
 
 OWNER_IDS = [726480855689724105]
@@ -48,7 +47,7 @@ class Bot(BotBase):
 		self.ready = False
 		self.cogs_ready = Ready()
 
-		self.guild = None
+		self.guild = 736258866504925306
 		self.scheduler = AsyncIOScheduler()
 		
 		try:
@@ -106,11 +105,11 @@ class Bot(BotBase):
 
 		if ctx.command is not None and ctx.guild is not None:
 			if message.author.id in self.banlist:
-				embed = Embed(description="**You are banned from using commands**", color=0x000000)
+				embed = Embed(description="**You are banned from using commands due to your immense gayness**", color=0xBC0808)
 				await ctx.reply(embed=embed)
 
 			elif not self.ready:
-				await ctx.send("I'm not ready to receive commands. Please wait a few seconds.")
+				await ctx.send("I'm not ready to receive commands. Have some patience gay ass. Wait a few seconds.")
 
 			else:
 				await self.invoke(ctx)
@@ -127,10 +126,10 @@ class Bot(BotBase):
 
 	async def on_error(self, err, *args, **kwargs):
 		if err == "on_command_error":
-			embed = Embed(description="**Something went wrong!**",color=embed_color)
+			embed = Embed(description="**Something went wrong because of gay boiz gayness**",color=embed_color)
 			await args[0].send(embed=embed, delete_after=60)
 
-		embed = Embed(description="**An error occurred!**",color=embed_color)
+		embed = Embed(description="**An error occurred due to gay boi**",color=embed_color)
 		await self.config_channel.send(embed=embed)
 		raise
 
@@ -159,7 +158,7 @@ class Bot(BotBase):
 			pass
 		
 		elif isinstance(exc, MissingRequiredArgument):
-			embed=Embed(description="**One or more required arguments are missing!**",color=0xffec00)
+			embed=Embed(description="**One or more required arguments are missing, just like gay boiz straightness**",color=0xffec00)
 			await ctx.reply(embed=embed, delete_after=60)
 			await ctx.message.delete(delay=15)
 		
@@ -177,7 +176,7 @@ class Bot(BotBase):
 
 			if isinstance(exc.original, Forbidden):
 				await ctx.message.delete(delay=15)
-				await ctx.send("**I do not have permission to do that**", delete_after=10)
+				await ctx.send("**I do not have permission to do that altough i am still admin\nFuck you gay boi**", delete_after=10)
 
 			else:
 				raise exc.original
@@ -188,11 +187,10 @@ class Bot(BotBase):
 	
 	async def on_ready(self):
 		if not self.ready:
-			self.guild = self.get_guild(803028981698789407) #SERVER ID HERE
-			self.config_channel = self.get_channel(826442024927363072) #CHANNEL ID HERE
+			self.guild = self.get_guild(736258866504925306) #SERVER ID HERE
+			self.config_channel = self.get_channel(830188895374278686) #CHANNEL ID HERE
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=0, minute=0, second=10))
-			self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
-		    826442024927363072, 818444886243803216)
+			self.allowed_channels = (830188895374278686)
 			self.scheduler.start()
 
 			self.update_db()
@@ -227,29 +225,28 @@ class Bot(BotBase):
 	async def on_message(self, message):
 		if self.user.mentioned_in(message) and message.content.startswith("<") and message.content.endswith(">"):
 			if not self.user == message.author:
-				if message.channel.id == (803031892235649044) or (803033569445675029):
+				if message.channel.id == (830188895374278686) or (771083740217999371):
 					prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
-					embed=Embed(title="<:cheemsThink:821795532385157173> You Pinged Me", color=0x000000, timestamp=datetime.utcnow())
+					embed=Embed(title="<:cheemsThink:821795532385157173> You Pinged Me", color=0xBC0808, timestamp=datetime.utcnow())
 					fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
-						("Tip", "If you dont remember my prefix, you can mention me with the comand instead! \nFor example, ```@CHAD丨BӨT#9795 help - @CHAD丨BӨT#9795 flip```" , False),
-						("Help", "Need help? just use the `?help` command " , False),
-						("More Info", "For more info about me, use the command `?info`" , False)]
+						("Help", f"Need help? just use the `[{prefix}help` command " , False),
+						("More Info", f"For more info about me, use the command `{prefix}info`" , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)			
 					embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
-					embed.set_thumbnail(url=server_logo)
+					embed.set_thumbnail(url=message.guild.icon_url)
 					await message.delete(delay=120)
 					await message.channel.send(f"||{message.author.mention}||",embed=embed, delete_after=120)
 				
 				else:
-					embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for pings, please ping me in <#803031892235649044> instead**", color=0x000000)
+					embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for pings, please ping me in <#803031892235649044> instead**", color=0xBC0808)
 					await ctx.reply(embed=embed)	
 			
 		#MODMAIL SYSTEM
 		if not message.author.bot:
 			if isinstance(message.channel, DMChannel):
 				if len(message.content) < 40:
-					embed= Embed(title="ModMail Error", description=":exclamation: Your message needs to be **atleast 40** characters in length\n Refrain from spamming and abusing the ModMail system", color=0x000000)
+					embed= Embed(title="ModMail Error", description=":exclamation: Your message needs to be **atleast 40** characters in length\n Refrain from spamming and abusing the ModMail system", color=0xBC0808)
 					await message.channel.send(embed=embed)
 
 				else:			
@@ -262,9 +259,9 @@ class Bot(BotBase):
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
 					
-					mod_channel = self.get_channel(823133054078943272) #YOUR CHANNEL HERE
+					mod_channel = self.get_channel(830567374180319263) #YOUR CHANNEL HERE
 					await mod_channel.send(embed=embed)
-					embed= Embed(title=":white_check_mark: ModMail Sent Successfully",color=0x000000)
+					embed= Embed(title=":white_check_mark: ModMail Sent Successfully",color=0xBC0808)
 					fields = [("Message Sent", "Your message has been relayed to moderators. \nWe will get back to you shortly", False),
 						("ModMail Abuse",":exclamation: Refrain from abusing and spamming ModMail system or it will result in a mute", False),
 						("Notice",":exclamation: Attachments such as images, files and videos are not supported **yet** in the ModMail system", False)]

@@ -27,7 +27,7 @@ class Poll(commands.Cog):
         self.bot = bot
 
     @command(name="poll", brief="Poll Command", help="Create polls", hidden=True)
-    @has_any_role('Admin', 'Chad', "Executive")
+    @has_any_role("Chad.exe", "RES | Executives")
     async def poll(self, ctx, *, question):            
         if question is None:
             embed=Embed(title="Poll",description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)
@@ -46,7 +46,7 @@ class Poll(commands.Cog):
             def check(m):
                 return m.author == ctx.author and m.channel == ctx.channel and len(m.content) <= 100
             
-            channel_embed = Embed(title="🎉 Select A Channel",description=f"Which **channel** should it be hosted in? Mention a channel like {ctx.channel.mention}", color=0x000000)
+            channel_embed = Embed(title="🎉 Select A Channel",description=f"Which **channel** should it be hosted in? Mention a channel like {ctx.channel.mention}", color=0xBC0808)
             channel_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
             
             questions = [channel_embed]
@@ -57,12 +57,12 @@ class Poll(commands.Cog):
                 try:
                     msg = await self.bot.wait_for('message', timeout=15.0, check=check)
                 except asyncio.TimeoutError:
-                    embed = Embed(title="✅ Process Canceled", description="You didn\'t answer in the given time!\nPlease answer in under **15 seconds** next time!",color=0x000000)
+                    embed = Embed(title="✅ Process Canceled", description="You didn\'t answer in the given time!\nPlease answer in under **15 seconds** next time!",color=0xBC0808)
                     await ctx.send(embed = embed,delete_after=10)
                     return
                 else:
                     if msg.content == "?cancel":
-                        embed = Embed(title="Process Canceled",description="Process has been canceled sucessfully", color=0x000000)
+                        embed = Embed(title="Process Canceled",description="Process has been canceled sucessfully", color=0xBC0808)
                         await ctx.send(embed = embed,delete_after=10)
                         return
                     ans.append(msg.content)
@@ -70,13 +70,13 @@ class Poll(commands.Cog):
                 c_id = int(ans[0][2:-1])
             
             except:
-                embed = Embed(title="✅ Process Canceled", description=f"You didn't mention a channel properly\nMention the channel like this {ctx.channel.mention} next time.",color=0x000000)
+                embed = Embed(title="✅ Process Canceled", description=f"You didn't mention a channel properly\nMention the channel like this {ctx.channel.mention} next time.",color=0xBC0808)
                 await ctx.send(embed=embed,delete_after=10)
                 return
 
             channel = self.bot.get_channel(c_id)
             
-            info_embed = Embed(title="Enter your options", color=0x000000)
+            info_embed = Embed(title="Enter your options", color=0xBC0808)
             fields = [("Instuctions","To add options, simply type them out after this message\nYou can add up to **20** options\nThis message will timeout after **60 seconds**", False),
                 ("Publish Poll", "To publish your poll, simply type `?publish`",False),
                 ("Cancel Poll", "To cancel your poll, simply type `?cancel`", False),
@@ -87,7 +87,7 @@ class Poll(commands.Cog):
             await ctx.send(embed=info_embed, delete_after=60)
 
             for i in range(20):
-                embed=Embed(title="Enter Your Options", description="Type below your option for the poll\nThis message will appear everytime you sucessfully add a new option", color=0x000000)
+                embed=Embed(title="Enter Your Options", description="Type below your option for the poll\nThis message will appear everytime you sucessfully add a new option", color=0xBC0808)
                 messages.append(await ctx.send(embed = embed,))
 
                 try:
@@ -98,7 +98,7 @@ class Poll(commands.Cog):
                 messages.append(entry)
                 
                 if entry.clean_content.startswith(f'{ctx.prefix}cancel'):
-                    embed = Embed(title="Process Canceled",description="Process has been canceled sucessfully", color=0x000000)
+                    embed = Embed(title="Process Canceled",description="Process has been canceled sucessfully", color=0xBC0808)
                     return await ctx.send(embed = embed)
                 
                 if entry.clean_content.startswith(f'{ctx.prefix}publish'):
@@ -112,7 +112,7 @@ class Poll(commands.Cog):
                 pass # oh well
 
             answer = '\n'.join(f'{i[0]} 》 {i[1]}' for i in answers)
-            embed = Embed(title="Poll",color=0x000000, timestamp=datetime.utcnow())
+            embed = Embed(title="Poll",color=0xBC0808, timestamp=datetime.utcnow())
             fields = [("Question", f"{question}", False),
                     ("Options", f"{answer}",False),
                     ("Instructions", "React to cast your vote!", False)]
@@ -127,7 +127,7 @@ class Poll(commands.Cog):
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
-            self.audit_log_channel= self.bot.get_channel(803038174057070602) # CHANNEL HERE
+            self.audit_log_channel= self.bot.get_channel(761567095133306880) # CHANNEL HERE
             self.bot.cogs_ready.ready_up("poll")
 
 def setup(bot):

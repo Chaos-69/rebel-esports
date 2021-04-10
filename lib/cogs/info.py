@@ -13,14 +13,13 @@ from discord.ext.commands import has_any_role, has_role
 class Info(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
-		    826442024927363072, 818444886243803216)
+		self.allowed_channels = (830188895374278686,771083740217999371)
 		
 	@command(name="userinfo", aliases =["ui"], help="Displays info for a specific member in the guild.", brief="User Information")
 	@cooldown(3, 60, BucketType.user)
 	async def user_info(self, ctx, target: Optional[Member]):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 		
@@ -29,7 +28,7 @@ class Info(Cog):
 			roles = [role for role in reversed(target.roles[1:])]
 
 			embed = Embed(title=f"**{str(target.display_name)}'s Information**", 
-							color =0x000000, timestap=datetime.utcnow())
+							color =0xBC0808, timestap=datetime.utcnow())
 
 			fields = [("Name", f"{target.mention} __AKA__ {str(target.display_name)}", False),
 						("ID", f"{target.id}", False),				
@@ -52,13 +51,13 @@ class Info(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def server_info(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 		
 		else:
 			embed = Embed(title=f"**{ctx.guild.name}**", 
-							color =0x000000, timestap=datetime.utcnow())
+							color =0xBC0808, timestap=datetime.utcnow())
 
 			embed.set_thumbnail(url=ctx.guild.icon_url)
 			embed.set_footer(text=f"ID {ctx.guild.id}")

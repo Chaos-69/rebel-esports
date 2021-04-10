@@ -11,19 +11,17 @@ import discord
 from discord.ext.commands.errors import MissingAnyRole
 
 # |CUSTOM|
-embed_color = 0x000000
-server_logo = "https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png"
+embed_color = 0xBC0808
 # |CUSTOM|
 
 class Misc(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.allowed_channels = (803031892235649044, 803029543686242345, 803033569445675029, 823130101277261854,
-		    826442024927363072, 818444886243803216)
+		self.allowed_channels = (830188895374278686,771083740217999371)
 
 	# CHANGE PREFIX COMMAND
 	@command(name="prefix", brief="Change Guild Prefix",help="Changes the guild prefix.", hidden=True)
-	@is_owner()
+	@has_any_role("Chad.exe")
 	async def change_prefix(self, ctx, new: str):
 		if len(new) > 5:
 			embed = Embed(text=":exclamation: The prefix can not be more than 5 characters in length.", color=0xffec00)
@@ -32,17 +30,17 @@ class Misc(Cog):
 
 		else:
 			db.execute("UPDATE guilds SET Prefix = ? WHERE GuildID = ?", new , ctx.guild.id)
-			embed = Embed(description=f"Guild prefix has been changed to **{new}**" , color=0x000000)
+			embed = Embed(description=f"Guild prefix has been changed to **{new}**" , color=0xBC0808)
 			await ctx.send("@everyone")
 			await ctx.reply(embed=embed)
 	
 	
 	#ADD BAN COMMAND
 	@command(name="addban",brief="Ban Users From Using Commands", help="Blacklists users from being able to use bot commands", hidden=True)
-	@is_owner()
+	@has_any_role("Chad.exe")
 	async def addban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
-			embed = Embed(description="**No targets specified**", color=0x000000)
+			embed = Embed(description="**No targets specified**", color=0xBC0808)
 			await ctx.message.delete(delay=15)
 			await ctx.reply(embed=embed,delete_after=10)
 
@@ -50,18 +48,18 @@ class Misc(Cog):
 			for target in targets:
 				if not target.id in self.bot.banlist:
 					if target == self.bot or ctx.author:
-						embed = Embed(description="**You cannot ban yourself or the bot**", color=0x000000)
+						embed = Embed(description="**You cannot ban yourself or the bot**", color=0xBC0808)
 						await ctx.reply(embed=embed, delete_after=10)
 						await ctx.message.delete(delay=15)
 						
 					else:
 						self.bot.banlist.extend([t.id for t in targets])
-						embed = Embed(description=f"**Added {target.mention} to banlist**", color=0x000000)
+						embed = Embed(description=f"**Added {target.mention} to banlist**", color=0xBC0808)
 						await ctx.reply(embed = embed)
 						
 				
 				else:
-					embed = Embed(description="**That user is already banned**", color=0x000000)
+					embed = Embed(description="**That user is already banned**", color=0xBC0808)
 					await ctx.reply(embed=embed, delete_after=10)
 					await ctx.message.delete(delay=15)
 
@@ -69,10 +67,10 @@ class Misc(Cog):
 	
 	#DELETE BAN COMMAND
 	@command(name="delban",brief="Unban Users From Commands", help="Removes blacklisted users from being able to use bot commands", hidden=True)
-	@is_owner()
+	@has_any_role("Chad.exe")
 	async def delban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
-			embed = Embed(description="**No targets specified**", color=0x000000)
+			embed = Embed(description="**No targets specified**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 
@@ -80,124 +78,55 @@ class Misc(Cog):
 			for target in targets:
 				if target.id in self.bot.banlist:
 					if target == self.bot or ctx.author:
-						embed = Embed(description="**You cannot unban yourself or the bot**", color=0x000000)
+						embed = Embed(description="**You cannot unban yourself or the bot**", color=0xBC0808)
 						await ctx.message.delete(delay=15)
 						await ctx.reply(embed=embed, delete_after=10)
 						
 					else:
 						self.bot.banlist.remove(target.id)
-						embed = Embed(description=f"**Removed {target.mention} from banlist**", color=0x000000)
+						embed = Embed(description=f"**Removed {target.mention} from banlist**", color=0xBC0808)
 						await ctx.reply(embed = embed)
 						
 				else:
-					embed = Embed(description="**That user is already unbanned**", color=0x000000)
+					embed = Embed(description="**That user is already unbanned**", color=0xBC0808)
 					await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
     
 	
 	#TOGGLE COMMAND
 	@command(name="toggle", brief="Enable or Disable Commands", help="Enables or Disables commands for all users", hidden=True)
-	@is_owner()
+	@has_any_role("Chad.exe")
 	async def toggle(self, ctx, *, command):
 		command = self.bot.get_command(command)
 
 		if command is None:
-			embed = Embed(description="**That command does not exist**", color=0x000000)
+			embed = Embed(description="**That command does not exist**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 
 		elif ctx.command == command:
-			embed = Embed(description="**You cannot disable that command**", color=0x000000)
+			embed = Embed(description="**You cannot disable that command**", color=0xBC0808)
 			await ctx.reply(embed=embed,delete_after=10)
 
 		else:
 			command.enabled = not command.enabled
 			ternary = "enabled" if command.enabled else "disabled"
-			embed = Embed(description=f"**I have successfully {ternary} {command.qualified_name}**", color=0x000000)
-			await ctx.reply(embed=embed)
-	
-	
-	#NUKE COMAMND
-	@command(name="nuke", brief="Nuke Channels", help="Nukes all messages in a channel", hidden=True)
-	@is_owner()
-	async def nuke(self, ctx, channel: discord.TextChannel = None):
-		if channel == None:
-			embed = Embed(description=f"**You did not mention a channel\n For example {ctx.channel.mention}**", color=0x000000)
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
-			return
-
-		nuke_channel = discord.utils.get(ctx.guild.channels, name=channel.name)
-
-		if nuke_channel is not None:
-			new_channel = await nuke_channel.clone(reason="Has been Nuked!")
-			await nuke_channel.delete()
-			nuke_channel_embed = Embed(description="**This channel has been nuked**",color=0x000000)
-			nuke_channel_embed.set_image(url="https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif")
-			await new_channel.send(embed=nuke_channel_embed)
-			embed=Embed(description=f"**{new_channel.mention}  Has been nuked sucessfully**", color=0x000000)
-			await ctx.reply(embed=embed, delete_after=200)
-
-		else:
-			emebd = Embed(description=f"**No channel named {channel.name} was found!**")
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)             			
-
-	
-	#ADD ROLE COMMAND
-	@command(name="addrole", brief="Add Roles To Users", help="Adds the given role to the provided user", hidden=True)
-	@has_any_role('Admin', 'Chad', 'Executive')
-	async def add_role(self, ctx, role: discord.Role, targets: Greedy[Member]):
-		for target in targets:
-			if (ctx.author.top_role.position > target.top_role.position):
-				if not role in target.roles:
-					await target.add_roles(role)
-					embed = Embed(description=f"Added {role.mention} to {target.mention}", color=0x000000)
-					await ctx.reply(embed=embed)
-			
-				else:
-					embed = Embed(description=f"**{target.mention} alreadys has {role.mention} role**")
-					await ctx.reply(embed=embed, delete_after=10)
-					await ctx.message.delete(delay=15)
-			else:	
-				embed=Embed(title="Task Unsuccessful", description=f":x: **You cannot edit roles for {target.mention}**.", color=0xffec00)
-				await ctx.reply(embed=embed, delete_after=10)
-				await ctx.message.delete(delay=15)		
-
-
-	#ROMOVE ROLE COMMAND
-	@command(name="removerole", brief="Remove Roles From Users", help="Removes the given role from the provided user", hidden=True)
-	@has_any_role('Admin', 'Chad', 'Executive')
-	async def remove_role(self, ctx, role:discord.Role = None, targets: Greedy[Member] = None):
-		for target in targets:
-			if (ctx.author.top_role.position > target.top_role.position):
-				if role in target.roles:
-					await target.remove_roles(role)
-					embed = Embed(description=f"Removed {role.mention} from {target.mention}", color=0x000000)
-					await ctx.reply(embed=embed)
-			
-				else:
-					embed = Embed(description=f"**{target.mention} does not have {role.mention} role**")
-					await ctx.reply(embed=embed, delete_after=10)
-					await ctx.message.delete(delay=15)
-			else:
-				embed=Embed(title="Task Unsuccessful", description=f":x: **You cannot edit roles for {target.mention}**.", color=0xffec00)
-				await ctx.reply(embed=embed, delete_after=10)
-				await ctx.message.delete(delay=15)		
+			embed = Embed(description=f"**I have successfully {ternary} {command.qualified_name}**", color=0xBC0808)
+			await ctx.reply(embed=embed)	
 
 	#SLOW MODE COMMAND
 	@command(name="slowmode", brief="Set Slowmode", help="Sets slowmode for a desired channel in seconds", hidden=True)
-	@has_any_role('Admin', 'Chad', 'Executive')
+	@has_any_role("Chad.exe", "RES | Executives", "RES | Management")
 	async def slowmode(self, ctx, seconds: int):
-			guild = self.bot.get_guild(803028981698789407)
+			guild = self.bot.get_guild(736258866504925306)
 			for channels in guild.channels:
 				if seconds != 0:
 					await ctx.channel.edit(slowmode_delay=seconds)
-					embed = Embed(description=f"**Slowmode for {ctx.channel.mention} has been set to {seconds} seconds**", color=0x000000)
+					embed = Embed(description=f"**Slowmode for {ctx.channel.mention} has been set to {seconds} seconds**", color=0xBC0808)
 					return await ctx.send(embed=embed)
 				else:
 					await ctx.channel.edit(slowmode_delay=seconds)
-					embed = Embed(description=f"**Slowmode for {ctx.channel.mention} has been removed**", color=0x000000)
+					embed = Embed(description=f"**Slowmode for {ctx.channel.mention} has been removed**", color=0xBC0808)
 					return await ctx.send(embed=embed)
 	
 	@Cog.listener()
