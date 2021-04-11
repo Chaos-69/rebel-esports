@@ -207,12 +207,12 @@ class Bot(BotBase):
 			self.ready = True
 
 			#CUSTOM BOT STATUSES
-			statuses = ["Chad Stuff",f"{len(self.guilds)} Servers",f"{len(self.users)} Members", "Over Ghost Pings", "Over Other Bots" ,  "?help" , "Over Chads' Den", "Over The Mods", "ModMail", "Version 0.0.1", "Developed By Chad", "Chads","The World Burn", "9/11",
+			statuses = [f"With {len(self.guilds)} Servers",f"With {len(self.users)} Members", "With Your Mom", "With Other Bots" ,  f"{prefix}help" , "Join Chads' Den", "With Gay Mods", "ModMail", "Version 0.0.1", "Developed By Chad",
 			"Join ESM丨CODM", "Join RES", "discord.gg/esm"]
 			while not self.is_closed():
 				status = random.choice(statuses)
 				
-				await bot.change_presence(status=discord.Status.dnd ,activity=discord.Activity(type=discord.ActivityType.watching, name=status))
+				await bot.change_presence(status=discord.Status.online ,activity=discord.Activity(type=discord.ActivityType.playing, name=status))
 
 				await asyncio.sleep(10)
 
