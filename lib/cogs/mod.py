@@ -353,10 +353,10 @@ class Mod(Cog):
 						return
 				
 				for channel in guild.channels:
-					if message.channel.id in self.ping_allowed_channels:
+					if message.channel.id in self.ping_not_allowed_channels:
 						return
 				
-				channel_embed=Embed(title="<:cheemsGun:821807384246353981> Ghost Ping Detected", description=f"{message.content}", color=0xBC0808, timestamp=datetime.utcnow())
+				channel_embed=Embed(title="Ghost Ping Detected", description=f"{message.content}", color=0xBC0808, timestamp=datetime.utcnow())
 				channel_embed.set_footer(text=f"By {message.author.name}#{message.author.discriminator}",icon_url=f"{message.author.avatar_url}")
 				await message.channel.send(embed=channel_embed)
 				log_embed=Embed(title="Ghost Ping",color=0xff0000, timestamp=datetime.utcnow())
