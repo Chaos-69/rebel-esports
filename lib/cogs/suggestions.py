@@ -15,26 +15,13 @@ class Suggestions(Cog):
 		#COMMUITY SUGGESTIONS CHANNEL:
 		guild = self.bot.get_guild(736258866504925306)
 		if not message.author == guild.me and message.channel.id == (827960572330377233):
-			if not message.content.startswith("?nosuggest"):
-				try:
-					suggestEmbed=Embed(description=f"{message.content}", color=0xBC0808, timestamp=datetime.utcnow())
-					suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")
-					suggestEmbed.set_footer(text="?nosuggest = Simple message")
-					await self.audit_log_channel.send(embed=suggestEmbed)
-					
-					reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
-					await message.delete()
-					await reaction_message.add_reaction("<:RES_ThumbsUp:824692074615930942>")
-					await reaction_message.add_reaction("<:RES_ThumbsDown:824692213476360292>")
-					await reaction_message.add_reaction("<:pepe_cringe:824692893981736991>")
-				
-				except NotFound:
-					pass
-			else:
-				
-				message.content = message.content[10:]
-				await message.channel.send(f"{message.content} • Said By {message.author.mention}")
-				await message.delete()
+			try:
+				await message.add_reaction("<:RES_ThumbsUp:823851707292844102")
+				await message.add_reaction("<:RES_ThumbsDown:823851740242640907>")
+				await message.add_reaction("<:RES_pepe_sneer:813330951169114122>")
+			
+			except NotFound:
+				pass
 
 	@Cog.listener()
 	async def on_ready(self):
