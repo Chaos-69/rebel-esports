@@ -213,7 +213,7 @@ class Bot(BotBase):
 			while not self.is_closed():
 				status = random.choice(statuses)
 				
-				await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=status))
+				await bot.change_presence(status =discord.Status.online ,activity=discord.Activity(type=discord.ActivityType.playing, name=status))
 
 				await asyncio.sleep(10)
 

@@ -49,12 +49,12 @@ class Meta(Cog):
 			current_time = time.time()
 			difference = int(round(current_time - start_time))
 			uptime = str(datetime.timedelta(seconds=difference))	
-			embed = Embed(title="CHΛD丨BӨT INFO", color=0xBC0808)	
+			embed = Embed(title="Rebel eSports Bot INFO", color=0xBC0808)	
 			embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
 
 			embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 								 icon_url=f"{ctx.author.avatar_url}")
-			fields = [("Bot Tag", "CHAD丨BӨT#9795", False),
+			fields = [("Bot Tag", "Rebel eSports#8205", False),
 					("Developer", "Lord Chaos#9958", False),
 					("Prefix", ctx.prefix, False),
 					("Servers",len(self.bot.guilds), True),
