@@ -207,12 +207,13 @@ class Bot(BotBase):
 			self.ready = True
 
 			#CUSTOM BOT STATUSES
+			prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", self.guild.id)
 			statuses = [f"With {len(self.guilds)} Servers",f"With {len(self.users)} Members", "With Your Mom", "With Other Bots" ,  f"{prefix}help" , "Join Chads' Den", "With Gay Mods", "ModMail", "Version 0.0.1", "Developed By Chad",
 			"Join ESM丨CODM", "Join RES", "discord.gg/esm"]
 			while not self.is_closed():
 				status = random.choice(statuses)
 				
-				await bot.change_presence(status=discord.Status.online ,activity=discord.Activity(type=discord.ActivityType.playing, name=status))
+				await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=status))
 
 				await asyncio.sleep(10)
 
@@ -229,7 +230,7 @@ class Bot(BotBase):
 					prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
 					embed=Embed(title="<:cheemsThink:821795532385157173> You Pinged Me", color=0xBC0808, timestamp=datetime.utcnow())
 					fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
-						("Help", f"Need help? just use the `[{prefix}help` command " , False),
+						("Help", f"Need help? just use the `{prefix}help` command " , False),
 						("More Info", f"For more info about me, use the command `{prefix}info`" , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)			
