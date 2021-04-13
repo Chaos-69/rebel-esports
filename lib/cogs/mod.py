@@ -31,7 +31,7 @@ class Mod(Cog):
 	#KICK COMMAND
 	@command(name="kick", brief="Kick Members", help="Kicks members from the current guild.", hidden=True)
 	@bot_has_permissions(kick_members=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def kick_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -93,7 +93,7 @@ class Mod(Cog):
 	#BAN COMMAND
 	@command(name="ban", brief="Ban Members", help="Bans members from the current guild.", hidden=True)
 	@bot_has_permissions(ban_members=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def ban_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -154,7 +154,7 @@ class Mod(Cog):
 	#PURGE COMMAND
 	@command(name="purge", brief="Purge Messages",help="Deletes optional number of messages.", hidden=True)
 	@bot_has_permissions(manage_messages=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def clear_messages(self, ctx, limit: Optional[int] = 10):
 			with ctx.channel.typing():
 				await ctx.message.delete()
@@ -166,7 +166,7 @@ class Mod(Cog):
 	#MUTE COMMAND
 	@command(name="mute", brief="Mute Members", help="Mutes members for a specific amount of time in the guild." ,hidden=True)
 	@bot_has_permissions(manage_roles=True)
-	@has_any_role("Chad.exe", "RES | Executives", "RES | Management", "RES | Moderator")
+	@has_any_role(806886607541633045, "RES | Executives", "RES | Management", "RES | Moderator")
 	async def mute_members(self, ctx, targets: Greedy[Member], minutes: Optional[int], *, reason: Optional[str] = "No reason provided"):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -288,7 +288,7 @@ class Mod(Cog):
 	#UNMUTE COMMAND
 	@command(name="unmute", brief="Unmute Members", help="Unmutes members which were muted previously", hidden=True)
 	@bot_has_permissions(manage_roles=True)
-	@has_any_role("Chad.exe", "RES | Executives", "RES | Management", "RES | Moderator")
+	@has_any_role(806886607541633045, "RES | Executives", "RES | Management", "RES | Moderator")
 	async def unmute_members(self, ctx, targets: Greedy[Member], *, reason: Optional[str] = "No reason provided"):
 			if not len(targets):
 				embed=Embed(title="Unmute",description=":x: One or more arguments are missing, use the below provided syntax.", color=0xffec00)
@@ -304,7 +304,7 @@ class Mod(Cog):
 	
 	#ADD BLACKLIST WORDS COMMAND
 	@command(name="addprofanity", brief="Add Blacklisted Words", help="Adds blacklisted words for the current guild", hidden=True)
-	@has_any_role("Chad.exe")
+	@has_any_role(806886607541633045)
 	async def add_profanity(self, ctx, *words):
 		with open("./data/profanity.txt", "a",encoding="utf-8") as f:
 			f.write("".join([f"{w}\n" for w in words]))
@@ -317,7 +317,7 @@ class Mod(Cog):
 	
 	#DELETE BLACKLISTED WORDS COMMAND
 	@command(name="delprofanity", brief="Remove Blacklisted Words", help="Removes blacklisted words for the current guild",hidden=True)	
-	@has_any_role("Chad.exe")
+	@has_any_role(806886607541633045)
 	async def remove_profanity(self, ctx, *words):
 		with open("./data/profanity.txt", "r", encoding="utf-8") as f:
 			stored = [w.strip() for w in f.readlines()]
@@ -331,15 +331,15 @@ class Mod(Cog):
 		await ctx.reply(embed=embed)	
 
 
-#	#PROFANITY DETECTION
-#	@Cog.listener()		
-#	async def on_message(self, message):
-#		if not message.author.bot:
-#			if profanity.contains_profanity(message.content):
-#				await message.delete(delay=15)
-#				embed=Embed(title="Blacklisted Word Detected", description=f"<:D_stopOfficer:820756718648688660> **{message.author.display_name}** watch your language.", color=0xff0000)
-#				await message.channel.send(message.author.mention, delete_after=10)
-#				await message.channel.send(embed=embed, delete_after=10)
+	#PROFANITY DETECTION
+	@Cog.listener()		
+	async def on_message(self, message):
+		if not message.author.bot:
+			if profanity.contains_profanity(message.content):
+				await message.delete()
+				embed=Embed(title="Blacklisted Word Found", description=f"**{message.author.display_name}** that word is blacklisted", color=0xff0000)
+				await message.channel.send(message.author.mention, delete_after=10)
+				await message.channel.send(embed=embed, delete_after=10)
         
 	
 	@Cog.listener()	
@@ -384,7 +384,7 @@ class Mod(Cog):
 		snipe_message_content = None
 	
 	@command(name="snipe",brief="Snipe Messages",help="Displays the most recent deleted message by any user in the guild",hidden=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def snipe(self, message):
 		if message.author.bot or snipe_message_content == None:
 			embed=Embed(description="**Nothing to snipe!**", color=0xBC0808)

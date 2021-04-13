@@ -69,7 +69,7 @@ class Meta(Cog):
 
 
 	@command(name="shutdown",brief="Shutdown The Bot", help="Kills the bot like you expect it to")
-	@has_any_role("Chad.exe")
+	@has_any_role(806886607541633045)
 	async def shutdown(self, ctx):
 		embed = Embed(description="**Shutting Down...**", color=0xBC0808)
 		await ctx.reply(embed = embed)

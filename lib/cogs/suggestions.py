@@ -16,10 +16,15 @@ class Suggestions(Cog):
 		guild = self.bot.get_guild(736258866504925306)
 		if not message.author == guild.me and message.channel.id == (827960572330377233):
 			try:
-				await message.add_reaction("<:RES_ThumbsUp:823851707292844102")
-				await message.add_reaction("<:RES_ThumbsDown:823851740242640907>")
-				await message.add_reaction("<:RES_pepe_sneer:813330951169114122>")
-			
+				suggestEmbed=Embed(description=f"{message.content}", color=0xBC0808, timestamp=datetime.utcnow())
+				suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")
+				
+				reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
+				await message.delete()
+				await reaction_message.add_reaction("<:RES_ThumbsUp:823851707292844102>")
+				await reaction_message.add_reaction("<:RES_ThumbsDown:823851740242640907>")
+				await reaction_message.add_reaction("<:pepe_cringe:789523123389202452>")
+				
 			except NotFound:
 				pass
 

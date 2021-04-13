@@ -27,7 +27,7 @@ class Poll(commands.Cog):
         self.bot = bot
 
     @command(name="poll", brief="Poll Command", help="Create polls", hidden=True)
-    @has_any_role("Chad.exe", "RES | Executives")
+    @has_any_role(806886607541633045, "RES | Executives")
     async def poll(self, ctx, *, question):            
         if question is None:
             embed=Embed(title="Poll",description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)

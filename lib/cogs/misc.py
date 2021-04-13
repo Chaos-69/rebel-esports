@@ -21,7 +21,7 @@ class Misc(Cog):
 
 	# CHANGE PREFIX COMMAND
 	@command(name="prefix", brief="Change Guild Prefix",help="Changes the guild prefix.", hidden=True)
-	@has_any_role("Chad.exe")
+	@has_any_role(806886607541633045)
 	async def change_prefix(self, ctx, new: str):
 		if len(new) > 5:
 			embed = Embed(text=":exclamation: The prefix can not be more than 5 characters in length.", color=0xffec00)
@@ -37,7 +37,7 @@ class Misc(Cog):
 	
 	#ADD BAN COMMAND
 	@command(name="addban",brief="Ban Users From Using Commands", help="Blacklists users from being able to use bot commands", hidden=True)
-	@has_any_role("Chad.exe")
+	@has_any_role(806886607541633045)
 	async def addban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
 			embed = Embed(description="**No targets specified**", color=0xBC0808)
@@ -67,7 +67,7 @@ class Misc(Cog):
 	
 	#DELETE BAN COMMAND
 	@command(name="delban",brief="Unban Users From Commands", help="Removes blacklisted users from being able to use bot commands", hidden=True)
-	@has_any_role("Chad.exe")
+	@has_any_role(806886607541633045)
 	async def delban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
 			embed = Embed(description="**No targets specified**", color=0xBC0808)
@@ -95,7 +95,7 @@ class Misc(Cog):
 	
 	#TOGGLE COMMAND
 	@command(name="toggle", brief="Enable or Disable Commands", help="Enables or Disables commands for all users", hidden=True)
-	@has_any_role("Chad.exe")
+	@has_any_role(806886607541633045)
 	async def toggle(self, ctx, *, command):
 		command = self.bot.get_command(command)
 
@@ -116,7 +116,7 @@ class Misc(Cog):
 
 	#SLOW MODE COMMAND
 	@command(name="slowmode", brief="Set Slowmode", help="Sets slowmode for a desired channel in seconds", hidden=True)
-	@has_any_role("Chad.exe", "RES | Executives", "RES | Management")
+	@has_any_role(806886607541633045, "RES | Executives", "RES | Management")
 	async def slowmode(self, ctx, seconds: int):
 			guild = self.bot.get_guild(736258866504925306)
 			for channels in guild.channels:

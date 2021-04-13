@@ -131,7 +131,7 @@ class Reactions(Cog):
 
 	#GIVEAWAY COMMAND
 	@command(name="gstart", brief="Conduct Giveaways", help="Makes giveaways and picks a random winner", hidden=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def giveaway(self, ctx):
 		start_embed = Embed(title="🎉 Giveay Initiated", description="Let's start with this giveaway! Answer these questions within **15 seconds**!",color=0xBC0808)
 		await ctx.send(embed=start_embed)
@@ -215,7 +215,7 @@ class Reactions(Cog):
 
 	#GIVEAWAY REROLL COMMAND
 	@command(name="greroll",help="Reroll recently conducted giveaways", brief="Reroll Giveaways", hidden=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def reroll(self, ctx, channel : discord.TextChannel, id_ : int):		
 		try:
 			new_msg = await channel.fetch_message(id_)
