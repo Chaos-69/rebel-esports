@@ -29,15 +29,15 @@ class Inrole(Cog):
     @command(name = "inrole",brief="Inrole Users", help="Shows all the members with a specific role", hidden=True)
     @has_any_role(806886607541633045, "RES | Executives", "RES | Management")
     async def inrole(self, ctx, *role):
-        server = self.bot.get_guild(803028981698789407)
+        server = self.bot.get_guild(736258866504925306)
         role_name = (' '.join(role))
         role_id = server.roles[0]
         for role in server.roles:
-            if role_name == role.name or role_name.lower() == role.name.lower():
-                role_id = role
+            if role_name == role.name or role_name.lower() == role.name.lower() or role_name == role.mention:
+                role_id = role.id
                 break
         else:
-            embed = Embed(description="**Either that role does not exist or you provided the role mention\n Use the role name instead of the role mention**\n This is to prevent unnecessary role mentions", color=0xBC0808)
+            embed = Embed(description="**That role does not exist, please provide a valid role name or mention**", color=0xBC0808)
             await ctx.send(embed = embed)
             return
         n = 0

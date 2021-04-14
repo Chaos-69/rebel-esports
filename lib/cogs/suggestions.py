@@ -14,7 +14,7 @@ class Suggestions(Cog):
 	async def on_message(self, message):
 		#COMMUITY SUGGESTIONS CHANNEL:
 		guild = self.bot.get_guild(736258866504925306)
-		if not message.author == guild.me and message.channel.id == (827960572330377233):
+		if not message.author == guild.me and message.channel.id == (827960572330377233) and not message.content.startswith("+"):
 			try:
 				suggestEmbed=Embed(description=f"{message.content}", color=0xBC0808, timestamp=datetime.utcnow())
 				suggestEmbed.set_author(name=f"{message.author.display_name}'s Suggestion", icon_url=f"{message.author.avatar_url}")

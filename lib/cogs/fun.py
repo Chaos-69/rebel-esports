@@ -43,6 +43,41 @@ class Fun(Cog):
 			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
 			await ctx.reply(embed = embed)
 	
+	
+	#URBAN COMMAND
+	@command(name="urban", brief="Urban Dictionary Search", help="Gets definitions of provided words from urban dictionary")
+	@cooldown(3, 60, BucketType.user)
+	async def urban(self, ctx, *, search_terms : str):
+		if ctx.channel.id not in self.allowed_channels:
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0x000000)
+			await ctx.reply(embed=embed, delete_after=10)
+			await ctx.message.delete(delay=15)
+		
+		else:
+			search_terms = search_terms.split(" ")
+			search_terms = "+".join(search_terms)
+			search = "http://api.urbandictionary.com/v0/define?term=" + search_terms
+			try:
+				async with aiohttp.ClientSession() as a:
+					async with a.get(search) as r:
+						result = await r.json()
+				if result["list"] != []:
+					definition = result['list'][0]['definition']
+					example = result['list'][0]['example']
+					a = definition.replace("[", "")
+					b = example.replace("]", "")
+					embed = Embed(title=f"Search Results For {search_terms}", color=0x000000)
+					fields = [("Defination", a.replace("]", ""), False),
+							("Example", b.replace("[","") , False)]
+					for name , value, inline in fields:
+						embed.add_field(name=name, value=value, inline=inline)
+						embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
+					await ctx.reply(embed=embed)
+				else:
+					await ctx.reply("Your search terms gave no results.", delete_after=10)
+			except:
+				await ctx.reply("The API retured nothing!", delete_after=10)
+	
 
 	#8BALL COMMAND    
 	@command(name="8ball", brief="Ask 8Ball Questions", help="Ask 8ball any question you want")
@@ -105,7 +140,7 @@ class Fun(Cog):
 
 	#SEND EMBEDS COMMAND
 	@command(name="embed",brief="Send Embeds",help="Send embeds throught the bot.", hidden=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def say_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
 		await ctx.send(embed=embed)
@@ -114,7 +149,7 @@ class Fun(Cog):
 
     #SEND MESSAGES COMMAND
 	@command(name="say",brief="Send Messages",help="Send a message throught the bot.", hidden=True)
-	@has_any_role("Chad.exe", "RES | Executives")
+	@has_any_role(806886607541633045, "RES | Executives")
 	async def say_message(self, ctx,*, message):		
 		await ctx.send(f"{message}")
 		await ctx.message.delete()

@@ -222,7 +222,6 @@ class Mod(Cog):
 								pass
 							
 							embed=Embed(description=f":white_check_mark: ***{target.display_name} has been muted***.", color=0x43b581)
-							await ctx.message.delete()
 							await ctx.send(ctx.author.mention,embed=embed)
 							await self.gulag_channel.send(f"**Pffffttt Lmao get muted son\n Welcome to the gulag\n||{target.mention}||**")
 							if minutes:
@@ -302,45 +301,45 @@ class Mod(Cog):
 				await self.unmute(ctx, targets, reason=reason)
 
 	
-	#ADD BLACKLIST WORDS COMMAND
-	@command(name="addprofanity", brief="Add Blacklisted Words", help="Adds blacklisted words for the current guild", hidden=True)
-	@has_any_role(806886607541633045)
-	async def add_profanity(self, ctx, *words):
-		with open("./data/profanity.txt", "a",encoding="utf-8") as f:
-			f.write("".join([f"{w}\n" for w in words]))
-		
-		profanity.load_censor_words_from_file("./data/profanity.txt")
-		
-		embed=Embed(title="Blacklist Words Added", description=":white_check_mark: Blacklist words have been successfully added. \n**Warn dialog will appear for confirmation.**", color=0x43b581)
-		await ctx.reply(embed=embed)	
-
-	
-	#DELETE BLACKLISTED WORDS COMMAND
-	@command(name="delprofanity", brief="Remove Blacklisted Words", help="Removes blacklisted words for the current guild",hidden=True)	
-	@has_any_role(806886607541633045)
-	async def remove_profanity(self, ctx, *words):
-		with open("./data/profanity.txt", "r", encoding="utf-8") as f:
-			stored = [w.strip() for w in f.readlines()]
-		
-		with open("./data/profanity.txt", "w",encoding="utf-8") as f:
-			f.write("".join([f"{w}\n" for w in stored if w not in words]))	
-		
-		profanity.load_censor_words_from_file("./data/profanity.txt")
-		
-		embed=Embed(title="Blacklist Words Removed.", description=":white_check_mark: Blacklist words have been successfully removed.", color=0x43b581)
-		await ctx.reply(embed=embed)	
-
-
-	#PROFANITY DETECTION
-	@Cog.listener()		
-	async def on_message(self, message):
-		if not message.author.bot:
-			if profanity.contains_profanity(message.content):
-				await message.delete()
-				embed=Embed(title="Blacklisted Word Found", description=f"**{message.author.display_name}** that word is blacklisted", color=0xff0000)
-				await message.channel.send(message.author.mention, delete_after=10)
-				await message.channel.send(embed=embed, delete_after=10)
-        
+#	#ADD BLACKLIST WORDS COMMAND
+#	@command(name="addprofanity", brief="Add Blacklisted Words", help="Adds blacklisted words for the current guild", hidden=True)
+#	@has_any_role(806886607541633045)
+#	async def add_profanity(self, ctx, *words):
+#		with open("./data/profanity.txt", "a",encoding="utf-8") as f:
+#			f.write("".join([f"{w}\n" for w in words]))
+#		
+#		profanity.load_censor_words_from_file("./data/profanity.txt")
+#		
+#		embed=Embed(title="Blacklist Words Added", description=":white_check_mark: Blacklist words have been successfully added. \n**Warn dialog will appear for confirmation.**", color=0x43b581)
+#		await ctx.reply(embed=embed)	
+#
+#	
+#	#DELETE BLACKLISTED WORDS COMMAND
+#	@command(name="delprofanity", brief="Remove Blacklisted Words", help="Removes blacklisted words for the current guild",hidden=True)	
+#	@has_any_role(806886607541633045)
+#	async def remove_profanity(self, ctx, *words):
+#		with open("./data/profanity.txt", "r", encoding="utf-8") as f:
+#			stored = [w.strip() for w in f.readlines()]
+#		
+#		with open("./data/profanity.txt", "w",encoding="utf-8") as f:
+#			f.write("".join([f"{w}\n" for w in stored if w not in words]))	
+#		
+#		profanity.load_censor_words_from_file("./data/profanity.txt")
+#		
+#		embed=Embed(title="Blacklist Words Removed.", description=":white_check_mark: Blacklist words have been successfully removed.", color=0x43b581)
+#		await ctx.reply(embed=embed)	
+#
+#
+#	#PROFANITY DETECTION
+#	@Cog.listener()		
+#	async def on_message(self, message):
+#		if not message.author.bot:
+#			if profanity.contains_profanity(message.content):
+#				await message.delete()
+#				embed=Embed(title="Blacklisted Word Found", description=f"**{message.author.display_name}** that word is blacklisted", color=0xff0000)
+#				await message.channel.send(message.author.mention, delete_after=10)
+#				await message.channel.send(embed=embed, delete_after=10)
+#       
 	
 	@Cog.listener()	
 	async def on_message_delete(self, message):
@@ -403,7 +402,7 @@ class Mod(Cog):
 			self.mute_role = self.bot.get_guild(736258866504925306).get_role(803885096666005514)  #MUTE ROLE HERE
 			self.role = self.bot.get_guild(736258866504925306).get_role(751028081233494107)  #COMMUNITY ROLE HERE
 			self.mod_log_channel = self.bot.get_channel(822428198989725727)
-			self.allowed_roles = [self.bot.get_guild(736258866504925306).get_role(810854901055225907),self.bot.get_guild(736258866504925306).get_role(751028067446554704),self.bot.get_guild(736258866504925306).get_role(776069302045769759),self.bot.get_guild(736258866504925306).get_role(806886607541633045)]
+			self.allowed_roles = [self.bot.get_guild(736258866504925306).get_role(810854901055225907),self.bot.get_guild(736258866504925306).get_role(751028067446554704),self.bot.get_guild(736258866504925306).get_role(776069302045769759),self.bot.get_guild(736258866504925306).get_role(806886607541633045),self.bot.get_guild(736258866504925306).get_role(772521546191208488)]
 			self.gulag_channel = self.bot.get_channel(751057537280901162)
 			self.bot.cogs_ready.ready_up("mod")
 			
