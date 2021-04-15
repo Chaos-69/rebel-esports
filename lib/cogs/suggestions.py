@@ -37,19 +37,6 @@ class Suggestions(Cog):
 			except NotFound:
 				pass
 	
-		if not self.bot.user == message.author and message.channel == self.ai_chat_channel:
-			try:
-				rs = RandomStuff()
-				response = rs.get_ai_response(message.content)
-
-				await message.reply(response) 
-			
-			except NotFound:
-				pass
-		
-		else:	
-			return
-	
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
