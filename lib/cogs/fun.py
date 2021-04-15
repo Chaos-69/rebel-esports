@@ -140,7 +140,7 @@ class Fun(Cog):
 
 	#SEND EMBEDS COMMAND
 	@command(name="embed",brief="Send Embeds",help="Send embeds throught the bot.", hidden=True)
-	@has_any_role(806886607541633045, "RES | Executives")
+	@has_any_role(806886607541633045, 776069302045769759)
 	async def say_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
 		await ctx.send(embed=embed)
@@ -148,8 +148,8 @@ class Fun(Cog):
 
 
     #SEND MESSAGES COMMAND
-	@command(name="say",brief="Send Messages",help="Send a message throught the bot.", hidden=True)
-	@has_any_role(806886607541633045, "RES | Executives")
+	@command(name="say",brief="Send Messages",help="Send a message throught the bot\n \n**Required Roles** \n<@&776069302045769759> and above", hidden=True)
+	@has_any_role(806886607541633045,776069302045769759)
 	async def say_message(self, ctx,*, message):		
 		await ctx.send(f"{message}")
 		await ctx.message.delete()

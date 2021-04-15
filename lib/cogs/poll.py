@@ -47,7 +47,7 @@ class Poll(commands.Cog):
                 return m.author == ctx.author and m.channel == ctx.channel and len(m.content) <= 100
             
             channel_embed = Embed(title="🎉 Select A Channel",description=f"Which **channel** should it be hosted in? Mention a channel like {ctx.channel.mention}", color=0xBC0808)
-            channel_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
+            channel_embed.set_footer(text="You can cancel this process by replying with '+cancel'")
             
             questions = [channel_embed]
             ans = []
@@ -61,7 +61,7 @@ class Poll(commands.Cog):
                     await ctx.send(embed = embed,delete_after=10)
                     return
                 else:
-                    if msg.content == "?cancel":
+                    if msg.content == "+cancel":
                         embed = Embed(title="Process Canceled",description="Process has been canceled sucessfully", color=0xBC0808)
                         await ctx.send(embed = embed,delete_after=10)
                         return

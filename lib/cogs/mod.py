@@ -223,7 +223,7 @@ class Mod(Cog):
 							
 							embed=Embed(description=f":white_check_mark: ***{target.display_name} has been muted***.", color=0x43b581)
 							await ctx.send(ctx.author.mention,embed=embed)
-							await self.gulag_channel.send(f"**Pffffttt Lmao get muted son\n Welcome to the gulag\n||{target.mention}||**")
+							await self.gulag_channel.send(f"**Welcome to the gulag {target.mention} \n If you survive you earn you freedom\n ||Tag any @RES | Moderater or @RES | Staff to be freed||**")
 							if minutes:
 								unmutes.append(target)
 						

@@ -209,7 +209,7 @@ class Bot(BotBase):
 			#CUSTOM BOT STATUSES
 			prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", self.guild.id)
 			statuses = [f"With {len(self.guilds)} Servers",f"With {len(self.users)} Members", "With Your Mom", "With Other Bots" ,  f"{prefix}help" , "Join Chads' Den", "With Gay Mods", "ModMail", "Version 0.0.1", "Developed By Chad",
-			"Join ESM丨CODM", "discord.gg/esm", "Follow rebel._.esports On Insta", "rebel._.esports"]
+			"Join ESM丨CODM", "discord.gg/esm", "Follow rebel._.esports On Insta", "Insta: rebel._.esports"]
 			while not self.is_closed():
 				status = random.choice(statuses)
 				
