@@ -37,11 +37,13 @@ class Suggestions(Cog):
 			except NotFound:
 				pass
 	
-		if not self.bot.user == message.author and message.channel == self.ai_chat_channel:			api_key = "WjGcchHanX"
+		if not self.bot.user == message.author and message.channel == self.ai_chat_channel:
 			try:
-				response = get_ai_response(message.content)
-				
-				await message.reply(response)
+				rs = RandomStuff()
+				response = rs.get_ai_response(message.content)
+
+				await message.reply(response) 
+			
 			except NotFound:
 				pass
 		
