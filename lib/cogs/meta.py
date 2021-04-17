@@ -50,7 +50,7 @@ class Meta(Cog):
 			difference = int(round(current_time - start_time))
 			uptime = str(datetime.timedelta(seconds=difference))	
 			embed = Embed(title="Rebel eSports Bot INFO", color=0xBC0808)	
-			embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png")
+			embed.set_thumbnail(url= ctx.guild.me.avatar_url)
 
 			embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 								 icon_url=f"{ctx.author.avatar_url}")
