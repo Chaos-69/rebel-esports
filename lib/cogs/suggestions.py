@@ -30,9 +30,9 @@ class Suggestions(Cog):
 				
 				reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
 				await message.delete()
-				await reaction_message.add_reaction("<:RES_ThumbsUp:823851707292844102>")
-				await reaction_message.add_reaction("<:RES_ThumbsDown:823851740242640907>")
-				await reaction_message.add_reaction("<:pepe_cringe:789523123389202452>")
+				await reaction_message.add_reaction("<:dorime~1:782949100689424395>")
+				await reaction_message.add_reaction("<:RES_pepeshoot:794914410987913249>")
+				await reaction_message.add_reaction("<:cringe_2:789523123389202452>")
 				
 			except NotFound:
 				pass
