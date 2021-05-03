@@ -228,16 +228,16 @@ class Bot(BotBase):
 			if not self.user == message.author:
 				if message.channel.id == (830188895374278686) or (771083740217999371):
 					prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
-					embed=Embed(title="<:cheemsThink:821795532385157173> You Pinged Me", color=0xBC0808, timestamp=datetime.utcnow())
+					embed=Embed(title="<:pepeshytartedlub:790991638792241182> Ping?", color=0xBC0808, timestamp=datetime.utcnow())
 					fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
 						("Help", f"Need help? just use the `{prefix}help` command " , False),
 						("More Info", f"For more info about me, use the command `{prefix}info`" , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)			
 					embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
-					embed.set_thumbnail(url=message.guild.icon_url)
+					embed.set_thumbnail(url = self.guild.me.avatar_url)
 					await message.delete(delay=120)
-					await message.channel.send(f"||{message.author.mention}||",embed=embed, delete_after=120)
+					await message.channel.send(embed=embed, delete_after=120)
 				
 				else:
 					embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for pings, please ping me in <#803031892235649044> instead**", color=0xBC0808)

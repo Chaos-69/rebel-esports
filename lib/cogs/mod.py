@@ -354,18 +354,23 @@ class Mod(Cog):
 				for channel in guild.channels:
 					if message.channel.id in self.ping_not_allowed_channels:
 						return
-				
-				channel_embed=Embed(title="Ghost Ping Detected", description=f"{message.content}", color=0xBC0808, timestamp=datetime.utcnow())
-				channel_embed.set_footer(text=f"By {message.author.name}#{message.author.discriminator}",icon_url=f"{message.author.avatar_url}")
-				await message.channel.send(embed=channel_embed)
-				log_embed=Embed(title="Ghost Ping",color=0xff0000, timestamp=datetime.utcnow())
-				log_embed.set_thumbnail(url=f"{message.author.avatar_url}")
-				fields = [("By", f"{message.author.name}#{message.author.discriminator}", True),
-						("Channel", message.channel.mention , True),
-						("Message", message.content , False)]
-				for name, value, inline in fields:
-					log_embed.add_field(name=name, value=value, inline=inline)
-				await self.log_channel.send(embed=log_embed)
+				for s in message.mentions:
+					channel_embed=Embed(title="Ghost Ping Detected",color=0xBC0808, timestamp=datetime.utcnow())
+					fields = [("Ping By",f"{message.author.mention}", True),
+								("To", f"{s.mention}",True),
+								("Message", f"{message.content}", False)]
+					for name, value, inline in fields:
+						channel_embed.add_field(name=name, value=value, inline=inline)
+					await message.channel.send(embed=channel_embed)
+					log_embed=Embed(title="Ghost Ping",color=0xff0000, timestamp=datetime.utcnow())
+					log_embed.set_thumbnail(url=f"{message.author.avatar_url}")
+					fields = [("By", f"{message.author.name}#{message.author.discriminator}", True),
+							("To", f"{s.name}#{s.discriminator}", False),
+							("Channel", message.channel.mention , True),
+							("Message", message.content , False)]
+					for name, value, inline in fields:
+						log_embed.add_field(name=name, value=value, inline=inline)
+					await self.log_channel.send(embed=log_embed)
 
 		
 		#SNIPE COMMAND	

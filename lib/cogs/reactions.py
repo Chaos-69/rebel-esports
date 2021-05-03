@@ -46,13 +46,13 @@ class Reactions(Cog):
 		await ctx.send(embed=start_embed)
 		
 		channel_embed = Embed(title="🎉 Select A Channel",description=f"Which **channel** should it be hosted in? Mention a channel like {ctx.channel.mention}", color=0xBC0808)
-		channel_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
+		channel_embed.set_footer(text="You can cancel this process by replying with '+cancel'")
 		
 		duration_embed = Embed(title="🎉 Select The Duration",description="What should be the **duration** of the giveaway? \nReply **(s|m|h|d)** at the end of an integer \n For example `2h`, `60s` , `4d` , `30m` ", color=0xBC0808)
-		duration_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
+		duration_embed.set_footer(text="You can cancel this process by replying with '+cancel'")
 
 		prize_embed = Embed(title="🎉 Select A Prize", description="What is the prize of the giveaway?", color=0xBC0808)
-		prize_embed.set_footer(text="You can cancel this process by replying with 'cancel'")
+		prize_embed.set_footer(text="You can cancel this process by replying with '+cancel'")
 
 		questions = [channel_embed , duration_embed , prize_embed]
 
@@ -71,7 +71,7 @@ class Reactions(Cog):
 				await ctx.send(embed = embed,delete_after=10)
 				return
 			else:
-				if msg.content == "cancel":
+				if msg.content == "+cancel":
 					embed = Embed(title="✅ Process Canceled",description="Process has been canceled sucessfully", color=0xBC0808)
 					await ctx.send(embed = embed,delete_after=10)
 					return
@@ -128,9 +128,12 @@ class Reactions(Cog):
 	async def reroll(self, ctx, channel : discord.TextChannel, id_ : int):		
 		try:
 			new_msg = await channel.fetch_message(id_)
+		
 		except:
+			
 			embed = Embed(description="**The provided ID was incorrect, make sure you have entered the correct giveaway message ID\n Do not enter the ID of a reroll message either**", color=0xBC0808)
 			await ctx.send(embed =embed)
+		
 		users = await new_msg.reactions[0].users().flatten()
 		users.pop(users.index(self.bot.user))
 

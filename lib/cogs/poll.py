@@ -32,7 +32,7 @@ class Poll(commands.Cog):
         if question is None:
             embed=Embed(title="Poll",description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)
             
-            fields = [("Syntax", "```?poll | question```", False)]
+            fields = [("Syntax", "```+poll | question```", False)]
             for name, value, inline in fields:
                 embed.add_field(name=name, value=value, inline=inline)
             await ctx.message.delete(delay=15)
@@ -78,8 +78,8 @@ class Poll(commands.Cog):
             
             info_embed = Embed(title="Enter your options", color=0xBC0808)
             fields = [("Instuctions","To add options, simply type them out after this message\nYou can add up to **20** options\nThis message will timeout after **60 seconds**", False),
-                ("Publish Poll", "To publish your poll, simply type `?publish`",False),
-                ("Cancel Poll", "To cancel your poll, simply type `?cancel`", False),
+                ("Publish Poll", f"To publish your poll, simply type `{ctx.prefix}publish`",False),
+                ("Cancel Poll", f"To cancel your poll, simply type `{ctx.prefix}cancel`", False),
                 ("Timeout", "Add options message will timeout after **60 seconds**", False)]
             for name, value, inline in fields:
                 info_embed.add_field(name=name, value=value, inline=inline)

@@ -14,7 +14,6 @@ import random
 from discord import Embed
 from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
-
 class Suggestions(Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -30,12 +29,29 @@ class Suggestions(Cog):
 				
 				reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
 				await message.delete()
-				await reaction_message.add_reaction("<:dorime~1:782949100689424395>")
+				await reaction_message.add_reaction("<:pepe_hehe:780542654496768050>")
 				await reaction_message.add_reaction("<:RES_pepeshoot:794914410987913249>")
 				await reaction_message.add_reaction("<:cringe_2:789523123389202452>")
-				
+			
 			except NotFound:
 				pass
+		
+		
+		#AI CHAT
+		if not self.bot.user == message.author and message.channel == self.ai_chat_channel:
+			api_key = "WjGcchHanX"
+			rs = RandomStuff(api_key = api_key)
+			try:
+				response = rs.get_ai_response(message.content)
+				
+				await message.reply(response)
+			
+			except NotFound:
+				await message.channel.reply("Try again later please")
+				await ctx.self.config_channel.send(f"{message.author.mention} Tried to use ai chat but the api returned nothing!")
+		
+		else:	
+			return 
 	
 	@Cog.listener()
 	async def on_ready(self):
@@ -43,6 +59,7 @@ class Suggestions(Cog):
 			self.audit_log_channel= self.bot.get_channel(761567095133306880) # CHANNEL HERE
 			self.community_suggestions_channel = self.bot.get_guild(736258866504925306).get_channel(827960572330377233)
 			self.ai_chat_channel = self.bot.get_channel(759470480981229598)
+			self.config_channel = self.bot.get_guild(736258866504925306).get_channel(830188895374278686)
 			self.bot.cogs_ready.ready_up("suggestions")
 
 def setup(bot):
