@@ -16,6 +16,7 @@ from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 class Suggestions(Cog):
 	def __init__(self, bot):
+		self.rs = RandomStuff(async_mode= True, api_key= "WjGcchHanX" )
 		self.bot = bot
 
 	@Cog.listener()
@@ -39,16 +40,18 @@ class Suggestions(Cog):
 		
 		#AI CHAT
 		if not self.bot.user == message.author and message.channel == self.ai_chat_channel:
-			api_key = "WjGcchHanX"
-			rs = RandomStuff(api_key = api_key)
-			try:
-				response = rs.get_ai_response(message.content)
+			if "@everyone" not in message.content and "@here" not in message.content:
+				try:
+					response = await self.rs.get_ai_response(message.content)
+					await message.reply(response)
 				
-				await message.reply(response)
-			
-			except NotFound:
-				await message.channel.reply("Try again later please")
-				await ctx.self.config_channel.send(f"{message.author.mention} Tried to use ai chat but the api returned nothing!")
+				except NotFound:
+					await message.channel.reply("Try again later")
+					await self.config_channel.send(f"{message.author.mention} \n The ai-chat api returned nothing!")
+			else:
+				await message.reply("You really thought that would work? <:cringe_2:789523123389202452>")
+				embed = Embed(description=f"{message.author.mention} **AKA** {message.author.display_name} tried to ping `@everyone` or `@here` in <#826537727104253993>", color=0xBC0808, timestamp=datetime.utcnow())
+				await self.audit_log_channel.send(embed=embed)
 		
 		else:	
 			return 
