@@ -89,19 +89,6 @@ class Bot(BotBase):
 
 		db.commit()
 
-	@tasks.loop(seconds=1800)
-	async def my_loop(self):
-		this = await self.lounge.send("https://cdn.discordapp.com/attachments/817670985364799503/839845206702030908/lmao_2.gif")
-		that = await self.lounge.send("https://media.discordapp.net/attachments/751028107892228096/839901353140027412/unknown.png?width=400&height=68")
-		ok = await self.lounge.send("https://tenor.com/view/confirm-marriage-hae-gif-18991420")
-		await this.add_reaction(":lipbite:794913585595678740")
-		await that.add_reaction("🇦")
-		await that.add_reaction("🇲")
-		await that.add_reaction("🇪")
-		await that.add_reaction(":2friends:792036650251321405")
-		await that.add_reaction("🇳")
-
-
 	def run(self, version):
 		self.VERSION = version
 
@@ -202,11 +189,9 @@ class Bot(BotBase):
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(736258866504925306) #SERVER ID HERE
-			self.lounge = self.get_guild(736258866504925306).get_channel(751028107892228096)
 			self.config_channel = self.get_channel(830188895374278686) #CHANNEL ID HERE
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=0, minute=0, second=10))
 			self.allowed_channels = (830188895374278686)
-			self.my_loop.start()
 			self.scheduler.start()
 
 			self.update_db()
