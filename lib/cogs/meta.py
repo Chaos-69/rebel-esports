@@ -23,18 +23,12 @@ class Meta(Cog):
 	@command(name="ping", brief="Ping-Pong!", help="Displays the bots current latency")
 	@cooldown(3, 60, BucketType.user)
 	async def ping(self, ctx):
-		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0xBC0808)
-			await ctx.reply(embed=embed, delete_after=10)
-			await ctx.message.delete(delay=15)
-		
-		else:
-			start = time.time()
-			embed = Embed(title="🏓 Pong!", description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms**",color=0xBC0808)
-			message = await ctx.reply(embed=embed)
-			end = time.time()
-			embed = Embed(title="🏓 Pong!",description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms** \nResponse time: **{(end-start)*1000:,.0f} ms**", color=0xBC0808)
-			await message.edit(embed=embed)
+		start = time.time()
+		embed = Embed(title="🏓 Pong!", description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms**",color=0xBC0808)
+		message = await ctx.reply(embed=embed)
+		end = time.time()
+		embed = Embed(title="🏓 Pong!",description=f"DWSP latency: **{self.bot.latency*1000:,.0f} ms** \nResponse time: **{(end-start)*1000:,.0f} ms**", color=0xBC0808)
+		await message.edit(embed=embed)
 
 	#INFO COMMAND
 	@command(name="info" ,brief="Bot Info And Stats", help="Displays bot info and stats")

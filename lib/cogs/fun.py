@@ -33,25 +33,25 @@ class Fun(Cog):
 		self.allowed_channels = (830188895374278686,771083740217999371)
 		self.stopwatches = {}
 	
-	#NUKE COMMAND
-	@command(name="nuke",brief="Nuke the server", help="Nukes the server completely, **obv**")
-	@has_any_role(812817220752900157,751028067446554704,806886607541633045,810854901055225907)
-	async def nuke(self, ctx):
-		first = await ctx.channel.send(":warning::warning: **Nuke initiated** :warning::warning:")
-		second = await first.edit(content="Retrieving server information.")
-		third = await second.edit(content="Retrieving server information..")
-		fourth = await third.edit(content="Retrieving server information...")
-		fifth = await fourth.edit(content="Collecting members information.")
-		sixth = await fifth.edit(content="Collecting members information..")
-		seventh = await sixth.edit(content="Collecting members information...")
-		eighth = await seventh.edit(content="Successfully retrieved all information\nInitiating protocol 69")
-		nineth = await eighth.edit(content="Breaching protocol 420\nApplying protocol 69")
-		tenth = await nineth.edit(content="Success")
-		eleventh = await tenth.edit(content="Detecting server owner")
-		twelveth = await eleventh.edit(content="<@478815409177362432> gay ass detected as **current** server owner\n||ima end this gays whole career, hold my chapal||")
-		thirteenth = await twelveth.edit(content="Switching ownership to <@726480855689724105> chad\n*bows in respect*")
-		fourteenth = await thirteenth.edit(content="Successfully granted server ownership to <@726480855689724105> [||chad||] and denied from <@478815409177362432> [||gay||]")
-		await fourteenth.edit(content="em too lazy to complete the nuke, ill do it later smh")
+	# #NUKE COMMAND
+	# @command(name="nuke",brief="Nuke the server", help="Nukes the server completely, **obv**")
+	# @has_any_role(812817220752900157,751028067446554704,806886607541633045,810854901055225907)
+	# async def nuke(self, ctx):
+	# 	first = await ctx.channel.send(":warning::warning: **Nuke initiated** :warning::warning:")
+	# 	second = await first.edit(content="Retrieving server information.")
+	# 	third = await second.edit(content="Retrieving server information..")
+	# 	fourth = await third.edit(content="Retrieving server information...")
+	# 	fifth = await fourth.edit(content="Collecting members information.")
+	# 	sixth = await fifth.edit(content="Collecting members information..")
+	# 	seventh = await sixth.edit(content="Collecting members information...")
+	# 	eighth = await seventh.edit(content="Successfully retrieved all information\nInitiating protocol 69")
+	# 	nineth = await eighth.edit(content="Breaching protocol 420\nApplying protocol 69")
+	# 	tenth = await nineth.edit(content="Success")
+	# 	eleventh = await tenth.edit(content="Detecting server owner")
+	# 	twelveth = await eleventh.edit(content="<@478815409177362432> gay ass detected as **current** server owner\n||ima end this gays whole career, hold my chapal||")
+	# 	thirteenth = await twelveth.edit(content="Switching ownership to <@726480855689724105> chad\n*bows in respect*")
+	# 	fourteenth = await thirteenth.edit(content="Successfully granted server ownership to <@726480855689724105> [||chad||] and denied from <@478815409177362432> [||gay||]")
+	# 	await fourteenth.edit(content="em too lazy to complete the nuke, ill do it later smh")
 		
 
 
@@ -64,8 +64,7 @@ class Fun(Cog):
 			embed.set_image(url=f"{target.avatar_url}")
 			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
 			await ctx.reply(embed = embed)
-	
-	
+
 	#URBAN COMMAND
 	@command(name="urban", brief="Urban Dictionary Search", help="Gets definitions of provided words from urban dictionary")
 	@cooldown(3, 60, BucketType.user)
