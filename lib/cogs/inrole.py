@@ -26,7 +26,7 @@ class Inrole(Cog):
         return check
 
     #INROLE COMMAND
-    @command(name = "inrole",brief="Inrole Users", help="Shows all the members with a specific role", hidden=True)
+    @command(name = "inrole", alaises=["rm"],brief="Inrole Users", help="Shows all the members with a specific role", hidden=True)
     @has_any_role(806886607541633045, "RES | Executives", "RES | Management")
     async def inrole(self, ctx, *role):
         server = self.bot.get_guild(736258866504925306)

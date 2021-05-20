@@ -110,7 +110,7 @@ class Bot(BotBase):
 				await ctx.reply(embed=embed)
 
 			elif not self.ready:
-				await ctx.send("I'm not ready to receive commands. Have some patience gay ass. Wait a few seconds.")
+				await ctx.send("I'm not ready to receive commands. Have some patience gay ass. Wait for a while.")
 
 			else:
 				await self.invoke(ctx)
