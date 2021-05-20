@@ -59,7 +59,7 @@ class Fun(Cog):
 	@cooldown(3, 60, BucketType.user)
 	async def display_avatar(self, ctx, target: Optional[Member]):
 			target = target or ctx.author
-			embed = Embed(title=f"{target.display_name}'s Avatar",url=f"{target.avatar_url}",color=0xBC0808)
+			embed = Embed(title=f"{target.display_name}'s Avatar",url="https://pornhub.com/",color=0xBC0808)
 			embed.set_image(url=f"{target.avatar_url}")
 			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
 			await ctx.reply(embed = embed)
