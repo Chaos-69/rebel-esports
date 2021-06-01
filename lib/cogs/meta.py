@@ -35,7 +35,7 @@ class Meta(Cog):
 	@cooldown(3, 3599, BucketType.user)
 	async def info(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#803031892235649044>**", color=0xBC0808)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#771083740217999371>**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 		
@@ -63,7 +63,7 @@ class Meta(Cog):
 
 
 	@command(name="shutdown",brief="Shutdown The Bot", help="Kills the bot like you expect it to")
-	@has_any_role(806886607541633045)
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def shutdown(self, ctx):
 		embed = Embed(description="**Shutting Down...**", color=0xBC0808)
 		await ctx.reply(embed = embed)

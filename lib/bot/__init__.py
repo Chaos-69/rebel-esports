@@ -189,7 +189,7 @@ class Bot(BotBase):
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(736258866504925306) #SERVER ID HERE
-			self.config_channel = self.get_channel(830188895374278686) #CHANNEL ID HERE
+			self.config_channel = self.get_guild(795726142161944637).get_channel(819349982305189898) #CHANNEL ID HERE
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=0, minute=0, second=10))
 			self.allowed_channels = (830188895374278686)
 			self.scheduler.start()

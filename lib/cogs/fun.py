@@ -136,7 +136,7 @@ class Fun(Cog):
 	
 	#SEND ANNOUNCEMENT EMBEDS COMMAND
 	@command(name="aembed",brief="Send Embeds",help="Send announcement embeds through the bot.", hidden=True)
-	@has_any_role(806886607541633045, 776069302045769759)
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def say_announcement_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
 		embed.set_thumbnail(url=f"{ctx.guild.icon_url}")
@@ -146,7 +146,7 @@ class Fun(Cog):
 
 	#SEND EMBEDS COMMAND
 	@command(name="embed",brief="Send Embeds",help="Send embeds through the bot.", hidden=True)
-	@has_any_role(806886607541633045, 776069302045769759)
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def say_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
 		await ctx.send(embed=embed)
@@ -155,7 +155,7 @@ class Fun(Cog):
 
     #SEND MESSAGES COMMAND
 	@command(name="say",brief="Send Messages",help="Send a message through the bot\n \n**Required Roles** \n<@&776069302045769759> and above", hidden=True)
-	@has_any_role(806886607541633045,776069302045769759)
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def say_message(self, ctx,*, message):		
 		await ctx.send(f"{message}")
 		await ctx.message.delete()

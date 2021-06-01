@@ -31,7 +31,7 @@ class Mod(Cog):
 	#KICK COMMAND
 	@command(name="kick", brief="Kick Members", help="Kicks members from the current guild.", hidden=True)
 	@bot_has_permissions(kick_members=True)
-	@has_any_role(806886607541633045, "RES | Executives")
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def kick_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -93,7 +93,7 @@ class Mod(Cog):
 	#BAN COMMAND
 	@command(name="ban", brief="Ban Members", help="Bans members from the current guild.", hidden=True)
 	@bot_has_permissions(ban_members=True)
-	@has_any_role(806886607541633045, "RES | Executives")
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def ban_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -154,7 +154,7 @@ class Mod(Cog):
 	#PURGE COMMAND
 	@command(name="purge", brief="Purge Messages",help="Deletes optional number of messages.", hidden=True)
 	@bot_has_permissions(manage_messages=True)
-	@has_any_role(806886607541633045, "RES | Executives")
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def clear_messages(self, ctx, limit: Optional[int] = 10):
 			with ctx.channel.typing():
 				await ctx.message.delete()
@@ -166,7 +166,7 @@ class Mod(Cog):
 	#MUTE COMMAND
 	@command(name="mute", brief="Mute Members", help="Mutes members for a specific amount of time in the guild." ,hidden=True)
 	@bot_has_permissions(manage_roles=True)
-	@has_any_role(806886607541633045, "RES | Executives", "RES | Management", "RES | Moderator")
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def mute_members(self, ctx, targets: Greedy[Member], minutes: Optional[int], *, reason: Optional[str] = "No reason provided"):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -287,7 +287,7 @@ class Mod(Cog):
 	#UNMUTE COMMAND
 	@command(name="unmute", brief="Unmute Members", help="Unmutes members which were muted previously", hidden=True)
 	@bot_has_permissions(manage_roles=True)
-	@has_any_role(806886607541633045, "RES | Executives", "RES | Management", "RES | Moderator")
+	@has_any_role(847565615329574913, 848311479941726288)
 	async def unmute_members(self, ctx, targets: Greedy[Member], *, reason: Optional[str] = "No reason provided"):
 			if not len(targets):
 				embed=Embed(title="Unmute",description=":x: One or more arguments are missing, use the below provided syntax.", color=0xffec00)
@@ -383,12 +383,11 @@ class Mod(Cog):
 		snipe_message_author = message.author.name
 		snipe_message_author_url = message.author.avatar_url
 		snipe_message_author_discriminator = message.author.discriminator
-		await asyncio.sleep(60)
+		await asyncio.sleep(120)
 		snipe_message_author = None
 		snipe_message_content = None
 	
 	@command(name="snipe",brief="Snipe Messages",help="Displays the most recent deleted message by any user in the guild",hidden=True)
-	@has_any_role(806886607541633045, "RES | Executives")
 	async def snipe(self, message):
 		if message.author.bot or snipe_message_content == None:
 			embed=Embed(description="**Nothing to snipe!**", color=0xBC0808)

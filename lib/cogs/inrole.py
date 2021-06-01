@@ -27,7 +27,7 @@ class Inrole(Cog):
 
     #INROLE COMMAND
     @command(name = "inrole", alaises=["rm"],brief="Inrole Users", help="Shows all the members with a specific role", hidden=True)
-    @has_any_role(806886607541633045, "RES | Executives", "RES | Management")
+    @has_any_role(847565615329574913, 848311479941726288)
     async def inrole(self, ctx, *role):
         server = self.bot.get_guild(736258866504925306)
         role_name = (' '.join(role))
@@ -45,7 +45,7 @@ class Inrole(Cog):
         for member in server.members:
             if role in member.roles:
                 n += 1
-                name = str(n) + ". " + member.name + " #" + member.discriminator + "\n"
+                name = str(n) + ". " + member.display_name +"#"+ member.discriminator + "\n"
                 members.append(name)
         composite_members = [members[x:x + 20] for x in range(0, len(members), 20)]
         pages = []
@@ -56,13 +56,14 @@ class Inrole(Cog):
             embedVar = discord.Embed(title=f"List of users with {role} - {n}", colour=0xBC0808)
             embedVar.add_field(name = "Members", value = string)
             embedVar.set_thumbnail(url=ctx.guild.icon_url)
+            embedVar.set_footer(text=f"ID : {role.id}")
             pages.append(embedVar)
 
         page = 0
         left = "⏪"
         right = "⏩"
         while True:
-            msg = await ctx.send(embed = pages[(page)], delete_after=120)
+            msg = await ctx.send(embed = pages[(page)])
             l = page != 0
             r = page != len(pages) - 1
             if l:
