@@ -30,12 +30,20 @@ class Suggestions(Cog):
 				
 				reaction_message = await self.community_suggestions_channel.send(embed=suggestEmbed)
 				await message.delete()
-				await reaction_message.add_reaction("<:RES_ThumbsUp:823851707292844102>")
-				await reaction_message.add_reaction("<:RES_ThumbsDown:823851740242640907>")
-				await reaction_message.add_reaction("<:cringe:789523123389202452>")
+				
+				try:
+					await reaction_message.add_reaction("<:RES_ThumbsUp:823851707292844102>")
+					await reaction_message.add_reaction("<:RES_ThumbsDown:823851740242640907>")
+					await reaction_message.add_reaction("<:cringe:789523123389202452>")
+
+				
+				except:
+					await reaction_message.add_reaction("👍")
+					await reaction_message.add_reaction("👎")
+					await reaction_message.add_reaction("😓")
 			
 			except NotFound:
-				pass
+				await message.author.send("Your suggestion could not be logged because it was either deleted or removed!")
 		
 		
 		#AI CHAT
