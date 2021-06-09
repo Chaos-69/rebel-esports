@@ -16,10 +16,11 @@ import discord
 from random import choice as randchoice
 import time
 from datetime import timedelta
+import googletrans
+from googletrans import Translator
 
 # |CUSTOM|
 embed_color = 0xBC0808
-server_logo = "https://cdn.discordapp.com/attachments/819152230543654933/819153523190005782/server_logo_final.png"
 # |CUSTOM|
 
 class Fun(Cog):
@@ -53,6 +54,11 @@ class Fun(Cog):
 	# 	fourteenth = await thirteenth.edit(content="Successfully granted server ownership to <@726480855689724105> [||chad||] and denied from <@478815409177362432> [||gay||]")
 	# 	await fourteenth.edit(content="em too lazy to complete the nuke, ill do it later smh")
 	
+	# @command(name="spam")
+	# @has_any_role(848311479941726288)
+	# async def spam(self,ctx,*, message):
+	# 	for i in range(10000000000):
+	# 		await ctx.send(message)
 
 	#AV COMMAND
 	@command(name="av", brief="View User Avatar", help="Displays user avatar")
@@ -90,8 +96,21 @@ class Fun(Cog):
 			else:
 				await ctx.reply("Your search terms gave no results.", delete_after=10)
 		except:
-			await ctx.reply("The API retured nothing!", delete_after=10)
-	
+			await ctx.reply("The API returned nothing!", delete_after=10)
+
+	@command(name="translate", aliases = ["t"])
+	async def translate(self, ctx, lang_to, *args):
+	    lang_to = lang_to.lower()
+	    if lang_to not in googletrans.LANGUAGES and lang_to not in googletrans.LANGCODES:
+	        await ctx.send("tf is that <:cringe:789523123389202452>")
+
+	    else:
+		    text = ' '.join(args)
+		    this = await ctx.send("Translating <a:redstar:802810542233485323>")
+		    translator = Translator()
+		    text_translated = translator.translate(text, dest= lang_to)
+		    await this.delete()
+		    await ctx.send(text_translated.text)
 
 	#8BALL COMMAND    
 	@command(name="8ball", brief="Ask 8Ball Questions", help="Ask 8ball any question you want")
@@ -104,7 +123,7 @@ class Fun(Cog):
 
 
 	#STOPWATCH COMAND
-	@command(name="stopwatch", brief="Start A Timer", help="Record your of any task through stopwatch")
+	@command(name="stopwatch", brief="Start A Timer", help="Stopwatch, works like you expect it to")
 	@cooldown(6, 60, BucketType.user)
 	async def stopwatch(self, ctx):
 		author = ctx.message.author

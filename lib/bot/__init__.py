@@ -19,6 +19,7 @@ from prsaw import RandomStuff
 from pathlib import Path
 from discord.ext import tasks
 
+
 # |CUSTOM|
 embed_color = 0xBC0808
 # |CUSTOM|
@@ -210,7 +211,7 @@ class Bot(BotBase):
 			#CUSTOM BOT STATUSES
 			prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", self.guild.id)
 			statuses = [f"With {len(self.guilds)} Servers",f"With {len(self.users)} Members", "With Your Mom", "With Other Bots" ,  f"{prefix}help" , "Join Chads' Den", "With Gay Mods", "ModMail", "Version 0.0.1", "Developed By Chad",
-			"Join ESM丨CODM", "discord.gg/esm", "Follow rebel._.esports On Insta", "Insta: rebel._.esports"]
+			"Join ESM丨CODM", "discord.gg/esm", "Follow res_codm On Insta", "Insta: res_codm"]
 			while not self.is_closed():
 				status = random.choice(statuses)
 				
@@ -225,24 +226,24 @@ class Bot(BotBase):
 	
 	#PING BOT
 	async def on_message(self, message):
-		if self.user.mentioned_in(message) and message.content.startswith("<") and message.content.endswith(">"):
-			if not self.user == message.author:
-				if message.channel.id == (830188895374278686) or (771083740217999371):
-					prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
-					embed=Embed(title="<:pepeshytartedlub:790991638792241182> Ping?", color=0xBC0808, timestamp=datetime.utcnow())
-					fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
-						("Help", f"Need help? just use the `{prefix}help` command " , False),
-						("More Info", f"For more info about me, use the command `{prefix}info`" , False)]
-					for name , value, inline in fields:
-						embed.add_field(name=name, value=value, inline=inline)			
-					embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
-					embed.set_thumbnail(url = self.guild.me.avatar_url)
-					await message.delete(delay=120)
-					await message.channel.send(embed=embed, delete_after=120)
+		# if self.user.mentioned_in(message) and message.content.startswith("<@830535") and message.content.endswith("919673147452>"):
+		# 	if not self.user == message.author:
+		# 		for channel in self.guild.channels:
+		# 			if message.channel.id == (819349982305189898) or (771083740217999371):
+		# 				prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
+		# 				embed=Embed(title="<:RES_cheemsPimg:823612649098575872>  Ping?", color=0xBC0808, timestamp=datetime.utcnow())
+		# 				fields = [("Prefix", f"My current prefix for this guild is `{prefix}`", False),
+		# 					("Help", f"Need help? just use the `{prefix}help` command " , False),
+		# 					("More Info", f"For more info about me, use the command `{prefix}info`" , False)]
+		# 				for name , value, inline in fields:
+		# 					embed.add_field(name=name, value=value, inline=inline)			
+		# 				embed.set_footer(text=f"Requested By {message.author.display_name}", icon_url=message.author.avatar_url)
+		# 				embed.set_thumbnail(url = self.guild.me.avatar_url)
+		# 				await message.delete(delay=120)
+		# 				return await message.channel.send(embed=embed, delete_after=120)
 				
-				else:
-					embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention} **Is blacklisted for pings, please ping me in <#803031892235649044> instead**", color=0xBC0808)
-					await ctx.reply(embed=embed)	
+		# 			else:
+		# 				print("Blacklisted Channel")
 			
 		#MODMAIL SYSTEM
 		if not message.author.bot:
