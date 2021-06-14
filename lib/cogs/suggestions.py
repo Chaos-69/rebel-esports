@@ -16,9 +16,38 @@ from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 class Suggestions(Cog):
 	def __init__(self, bot):
-		self.rs = RandomStuff(async_mode= True, api_key= "WjGcchHanX" )
 		self.bot = bot
+		self.rs = RandomStuff(async_mode= True, api_key= "WjGcchHanX" )
+		self.reddit = asyncpraw.Reddit(
+							client_id = "OS1rZE67Bn0mMw",
+							client_secret = "hdLS0IWqdkzJWmRQr7XbBhgUNaDoyw",
+							username = "chad-bot-69",
+							password = "chad-bot-69",
+							user_agent = "Chad | Bot")
+	#REDDIT COMMAND
+	@command(name="meme",aliases=["reddit"])
+	@cooldown(3, 120, BucketType.user)
+	async def meme(self, ctx, subred = "memes"):
+		try:
+			subreddit = await self.reddit.subreddit(subred)
+			all_subs = []
+			top = subreddit.top(limit = 100)
+			
+			async for submission in top:
+				all_subs.append(submission)
+			random_sub = random.choice(all_subs)
+			name = random_sub.title
+			url = random_sub.url
 
+			embed = Embed(title=name, color=0xBC0808, timestamp=datetime.utcnow())
+			embed.set_image(url= url)
+			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url= ctx.author.avatar_url)
+			await ctx.reply(embed = embed)
+		except:
+			this = await ctx.reply("Your momma made that sub? <:cringe:789523123389202452>")
+			await this.add_reaction("<a:pepe_fu:804010091619680267>")
+			await this.add_reaction("<a:keke:805437951105695746>")
+	
 	@Cog.listener()
 	async def on_message(self, message):
 		#COMMUITY SUGGESTIONS CHANNEL:
