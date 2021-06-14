@@ -25,28 +25,28 @@ class Suggestions(Cog):
 							password = "chad-bot-69",
 							user_agent = "Chad | Bot")
 	#REDDIT COMMAND
-	@command(name="meme",aliases=["reddit"])
+	@command(name="reddit",aliases=["meme"])
 	@cooldown(3, 120, BucketType.user)
 	async def meme(self, ctx, subred = "memes"):
-		try:
-			subreddit = await self.reddit.subreddit(subred)
-			all_subs = []
-			top = subreddit.top(limit = 100)
-			
-			async for submission in top:
-				all_subs.append(submission)
-			random_sub = random.choice(all_subs)
-			name = random_sub.title
-			url = random_sub.url
+			try:
+				subreddit = await self.reddit.subreddit(subred)
+				all_subs = []
+				hot = subreddit.hot(limit = 100)
+				
+				async for submission in hot:
+					all_subs.append(submission)
+				random_sub = random.choice(all_subs)
+				name = random_sub.title
+				url = random_sub.url
+				print(submission)
 
-			embed = Embed(title=name, color=0xBC0808, timestamp=datetime.utcnow())
-			embed.set_image(url= url)
-			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url= ctx.author.avatar_url)
-			await ctx.reply(embed = embed)
-		except:
-			this = await ctx.reply("Your momma made that sub? <:cringe:789523123389202452>")
-			await this.add_reaction("<a:pepe_fu:804010091619680267>")
-			await this.add_reaction("<a:keke:805437951105695746>")
+				embed = Embed(title=name, url= url, color=0xBC0808)
+				embed.set_image(url= url)
+				embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url= ctx.author.avatar_url)
+				await ctx.reply(embed = embed)
+			except:
+				this = await ctx.reply("Your momma made that sub? <:cringe:789523123389202452> <a:pepe_fu:804010091619680267>")
+				await this.add_reaction("<a:keke:805437951105695746>")
 	
 	@Cog.listener()
 	async def on_message(self, message):
