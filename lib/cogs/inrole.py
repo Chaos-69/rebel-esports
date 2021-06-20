@@ -29,7 +29,7 @@ class Inrole(Cog):
     @command(name = "inrole", alaises=["rm"],brief="Inrole Users", help="Shows all the members with a specific role", hidden=True)
     @has_any_role(847565615329574913, 848311479941726288)
     async def inrole(self, ctx, *role):
-        server = self.bot.get_guild(736258866504925306)
+        server = ctx.guild
         role_name = (' '.join(role))
         role_id = server.roles[0]
         for role in server.roles:
@@ -45,8 +45,10 @@ class Inrole(Cog):
         for member in server.members:
             if role in member.roles:
                 n += 1
-                name = str(n) + ". " + member.display_name +"#"+ member.discriminator + "\n"
+                name = member.name +"#"+ member.discriminator + "\n"
                 members.append(name)
+ 
+        
         composite_members = [members[x:x + 20] for x in range(0, len(members), 20)]
         pages = []
         for elements in composite_members:
@@ -63,24 +65,29 @@ class Inrole(Cog):
         left = "⏪"
         right = "⏩"
         while True:
-            msg = await ctx.send(embed = pages[(page)])
-            l = page != 0
-            r = page != len(pages) - 1
-            if l:
-                await msg.add_reaction(left)
+            try:
+                msg = await ctx.send(embed = pages[(page)])
+                l = page != 0
+                r = page != len(pages) - 1
+                if l:
+                    await msg.add_reaction(left)
 
-            if r:
-                await msg.add_reaction(right)
-            # bot.wait_for_reaction
-            react = await self.bot.wait_for('reaction_add', check=self.predicate(msg, l, r))
+                if r:
+                    await msg.add_reaction(right)
+                # bot.wait_for_reaction
+                react = await self.bot.wait_for('reaction_add', check=self.predicate(msg, l, r))
+                
+                if str(react[0]) == left:
+                    page -= 1
+                elif str(react[0]) == right:
+                    page += 1
+
+                await msg.delete()
             
-            if str(react[0]) == left:
-                page -= 1
-            elif str(react[0]) == right:
-                page += 1
+            except:
+                embed = Embed(description="**There are no members with that role!**", color=0xBC0808)
+                return await ctx.send(embed = embed)
 
-            await msg.delete()
-    
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:

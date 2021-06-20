@@ -355,10 +355,11 @@ class Mod(Cog):
 					if message.channel.id in self.ping_not_allowed_channels:
 						return
 				for s in message.mentions:
-					channel_embed=Embed(title="Ghost Ping Detected",color=0xBC0808, timestamp=datetime.utcnow())
-					fields = [("Ping By",f"{message.author.mention}", True),
-								("To", f"{s.mention}",True),
-								("Message", f"{message.content}", False)]
+					channel_embed=Embed(title="<:RES_cheemsPimg:823612649098575872> Ghost Ping Detected",
+						description=f"**{s.mention} was ghost pinged by {message.author.mention}**",
+						color=0xBC0808, 
+						timestamp=datetime.utcnow())
+					fields = [("Message", f"{message.content}", False)]
 					for name, value, inline in fields:
 						channel_embed.add_field(name=name, value=value, inline=inline)
 					await message.channel.send(embed=channel_embed)

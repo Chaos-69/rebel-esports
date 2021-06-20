@@ -27,7 +27,7 @@ class Suggestions(Cog):
 	#REDDIT COMMAND
 	@command(name="reddit",aliases=["meme"])
 	@cooldown(3, 120, BucketType.user)
-	async def meme(self, ctx, subred = "memes"):
+	async def meme(self, ctx, *, subred = "memes"):
 			try:
 				subreddit = await self.reddit.subreddit(subred)
 				all_subs = []
@@ -37,7 +37,7 @@ class Suggestions(Cog):
 					all_subs.append(submission)
 				random_sub = random.choice(all_subs)
 				name = random_sub.title
-				url = random_sub.url
+				url = random_sub.url 
 				print(submission)
 
 				embed = Embed(title=name, url= url, color=0xBC0808)

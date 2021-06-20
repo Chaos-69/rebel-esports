@@ -190,7 +190,7 @@ class Bot(BotBase):
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(736258866504925306) #SERVER ID HERE
-			self.config_channel = self.get_guild(795726142161944637).get_channel(819349982305189898) #CHANNEL ID HERE
+			self.config_channel = self.get_guild(795726142161944637).get_channel(819349982305189898) #CHANNEL ID HERR
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=0, minute=0, second=10))
 			self.allowed_channels = (830188895374278686)
 			self.scheduler.start()
@@ -248,29 +248,92 @@ class Bot(BotBase):
 		#MODMAIL SYSTEM
 		if not message.author.bot:
 			if isinstance(message.channel, DMChannel):
-				if len(message.content) < 40:
-					embed= Embed(title="ModMail Error", description=":exclamation: Your message needs to be **atleast 40** characters in length\n Refrain from spamming and abusing the ModMail system", color=0xBC0808)
-					await message.channel.send(embed=embed)
-
-				else:			
-					embed=Embed(title="New ModMail Received", color=0xfd0000, timestamp=datetime.utcnow())
-					embed.set_thumbnail(url=message.author.avatar_url)
-						
-					fields = [("Message By", f"{message.author.mention} __**AKA**__ {message.author.display_name}", False),
-						("Message Content",message.content, False)]
+				guild = bot.get_guild(736258866504925306)
+				prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", guild.id)
+				
+				if message.content == f"{prefix}verify":
+					embed = Embed(title="Verification Help",
+						description="For verification, head out to <#751028101584125984> and react to the verification message!",
+						color=0xBC0808)
+					embed.set_image(url = "https://media.discordapp.net/attachments/842232322320629780/856250663288569866/this.gif?width=733&height=473")
 					
+					return await message.channel.send(embed=embed)
+				
+				if message.content.startswith(f"{prefix}modmail"):
+					if len(message.content) > 9:
+						if len(message.content) > 29:
+							if len(message.content) < 2030:
+								modmail = message.content[9:]
+								this_embed = Embed(title="Modmail Confirmation",
+									description=f"**Message count:** {len(message.content[9:])} characters \n **Please confirm if you want to send this message** \n\t {modmail} \n \n **Reply with either `Yes` or `No`**",
+									color=0xBC0808)
+								this_embed.set_thumbnail(url = f"{guild.icon_url}")
+
+								questions = [this_embed]
+								answers = []
+								
+								def check(m):
+									return m.author == message.author and m.channel == message.channel
+								
+								for i in questions:
+									that = await message.channel.send(embed=i)
+								
+									try:
+										msg = await bot.wait_for('message', timeout=60, check=check)
+									except asyncio.TimeoutError:
+										embed = Embed(description="You didn\'t answer in the given time!\nPlease answer in under **60 seconds** next time!",color=0xBC0808)
+										await message.channel.send(embed = embed)
+										return
+									
+									answers.append(msg.content)
+
+								if answers[0] == "Yes" or answers[0] == "yes":
+									embed = Embed(title="Modmail Received",
+										description=f"**Message by {message.author.mention}丨{message.author.name}#{message.author.discriminator}** \n {modmail}",
+										color=0xBC0808,
+										timestamp=datetime.utcnow())
+									embed.set_thumbnail(url = f"{message.author.avatar_url}")
+									modmail_channel = self.get_guild(736258866504925306).get_channel(830567374180319263)
+									await modmail_channel.send(embed=embed)
+									
+									embed = Embed(description="<a:Check:856282490670284802> **Your message has been relayed to moderators!**",
+										color=0xBC0808)
+									return await that.edit(embed=embed)
+								
+								else:
+									ok = await message.channel.send("mf", delete_after=2)
+									embed = Embed(description="**Process has been canceled successfully**", color=0xBC0808)
+									await message.channel.send(embed = embed)
+									return
+
+							else:
+								await message.channel.send("<:RES_cheemsThiccMhm:823612526775238666>")
+								return await message.channel.send("Nice presidential debate")
+						else:
+							await message.channel.send("<a:pepe_seizure:790992973096812594>")
+							return await message.channel.send("Your message needs to be at least **20** characters in length...")
+					else:
+						return await message.channel.send("Try providing a message next time?")
+
+				if message.content == f"{prefix}apply":
+					return await message.channel.send(":x: Applications are currently closed!")
+				
+				if message.content == f"{prefix}help":
+					embed = Embed(title="<a:pet:801495732233961492> Help",
+								description="",
+								color=0xBC0808)
+					embed.set_thumbnail(url = f"{guild.icon_url}")
+					embed.set_footer(text="This message will auto-delete after 15 min")
+					fields = [("Verification", f"For verification help, use the following syntax: \n ```{prefix}verify```" , False),
+								("ModMail", f"For sending a modmail, use the following syntax: \n ```{prefix}modmail (Your message here)```" , False),
+								("RES Recruitment", f"To send an application, use the following syntax: \n ```{prefix}apply```" , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
 					
-					mod_channel = self.get_channel(830567374180319263) #YOUR CHANNEL HERE
-					await mod_channel.send(embed=embed)
-					embed= Embed(title=":white_check_mark: ModMail Sent Successfully",color=0xBC0808)
-					fields = [("Message Sent", "Your message has been relayed to moderators. \nWe will get back to you shortly", False),
-						("ModMail Abuse",":exclamation: Refrain from abusing and spamming ModMail system or it will result in a mute", False),
-						("Notice",":exclamation: Attachments such as images, files and videos are not supported **yet** in the ModMail system", False)]
-					for name , value, inline in fields:
-						embed.add_field(name=name, value=value, inline=inline)					
-					await message.channel.send(embed=embed)
+					return await message.channel.send(embed = embed, delete_after=900)
+
+				if "Hello" in message.content or "hello" in message.content or "Hi" in message.content or "hi" in message.content:
+					return await message.channel.send(f"Look who slid into my dms :wink: \n Use `{prefix}help` for help")
 
 			else:
 				await self.process_commands(message)
