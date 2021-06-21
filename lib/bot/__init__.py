@@ -338,7 +338,7 @@ class Bot(BotBase):
 					fields = [("Verification", f"For verification help, use the following syntax: \n ```{prefix}verify```" , False),
 								("ModMail", f"For sending a modmail, use the following syntax: \n ```{prefix}modmail (Your message here)```" , False),
 								("RES Recruitment", f"To send an application, use the following syntax: \n ```{prefix}apply```" , False),
-								("Clear Dms", f"For clearing bot dms, use the following syntax:\n **Note:** This will only delete messages sent by the bot itself! \n ```{prefix}clear```" , False)]
+								("Clear Dms", f"For clearing bot dms, use the following syntax:\n **Note:** This will only delete messages sent by the bot itself and make you look like an idiot who's talking to himself <:pepe_pixels:789523102371282944> \n ```{prefix}clear```" , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
 					
