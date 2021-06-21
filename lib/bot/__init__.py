@@ -251,6 +251,17 @@ class Bot(BotBase):
 				guild = bot.get_guild(736258866504925306)
 				prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", guild.id)
 				
+				if message.content == f"{prefix}clear":
+					counter = 0
+					this = await message.channel.send("<a:redstar:802810542233485323> Clearing dms, this may take a while")
+					async for message in message.channel.history(limit=10000):
+						counter += 1
+						if not message == this and message.author == self.user:
+							await message.delete()
+					
+					await this.delete()
+					return await message.channel.send(f"Successfully cleared **{counter}** messages!")
+
 				if message.content == f"{prefix}verify":
 					embed = Embed(title="Verification Help",
 						description="For verification, head out to <#751028101584125984> and react to the verification message!",
@@ -326,7 +337,8 @@ class Bot(BotBase):
 					embed.set_footer(text="This message will auto-delete after 15 min")
 					fields = [("Verification", f"For verification help, use the following syntax: \n ```{prefix}verify```" , False),
 								("ModMail", f"For sending a modmail, use the following syntax: \n ```{prefix}modmail (Your message here)```" , False),
-								("RES Recruitment", f"To send an application, use the following syntax: \n ```{prefix}apply```" , False)]
+								("RES Recruitment", f"To send an application, use the following syntax: \n ```{prefix}apply```" , False),
+								("Clear Dms", f"For clearing bot dms, use the following syntax:\n **Note:** This will only delete messages sent by the bot itself! \n ```{prefix}clear```" , False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
 					
