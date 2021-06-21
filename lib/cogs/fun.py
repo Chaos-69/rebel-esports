@@ -4,7 +4,7 @@ from aiohttp import request
 from discord.ext.commands import BadArgument
 from discord import Member, Embed
 from discord.errors import HTTPException
-from discord.ext.commands import command, cooldown, has_permissions, has_any_role, has_role, CheckFailure, Cog, BucketType, is_owner
+from discord.ext.commands import command, Greedy, cooldown, has_permissions, has_any_role, has_role, CheckFailure, Cog, BucketType, is_owner
 import discord
 from datetime import datetime
 import asyncio
@@ -18,6 +18,7 @@ import time
 from datetime import timedelta
 import googletrans
 from googletrans import Translator
+from discord.errors import Forbidden
 
 # |CUSTOM|
 embed_color = 0xBC0808
@@ -70,6 +71,36 @@ class Fun(Cog):
 			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
 			await ctx.reply(embed = embed)
 
+	#DM COMMAND
+	@command(name="dm")
+	@cooldown(3, 30, BucketType.user)
+	@has_any_role(847565615329574913, 848311479941726288)
+	async def dm(self, ctx, form, targets: Greedy[Member], *, message):
+		for target in targets:
+			if target != ctx.author:
+				if target != self.bot.user:	
+					if form == "embed" or form == "Embed":
+						try:
+							embed = Embed(description= f"{message}", color=0xBC0808)
+							await target.send(embed=embed)
+							embed = Embed(description=f"I dmed **{target.name}#{target.discriminator}** with the message **{message}**", color=0xBC0808)
+							return await ctx.reply(embed=embed)
+
+						except:
+							embed = Embed(description=f"I am unable to dm **{target.name}#{target.discriminator}**", color=0xBC0808)
+							await ctx.reply(embed=embed)
+					else:
+						try:
+							await target.send(f"{message}")
+							return await ctx.reply(f"I dmed **{target.name}#{target.discriminator}** with the message **{message}**")
+						
+						except:
+							return await ctx.reply(f"I am unable to dm **{target.name}#{target.discriminator}**")
+				else:
+					return await ctx.reply("How tf do i dm myself?")
+			else:
+				return await ctx.reply("Why should i dm you <:cringe:789523123389202452>")				
+	
 	#URBAN COMMAND
 	@command(name="urban", brief="Urban Dictionary Search", help="Gets definitions of provided words from urban dictionary")
 	@cooldown(3, 60, BucketType.user)

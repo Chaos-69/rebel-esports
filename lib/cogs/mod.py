@@ -156,11 +156,11 @@ class Mod(Cog):
 	@bot_has_permissions(manage_messages=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def clear_messages(self, ctx, limit: Optional[int] = 10):
-			with ctx.channel.typing():
-				await ctx.message.delete()
-				deleted = await ctx.channel.purge(limit=limit, after=datetime.utcnow()-timedelta(days=14))
-				embed=Embed(title="Action Successful", description=f":white_check_mark: Successfully deleted **{len(deleted):,}** messages.", color=0x43b581)
-				await ctx.send(embed=embed, delete_after=3)
+		with ctx.channel.typing():
+			await ctx.message.delete()
+			deleted = await ctx.channel.purge(limit=limit, after=datetime.utcnow()-timedelta(days=14))
+			embed=Embed(title="Action Successful", description=f":white_check_mark: Successfully deleted **{len(deleted):,}** messages.", color=0x43b581)
+			await ctx.send(embed=embed, delete_after=3)
 
 
 	#MUTE COMMAND
