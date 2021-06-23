@@ -69,7 +69,7 @@ class Help(Cog):
 			await ctx.send(embed=embed, delete_after=60)
 
 	#GENERAL HELP COMMAND
-	@command(name="help", brief="Help Categories", help="Displays all the categories assigned with commands.")
+	@command(name="help", brief="Help Categories", help="Responds to the call of help, imagine doing `+help help` though, gay af")
 	@cooldown(3, 60, BucketType.user)
 	async def show_help(self, ctx, cmd: Optional[str]):
 		self.allowed_channels = (771083740217999371, 819349982305189898)
@@ -86,9 +86,9 @@ class Help(Cog):
 					embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 									 icon_url=f"{ctx.author.avatar_url}")
 					fields = [("Total Commands",f"**RES | BOT** has a total of **{len(self.bot.commands)}** commands" , False),
-								("Miscellaneous Commands","`av`, `ping`, `stopwatch`, `8ball`, `urban`, `info`, `userinfo`, `serverinfo`, `membercount`", False),
+								("Miscellaneous Commands","`av`, `ping`, `translate` , `stopwatch`, `8ball`, `urban`, `info`, `userinfo`, `serverinfo`, `membercount`", False),
 								("Moderation Commands","`say`, `embed`,`aembed`, `snipe`, `purge`, `poll`, `gstart`, `greroll`, `inrole`, `warn`, `warnings`, `delwarn`, `mute`, `unmute`, `kick`, `ban`" , False),
-								("Admin Commands","`prefix`, `toggle`,`slowmode`, `addban`, `delban`, `shutdown`" , False),
+								("Admin Commands","`prefix`, `dm`, `toggle`,`slowmode`, `addban`, `delban`, `shutdown`" , False),
 								("Individual Commands Help", f"To view help for individual commands, use the following syntax ```{prefix}help <command>```", False)]
 					for name , value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)

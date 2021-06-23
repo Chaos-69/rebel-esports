@@ -26,7 +26,7 @@ class Poll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(name="poll", brief="Poll Command", help="Create polls", hidden=True)
+    @command(name="poll", brief="Poll Command", help="Make polls cuz you are a snowflake and your opinion doesn't mean shit so you have to ask everyone", hidden=True)
     @has_any_role(847565615329574913, 848311479941726288)
     async def poll(self, ctx, *, question):            
         if question is None:

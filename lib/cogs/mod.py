@@ -29,7 +29,7 @@ class Mod(Cog):
 		self.allowed_channels = (830188895374278686,771083740217999371)
 	
 	#KICK COMMAND
-	@command(name="kick", brief="Kick Members", help="Kicks members from the current guild.", hidden=True)
+	@command(name="kick", brief="Kick Members", help="Kicks a member like u expect it to", hidden=True)
 	@bot_has_permissions(kick_members=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def kick_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
@@ -91,7 +91,7 @@ class Mod(Cog):
 	
 
 	#BAN COMMAND
-	@command(name="ban", brief="Ban Members", help="Bans members from the current guild.", hidden=True)
+	@command(name="ban", brief="Ban Members", help="Bans a memeber like u expect it to do", hidden=True)
 	@bot_has_permissions(ban_members=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def ban_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
@@ -152,7 +152,7 @@ class Mod(Cog):
 	
 
 	#PURGE COMMAND
-	@command(name="purge", brief="Purge Messages",help="Deletes optional number of messages.", hidden=True)
+	@command(name="purge", brief="Purge Messages",help="Delete controversial messages through this command or hide your guilt", hidden=True)
 	@bot_has_permissions(manage_messages=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def clear_messages(self, ctx, limit: Optional[int] = 10):
@@ -285,7 +285,7 @@ class Mod(Cog):
 				await ctx.message.delete(delay=15)
 	
 	#UNMUTE COMMAND
-	@command(name="unmute", brief="Unmute Members", help="Unmutes members which were muted previously", hidden=True)
+	@command(name="unmute", brief="Unmute Members", help="Yeah this doesnt work so dont try", hidden=True)
 	@bot_has_permissions(manage_roles=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def unmute_members(self, ctx, targets: Greedy[Member], *, reason: Optional[str] = "No reason provided"):
@@ -388,7 +388,7 @@ class Mod(Cog):
 		snipe_message_author = None
 		snipe_message_content = None
 	
-	@command(name="snipe",brief="Snipe Messages",help="Displays the most recent deleted message by any user in the guild",hidden=True)
+	@command(name="snipe",brief="Snipe Messages",help="Idk why this doesnt work, too lazy to give a fuck about it either",hidden=True)
 	async def snipe(self, message):
 		if message.author.bot or snipe_message_content == None:
 			embed=Embed(description="**Nothing to snipe!**", color=0xBC0808)

@@ -24,7 +24,7 @@ from discord.errors import Forbidden
 embed_color = 0xBC0808
 # |CUSTOM|
 
-class Fun(Cog):
+class Main(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.bot.session = aiohttp.ClientSession()
@@ -62,7 +62,7 @@ class Fun(Cog):
 	# 		await ctx.send(message)
 
 	#AV COMMAND
-	@command(name="av", brief="View User Avatar", help="Displays user avatar")
+	@command(name="av", brief="Avatar", help="Displays user avatar, its literally in the name")
 	@cooldown(3, 60, BucketType.user)
 	async def display_avatar(self, ctx, target: Optional[Member]):
 			target = target or ctx.author
@@ -72,37 +72,30 @@ class Fun(Cog):
 			await ctx.reply(embed = embed)
 
 	#DM COMMAND
-	@command(name="dm")
+	@command(name="dm", brief="Dm people", help="Literally dms people, what else were you expecting you dumbfuck")
 	@cooldown(3, 30, BucketType.user)
 	@has_any_role(847565615329574913, 848311479941726288)
-	async def dm(self, ctx, form, targets: Greedy[Member], *, message):
+	async def dm(self, ctx, targets: Greedy[Member], *, message):
 		for target in targets:
 			if target != ctx.author:
 				if target != self.bot.user:	
-					if form == "embed" or form == "Embed":
-						try:
-							embed = Embed(description= f"{message}", color=0xBC0808)
-							await target.send(embed=embed)
-							embed = Embed(description=f"I dmed **{target.name}#{target.discriminator}** with the message **{message}**", color=0xBC0808)
-							return await ctx.reply(embed=embed)
-
-						except:
-							embed = Embed(description=f"I am unable to dm **{target.name}#{target.discriminator}**", color=0xBC0808)
-							await ctx.reply(embed=embed)
-					else:
-						try:
-							await target.send(f"{message}")
-							return await ctx.reply(f"I dmed **{target.name}#{target.discriminator}** with the message **{message}**")
+					try:
+						await target.send(f"{message}")
+						await ctx.message.delete()
+						return await ctx.reply(f"I dmed **{target.name}#{target.discriminator}** with the message **{message}**", delete_after=10)
 						
-						except:
-							return await ctx.reply(f"I am unable to dm **{target.name}#{target.discriminator}**")
+					except:
+						await ctx.message.delete()
+						return await ctx.reply(f"I am unable to dm **{target.name}#{target.discriminator}**")
 				else:
+					await ctx.message.delete()
 					return await ctx.reply("How tf do i dm myself?")
 			else:
+				await ctx.message.delete()
 				return await ctx.reply("Why should i dm you <:cringe:789523123389202452>")				
 	
 	#URBAN COMMAND
-	@command(name="urban", brief="Urban Dictionary Search", help="Gets definitions of provided words from urban dictionary")
+	@command(name="urban", brief="Urban Dictionary Search", help="Idk what this does, urban it or something")
 	@cooldown(3, 60, BucketType.user)
 	async def urban(self, ctx, *, search_terms : str):
 		search_terms = search_terms.split(" ")
@@ -129,22 +122,22 @@ class Fun(Cog):
 		except:
 			await ctx.reply("The API returned nothing!", delete_after=10)
 
-	@command(name="translate", aliases = ["t"])
-	async def translate(self, ctx, lang_to, *args):
-	    lang_to = lang_to.lower()
-	    if lang_to not in googletrans.LANGUAGES and lang_to not in googletrans.LANGCODES:
+	@command(name="translate", aliases = ["t"], brief="Translator", help="Does exactly what you expect it to do")
+	async def translate(self, ctx, lang, *sentence):
+	    lang = lang.lower()
+	    if lang not in googletrans.LANGUAGES and lang not in googletrans.LANGCODES:
 	        await ctx.send("tf is that <:cringe:789523123389202452>")
 
 	    else:
-		    text = ' '.join(args)
+		    text = ' '.join(sentence)
 		    this = await ctx.send("Translating <a:redstar:802810542233485323>")
 		    translator = Translator()
-		    text_translated = translator.translate(text, dest= lang_to)
+		    text_translated = translator.translate(text, dest= lang)
 		    await this.delete()
 		    await ctx.send(text_translated.text)
 
 	#8BALL COMMAND    
-	@command(name="8ball", brief="Ask 8Ball Questions", help="Ask 8ball any question you want")
+	@command(name="8ball", brief="8Ball", help="Ask 8ball questions and depend your life decisions on this puppy")
 	@cooldown(3, 60, BucketType.user)
 	async def _8ball(self,ctx,*question):
 		question = "  ".join(question)
@@ -154,7 +147,7 @@ class Fun(Cog):
 
 
 	#STOPWATCH COMAND
-	@command(name="stopwatch", brief="Start A Timer", help="Stopwatch, works like you expect it to")
+	@command(name="stopwatch", brief="Stopwatch", help="Starts a timer, works like you expect it to")
 	@cooldown(6, 60, BucketType.user)
 	async def stopwatch(self, ctx):
 		author = ctx.message.author
@@ -171,7 +164,7 @@ class Fun(Cog):
 			self.stopwatches.pop(author.id, None)
 
 	#MEMBER COUNT COMMAND
-	@command(name="membercount", brief="Member Count", help="Displays the number of members present in the server")
+	@command(name="membercount", aliases=["mc"], brief="Member Count", help="Gives the number of gays who are dumb enough to join this stupid server")
 	@cooldown(3, 60, BucketType.user)
 	async def member_count(self,ctx):
 		embed = Embed(title="Member Count", color=0xBC0808)
@@ -185,7 +178,7 @@ class Fun(Cog):
 
 	
 	#SEND ANNOUNCEMENT EMBEDS COMMAND
-	@command(name="aembed",brief="Send Embeds",help="Send announcement embeds through the bot.", hidden=True)
+	@command(name="aembed",brief="Announcement Embeds",help="Send announcement embeds through the bot.", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def say_announcement_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
@@ -195,7 +188,7 @@ class Fun(Cog):
 	
 
 	#SEND EMBEDS COMMAND
-	@command(name="embed",brief="Send Embeds",help="Send embeds through the bot.", hidden=True)
+	@command(name="embed",brief="Plain Embeds",help="Send embeds through the bot.", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def say_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
@@ -213,7 +206,7 @@ class Fun(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.bot.cogs_ready.ready_up("fun") #IMPORTANT! - ("Fun") is the FILE NAME, NOT print name. 
+			self.bot.cogs_ready.ready_up("main") #IMPORTANT! - ("Fun") is the FILE NAME, NOT print name. 
 
 def setup(bot):
-	bot.add_cog(Fun(bot))
+	bot.add_cog(Main(bot))

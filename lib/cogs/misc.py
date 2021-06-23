@@ -21,7 +21,7 @@ class Misc(Cog):
 
 
 	#CHANGE PREFIX COMMAND
-	@command(name="prefix", brief="Change Guild Prefix",help="Changes the guild prefix.", hidden=True)
+	@command(name="prefix", brief="Change Guild Prefix",help="Why do you even want me to explain this ffs", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def change_prefix(self, ctx, new: str):
 		if len(new) > 5:
@@ -35,7 +35,7 @@ class Misc(Cog):
 	
 	
 	#ADD BAN COMMAND
-	@command(name="addban",brief="Ban Users From Using Commands", help="Blacklists users from being able to use bot commands", hidden=True)
+	@command(name="addban",brief="Ban Users From Using Commands", help="Prevents users from using bot commands, i can bet my life this aint gonna be used until im alive", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def addban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
@@ -55,7 +55,7 @@ class Misc(Cog):
 
 	
 	#DELETE BAN COMMAND
-	@command(name="delban",brief="Unban Users From Commands", help="Removes blacklisted users from being able to use bot commands", hidden=True)
+	@command(name="delban",brief="Unban Users From Commands", help="Removes previously blacklisted users from using bot commands, another useless command yes", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def delban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
@@ -75,7 +75,7 @@ class Misc(Cog):
     
 	
 	#TOGGLE COMMAND
-	@command(name="toggle", brief="Enable or Disable Commands", help="Enables or Disables commands for all users", hidden=True)
+	@command(name="toggle", brief="Enable or Disable Commands", help="Enables or Disables commands, idk why u would want to do that but ok", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def toggle(self, ctx, *, command):
 		command = self.bot.get_command(command)
@@ -95,7 +95,7 @@ class Misc(Cog):
 			await ctx.reply(embed=embed)	
 
 	#SLOW MODE COMMAND
-	@command(name="slowmode", brief="Set Slowmode", help="Sets slowmode for a desired channel in seconds", hidden=True)
+	@command(name="slowmode", brief="Set Slowmode", help="You can definitely do the same thing from channel settings but using the bot is apparently a flex so sure", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def slowmode(self, ctx, seconds: int):
 			guild = self.bot.get_guild(736258866504925306)

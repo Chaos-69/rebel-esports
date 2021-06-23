@@ -20,7 +20,7 @@ class Meta(Cog):
 		self.allowed_channels = (830188895374278686,771083740217999371)
 	
 	#PING COMMAND
-	@command(name="ping", brief="Ping-Pong!", help="Displays the bots current latency")
+	@command(name="ping", brief="Bot Latency", help="Bot has worse ping than you but still keeps it together, you unthankful bitch")
 	@cooldown(3, 60, BucketType.user)
 	async def ping(self, ctx):
 		start = time.time()
@@ -31,7 +31,7 @@ class Meta(Cog):
 		await message.edit(embed=embed)
 
 	#INFO COMMAND
-	@command(name="info" ,brief="Bot Info And Stats", help="Displays bot info and stats")
+	@command(name="info" ,brief="Bot Info And Stats", help="Some random shit about the bot no one other than the dev cares about")
 	@cooldown(3, 3599, BucketType.user)
 	async def info(self, ctx):
 		if ctx.channel.id not in self.allowed_channels:
@@ -49,7 +49,7 @@ class Meta(Cog):
 			embed.set_footer(text =f"Requested By {ctx.author.display_name}",
 								 icon_url=f"{ctx.author.avatar_url}")
 			fields = [("Bot Tag", "Rebel eSports#8205", False),
-					("Developer", "Lord Chaos#9958", False),
+					("Developer", "Lord Chaos#6969", False),
 					("Prefix", ctx.prefix, False),
 					("Servers",len(self.bot.guilds), True),
 					("Users", f"{self.bot.guild.member_count:,}", True),
@@ -62,7 +62,7 @@ class Meta(Cog):
 			await ctx.reply(embed=embed)
 
 
-	@command(name="shutdown",brief="Shutdown The Bot", help="Kills the bot like you expect it to")
+	@command(name="shutdown",brief="Shutdown The Bot", help="Rapes the bot")
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def shutdown(self, ctx):
 		embed = Embed(description="**Shutting Down...**", color=0xBC0808)

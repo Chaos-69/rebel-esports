@@ -15,24 +15,24 @@ class Info(Cog):
 		self.bot = bot
 		self.allowed_channels = (830188895374278686,771083740217999371)
 		
-	@command(name="userinfo", aliases =["ui","whois"], help="Displays info for a specific member in the guild.", brief="User Information")
+	@command(name="userinfo", aliases =["ui","whois"], help="Sends you the social security number, address, passport and bank account info of a member", brief="User Information")
 	@cooldown(3, 60, BucketType.user)
 	async def user_info(self, ctx, target: Optional[Member]):
 		target = target or ctx.author
 		roles = [role for role in reversed(target.roles[1:])]
-
+		role_mentions = "   ".join(([role.mention for role in roles]))
 
 		embed = Embed(title=f"**{str(target.display_name)}'s Information**", 
 						color =0xBC0808, timestap=datetime.utcnow())
 
-		fields = [("Name", f"{target.mention}丨{target.display_name}#{target.discriminator}", False),
+		fields = [("Name", f"{target.mention}丨{target.name}#{target.discriminator}", False),
 					("ID", f"{target.id}", False),				
 					("Joined at", target.joined_at.strftime("%d/%m/%Y"), True),
 					("Create at", target.created_at.strftime("%d/%m/%Y"), True),
-					(f"Roles [{len(roles)}]", ("   ".join(([role.mention for role in roles]))), False),									
+					(f"Roles [{len(roles)}]", (role_mentions if len(role_mentions) < 1020 else "Too many roles to mention!" ), False),									
 					("Activity",f"{target.activity.name if target.activity else 'N/A' } ", False),
 					("Boost Status", bool(target.premium_since), True),
-					("Activity Status", str(target.status).title(), True)]
+					("Status", str(target.status).title(), True)]
 					
 		embed.set_thumbnail(url=target.avatar_url)
 		embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
@@ -42,7 +42,7 @@ class Info(Cog):
 		await ctx.reply(embed=embed)
 
 	
-	@command(name="serverinfo", aliases=["si"], help="Displays detailed server information", brief="Server Information")
+	@command(name="serverinfo", aliases=["si"], help="Displays some random shit about the server no one cares about", brief="Server Information")
 	@cooldown(3, 60, BucketType.user)
 	async def server_info(self, ctx):
 		embed = Embed(title=f"**{ctx.guild.name}**", 

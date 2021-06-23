@@ -39,7 +39,7 @@ class Reactions(Cog):
 		return val * time_dict[unit]
 
 	#GIVEAWAY COMMAND
-	@command(name="gstart", brief="Conduct Giveaways", help="Makes giveaways and picks a random winner", hidden=True)
+	@command(name="gstart", brief="Conduct Giveaways", help="Another useless command", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288, 833629835459821579)
 	async def giveaway(self, ctx):
 		start_embed = Embed(title="🎉 Giveay Initiated", description="Let's start with this giveaway! Answer these questions within **15 seconds**!",color=0xBC0808)
@@ -123,7 +123,7 @@ class Reactions(Cog):
 
 
 	#GIVEAWAY REROLL COMMAND
-	@command(name="greroll",help="Reroll recently conducted giveaways", brief="Reroll Giveaways", hidden=True)
+	@command(name="greroll",help="Reroll recently conducted giveaways", brief="Yes an associate of a useless command", hidden=True)
 	@has_any_role(847565615329574913, 848311479941726288, 833629835459821579)
 	async def reroll(self, ctx, channel : discord.TextChannel, id_ : int):		
 		try:

@@ -25,7 +25,7 @@ class Suggestions(Cog):
 							password = "chad-bot-69",
 							user_agent = "Chad | Bot")
 	#REDDIT COMMAND
-	@command(name="reddit",aliases=["meme"])
+	@command(name="reddit",aliases=["meme"], brief="Surf Reddit", help="Waste your time looking at shit reddit posts")
 	@cooldown(3, 120, BucketType.user)
 	async def meme(self, ctx, *, subred = "memes"):
 			try:
