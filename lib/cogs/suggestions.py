@@ -6,7 +6,6 @@ from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 from discord.errors import NotFound
 from discord.ext.commands import command
-from prsaw import RandomStuff
 from discord.ext.commands import Cog
 import asyncpraw
 from datetime import datetime
@@ -14,6 +13,9 @@ import random
 from discord import Embed
 from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
+import randomstuff
+from prsaw import RandomStuff
+
 class Suggestions(Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -73,18 +75,20 @@ class Suggestions(Cog):
 			
 			except NotFound:
 				await message.author.send("Your suggestion could not be logged because it was either deleted or removed!")
-		
-		
+
+
+
 		#AI CHAT
 		if not self.bot.user == message.author and message.channel == self.ai_chat_channel:
 			if "@everyone" not in message.content and "@here" not in message.content:
 				try:
-					response = await self.rs.get_ai_response(message.content)
-					await message.reply(response)
+					async with randomstuff.AsyncClient(api_key="tQeJ9s1ZRUQt") as client:
+						response = await client.get_ai_response(message.content)
+						await message.reply(response.message)
 				
-				except NotFound:
-					await message.channel.reply("Try again later")
-					await self.config_channel.send(f"{message.author.mention} \n The ai-chat api returned nothing!")
+				except:
+					await message.channel.send("Try again later")
+					await self.config_channel.send(f"{message.author.mention} tried to use ai-chat \n Ai-chat being gay again, smfh")
 			else:
 				await message.reply("You really thought that would work? <:cringe_2:789523123389202452>")
 				embed = Embed(description=f"{message.author.mention} **AKA** {message.author.display_name} tried to ping `@everyone` or `@here` in <#826537727104253993>", color=0xBC0808, timestamp=datetime.utcnow())
