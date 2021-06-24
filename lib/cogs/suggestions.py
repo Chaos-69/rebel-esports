@@ -91,7 +91,7 @@ class Suggestions(Cog):
 					await self.config_channel.send(f"{message.author.mention} tried to use ai-chat \n Ai-chat being gay again, smfh")
 			else:
 				await message.reply("You really thought that would work? <:cringe_2:789523123389202452>")
-				embed = Embed(description=f"{message.author.mention} **AKA** {message.author.display_name} tried to ping `@everyone` or `@here` in <#826537727104253993>", color=0xBC0808, timestamp=datetime.utcnow())
+				embed = Embed(description=f"{message.author.name}#{message.author.discriminator} tried to ping `@everyone` or `@here` in <#826537727104253993>", color=0xBC0808, timestamp=datetime.utcnow())
 				await self.audit_log_channel.send(embed=embed)
 		
 		else:	

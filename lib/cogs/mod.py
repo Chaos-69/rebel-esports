@@ -18,6 +18,7 @@ import re
 from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 from discord.errors import Forbidden
+from discord.errors import NotFound
 
 class Mod(Cog):
 	def __init__(self, bot):
@@ -157,11 +158,14 @@ class Mod(Cog):
 	@has_any_role(847565615329574913, 848311479941726288)
 	async def clear_messages(self, ctx, limit: Optional[int] = 10):
 		with ctx.channel.typing():
-			await ctx.message.delete()
-			deleted = await ctx.channel.purge(limit=limit, after=datetime.utcnow()-timedelta(days=14))
-			embed=Embed(title="Action Successful", description=f":white_check_mark: Successfully deleted **{len(deleted):,}** messages.", color=0x43b581)
-			await ctx.send(embed=embed, delete_after=3)
-
+			try:
+				await ctx.message.delete()
+				deleted = await ctx.channel.purge(limit=limit, after=datetime.utcnow()-timedelta(days=14))
+				embed=Embed(title="Action Successful", description=f":white_check_mark: Successfully deleted **{len(deleted):,}** messages.", color=0x43b581)
+				await ctx.send(embed=embed, delete_after=3)
+			
+			except NotFound:
+				pass
 
 	#MUTE COMMAND
 	@command(name="mute", brief="Mute Members", help="Mutes members for a specific amount of time in the guild." ,hidden=True)
