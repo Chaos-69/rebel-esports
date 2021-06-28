@@ -313,7 +313,7 @@ class Bot(BotBase):
 								
 								else:
 									ok = await message.channel.send("mf", delete_after=2)
-									embed = Embed(description="**Process has been canceled successfully**", color=0xBC0808)
+									embed = Embed(description="<a:Check:856282490670284802> **Process has been canceled successfully**", color=0xBC0808)
 									await message.channel.send(embed = embed)
 									return
 
@@ -327,7 +327,130 @@ class Bot(BotBase):
 						return await message.channel.send("Try providing a message next time?")
 
 				if message.content == f"{prefix}apply":
-					return await message.channel.send(":x: Applications are currently closed!")
+					questions_count = 0
+					#return await message.channel.send(":x: Applications are currently closed!")
+					this_embed = Embed(title="RES Recruitment",
+						description=f"Reply to the provided questions with suitable answers\n **Note:** You can cancel this process anytime by typing `{prefix}cancel`",color=0xBC0808)
+					# this_embed.set_thumbnail(url = f"{guild.icon_url}")
+					await message.channel.send(embed=this_embed)
+					
+					q0 = f"What is your UID/IGN"
+					q1 = f"What is your age and where are you from?"
+					q2 = f"What device you play on & whats your average ping?"
+					q3 = f"What were the clans you were previously in?"
+					q4 = f"Whats your play style? (passive/aggressive) & (OBJ/slayer)"
+					q5 = f"Are you a Smg,Ar or a Sniper? \n Which gun do you use the most?"
+					q6 = f"What will you rate yourself from 1-10, & why?"
+					q7 = f"Why do you want to join Rebel eSports?"
+					q8 = f"How much scrim experience do you have?"
+					q9 = f"When will you be available for scrims/tourneys (IST)?"
+					q10 = f"Have you read <#757248459622318230>?"
+					q11 = f"Is there anything would you like to tell us before joining?"
+					q12 = f"What time can you give us a tryout?"
+					
+					questions = [q0, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12]
+					answers = []
+					
+
+					def check(m):
+						
+						return m.author == message.author and m.channel == message.channel
+					
+					for i in questions:
+						questions_count += 1
+						ok = f"**{questions_count}.** {i}"
+						await message.channel.send(ok)
+					
+						try:
+							msg = await bot.wait_for('message', timeout=60, check=check)
+						
+						except asyncio.TimeoutError:
+							embed = Embed(description="You didn\'t answer in the given time!\nPlease answer in under **60 seconds** next time!",color=0xBC0808)
+							return await message.channel.send(embed = embed)
+							
+						else:
+							if msg.content == f"{prefix}cancel":
+								embed = Embed(title="<a:Check:856282490670284802> Process Canceled",description="Process has been canceled sucessfully", color=0xBC0808)
+								return await ctx.send(embed = embed,delete_after=10)
+						
+						answers.append(msg.content)
+
+
+					ign = answers[0]
+					age = answers[1]
+					device = answers[2]
+					pre_clans = answers[3]
+					play_style = answers[4]
+					gun = answers[5]
+					rating = answers[6]
+					reason = answers[7]
+					scrim_exp = answers[8]
+					avaliable_time = answers[9]
+					read_howtoapply = answers[10]
+					anything_else = answers[11]
+					tryout_time = answers[12]
+
+					embed = Embed(title=f"{message.author.name}'s Application",
+						description=f" **User Name:** {message.author.name}#{message.author.discriminator} \n **User ID:** {message.author.id}" ,
+						color=0xBC0808,
+						timestamp=datetime.utcnow())
+					fields = [(questions[0],f"**Answer:** {ign}" , False),
+							(questions[1], f"**Answer:** {age}" , False),
+							(questions[2], f"**Answer:** {device}" , False),
+							(questions[3], f"**Answer:** {pre_clans}" , False),
+							(questions[4], f"**Answer:** {play_style}" , False),
+							(questions[5], f"**Answer:** {gun}" , False),
+							(questions[6], f"**Answer:** {rating}" , False),
+							(questions[7], f"**Answer:** {reason}" , False),
+							(questions[8], f"**Answer:** {scrim_exp}" , False),
+							(questions[9], f"**Answer:** {avaliable_time}" , False),
+							(questions[10], f"**Answer:** {read_howtoapply}" , False),
+							(questions[11], f"**Answer:** {anything_else}" , False)]
+					for name , value, inline in fields:
+						embed.add_field(name=name, value=value, inline=inline)
+					embed.set_thumbnail(url=f"{message.author.avatar_url}")
+
+					confirm = [embed]
+					reply = []
+					for i in confirm:
+						await message.channel.send(embed=i)
+
+						try:
+							await message.channel.send(f"Reply with either `Yes` or `No` if you wish to proceed. \n You can cencel this process by replying with {prefix}cancel")
+							msg = await bot.wait_for('message', timeout=60, check=check)
+						
+						except asyncio.TimeoutError:
+							embed = Embed(description="You didn\'t answer in the given time!\nPlease answer in under **60 seconds** next time!",color=0xBC0808)
+							return await message.channel.send(embed = embed)
+							
+						else:
+							if msg.content == f"{prefix}cancel":
+								embed = Embed(title="<a:Check:856282490670284802> Process Canceled",description="Process has been canceled sucessfully", color=0xBC0808)
+								return await ctx.send(embed = embed,delete_after=10)
+						
+						reply.append(msg.content)
+						
+
+					if reply[0] == "yes" or reply[0] == "Yes":
+						temp = bot.get_guild(736258866504925306).get_channel(858485758969249822)
+						tryout_channel = bot.get_guild(736258866504925306).get_channel(763067748094836796)
+						await temp.send(embed=embed)						
+						embed = Embed(title=f"{message.author.display_name}'s Tryout Application",
+							description="",
+							color=0xBC0808,
+							timestamp=datetime.utcnow())
+						fields = [("Candidate Name", f"{message.author.name}#{message.author.discriminator}" , False),
+						("Candidate ID", message.author.id , False),
+						("Candidate's IGN", ign , False),
+						("Tryout Time", tryout_time , False)]
+						for name , value, inline in fields:
+							embed.add_field(name=name, value=value, inline=inline)
+						embed.set_thumbnail(url=f"{message.author.avatar_url}")
+						await tryout_channel.send("<@&808955900554903573>", embed=embed)
+						return await message.channel.send("Your application has been sent")
+
+					else:
+						return await message.channel.send("Process has been canceled")
 				
 				if message.content == f"{prefix}help":
 					embed = Embed(title="<a:pet:801495732233961492> Help",

@@ -15,6 +15,8 @@ from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 import randomstuff
 from prsaw import RandomStuff
+from discord.ext import tasks
+
 
 class Suggestions(Cog):
 	def __init__(self, bot):
@@ -40,16 +42,88 @@ class Suggestions(Cog):
 				random_sub = random.choice(all_subs)
 				name = random_sub.title
 				url = random_sub.url 
-				print(submission)
 
 				embed = Embed(title=name, url= url, color=0xBC0808)
 				embed.set_image(url= url)
 				embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url= ctx.author.avatar_url)
 				await ctx.reply(embed = embed)
+			
 			except:
 				this = await ctx.reply("Your momma made that sub? <:cringe:789523123389202452> <a:pepe_fu:804010091619680267>")
 				await this.add_reaction("<a:keke:805437951105695746>")
 	
+	@tasks.loop(seconds=600)
+	#REDDIT MEMES LOOP
+	async def memes_loop(self):
+		reddit_feed_channel = self.bot.get_guild(736258866504925306).get_channel(858993983530860554)
+		
+		try:
+			subreddit = await self.reddit.subreddit('memes')
+			all_subs = []
+			hot = subreddit.hot(limit = 100000)
+			
+			async for submission in hot:
+				all_subs.append(submission)
+			random_sub = random.choice(all_subs)
+			name = random_sub.title
+			url = random_sub.url 
+
+			embed = Embed(title = name, url = url, color = 0xBC0808)
+			embed.set_image(url = url)
+			await reddit_feed_channel.send(embed = embed)
+		
+		except:
+			print("Something went wrong with reddit memes loop!")
+			pass
+
+	@tasks.loop(seconds=600)
+	#REDDIT CODM LOOP
+	async def codm_loop(self):
+		reddit_feed_channel = self.bot.get_guild(736258866504925306).get_channel(859002683674198016)
+		
+		try:
+			subreddit = await self.reddit.subreddit('CallOfDutyMobile')
+			all_subs = []
+			hot = subreddit.hot(limit = 100000)
+			
+			async for submission in hot:
+				all_subs.append(submission)
+			random_sub = random.choice(all_subs)
+			name = random_sub.title
+			url = random_sub.url 
+
+			embed = Embed(title = name, url = url, color = 0xBC0808)
+			embed.set_image(url = url)
+			await reddit_feed_channel.send(embed = embed)
+		
+		except:
+			print("Something went wrong with reddit codm loop!")
+			pass
+
+	#REDDIT PCMR LOOP
+	@tasks.loop(seconds=600)
+	async def pcmr_loop(self):
+		reddit_feed_channel = self.bot.get_guild(736258866504925306).get_channel(859002723033546802)
+		
+		try:
+			subreddit = await self.reddit.subreddit('pcmasterrace')
+			all_subs = []
+			hot = subreddit.hot(limit = 100000)
+			
+			async for submission in hot:
+				all_subs.append(submission)
+			random_sub = random.choice(all_subs)
+			name = random_sub.title
+			url = random_sub.url 
+
+			embed = Embed(title = name, url = url, color = 0xBC0808)
+			embed.set_image(url = url)
+			await reddit_feed_channel.send(embed = embed)
+		
+		except:
+			print("Something went wrong with reddit pcmr loop!")
+			pass			
+
 	@Cog.listener()
 	async def on_message(self, message):
 		#COMMUITY SUGGESTIONS CHANNEL:
@@ -100,6 +174,9 @@ class Suggestions(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
+			self.memes_loop.start()
+			self.codm_loop.start()
+			self.pcmr_loop.start()
 			self.audit_log_channel= self.bot.get_channel(761567095133306880) # CHANNEL HERE
 			self.community_suggestions_channel = self.bot.get_guild(736258866504925306).get_channel(827960572330377233)
 			self.ai_chat_channel = self.bot.get_channel(759470480981229598)
