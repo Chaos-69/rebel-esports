@@ -19,6 +19,8 @@ from datetime import timedelta
 import googletrans
 from googletrans import Translator
 from discord.errors import Forbidden
+from discord_components import *
+from discord_slash import SlashCommand
 
 # |CUSTOM|
 embed_color = 0xBC0808
@@ -27,6 +29,7 @@ embed_color = 0xBC0808
 class Main(Cog):
 	def __init__(self, bot):
 		self.bot = bot
+		self.ddb = DiscordComponents(self.bot)
 		self.bot.session = aiohttp.ClientSession()
 		self.ball = ["As I see it, yes", "It is certain", "It is decidedly so", "Most likely", "Outlook good",
 			"Sources point to yes", "Without a doubt", "Yes", "Yes – definitely", "You may rely on it", "Reply hazy, try again",
@@ -60,13 +63,14 @@ class Main(Cog):
 	# async def spam(self,ctx,*, message):
 	# 	for i in range(10000000000):
 	# 		await ctx.send(message)
-
+	
+	
 	#AV COMMAND
 	@command(name="av", brief="Avatar", help="Displays user avatar, its literally in the name")
 	@cooldown(3, 60, BucketType.user)
 	async def display_avatar(self, ctx, target: Optional[Member]):
 			target = target or ctx.author
-			embed = Embed(title=f"{target.display_name}'s Avatar",url="https://pornhub.com/",color=0xBC0808)
+			embed = Embed(title=f"{target.display_name}'s Avatar",url=f"{target.avatar_url}",color=0xBC0808)
 			embed.set_image(url=f"{target.avatar_url}")
 			embed.set_footer(text=f"Requested By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
 			await ctx.reply(embed = embed)
