@@ -340,19 +340,19 @@ class Main(Cog):
 		await my_msg.add_reaction(":halal:834154424393531392")
 		await my_msg.add_reaction(":haram:834154339392028692")
 
-		try:
-			await asyncio.sleep(time-5*60)
 
-			embed = Embed(title=f"Match Reminder!", 
-				description=f"**{mode}** match will start in **5 minutes** \n **Avaliable Slots:** {slots} \n Contact {ctx.author.mention} for room link",
-				color=embed_color)
-			embed.set_thumbnail(url="https://images-ext-2.discordapp.net/external/I_vJq0oj4jpiz4DszZU4LTAlhQKWgBwWSMEPVLWVdlE/%3Fv%3D1/https/cdn.discordapp.com/emojis/851381516700221450.png")
-			await self.callout_channel.send(f"{role_mention}", embed=embed)
-			try:
-				await ctx.author.send(f"__**Reminder**__ \n **{mode}** match for **{role_name}** is starting in **5 minutes** \n Send the room link in <#840353352466038814>")
-			
-			except:
-				await ctx.channel.send(f"{ctx.author.mention} Please send the room link")
+		await asyncio.sleep(time-5*60)
+
+		embed = Embed(title=f"Match Reminder!", 
+			description=f"**{mode}** match will start in **5 minutes** \n **Avaliable Slots:** {slots} \n Contact {ctx.author.mention} for room link",
+			color=embed_color)
+		embed.set_thumbnail(url="https://images-ext-2.discordapp.net/external/I_vJq0oj4jpiz4DszZU4LTAlhQKWgBwWSMEPVLWVdlE/%3Fv%3D1/https/cdn.discordapp.com/emojis/851381516700221450.png")
+		await self.callout_channel.send(f"{role_mention}", embed=embed)
+		try:
+			await ctx.author.send(f"__**Reminder**__ \n **{mode}** match for **{role_name}** is starting in **5 minutes** \n Send the room link in <#840353352466038814>")
+		
+		except:
+			await ctx.channel.send(f"{ctx.author.mention} Please send the room link")
 		
 
 		await asyncio.sleep(5*60)
