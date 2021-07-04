@@ -55,7 +55,7 @@ class Warn(Cog):
 
     #WARN COMMAND
 	@command(name="warn", brief="Warn Command", help="Warns users and adds it to the user profile", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def warn(self, ctx, member: discord.Member=None, *, reason: Optional[str] = "No reason provided"):
 		guild = ctx.guild #self.bot.get_guild(803028981698789407)
 		if member == None:
@@ -124,7 +124,7 @@ class Warn(Cog):
    
     #WARNINGS COMMAND
 	@command(name="warnings", brief="Check Warnings Command",help="Displays all of the users warnings", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def warnings(self, ctx, member: discord.Member=None):
 		if member is None:
 			embed = Embed(title="Warnings", description=":x: One or more arguments are missing, use the below provided syntax", color=0xffec00)

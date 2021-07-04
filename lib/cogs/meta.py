@@ -55,7 +55,7 @@ class Meta(Cog):
 					("Users", f"{self.bot.guild.member_count:,}", True),
 					("Versions", f"**Bot Version:** {self.bot.VERSION}\n**Python Version:** {python_version()}\n **Discord.py Version:** {discord_version}", False),
 					("Uptime", uptime ,False),
-					("Chads' Den Invite", "[Server Link](https://discord.gg/3J92CWNXCK)", False)]
+					("Server Invites", "[RES | HUB](https://discord.gg/3J92CWNXCK) \n [Rebel eSports](https://discord.gg/e2nN3cPxBE)", False)]
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 
@@ -63,7 +63,7 @@ class Meta(Cog):
 
 
 	@command(name="shutdown",brief="Shutdown The Bot", help="Rapes the bot")
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 839423177793077248)
 	async def shutdown(self, ctx):
 		embed = Embed(description="**Shutting Down...**", color=0xBC0808)
 		await ctx.reply(embed = embed)

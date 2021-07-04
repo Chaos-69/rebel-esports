@@ -13,7 +13,7 @@ from discord.ext.commands import has_any_role, has_role
 class Info(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self.allowed_channels = (830188895374278686,771083740217999371)
+		self.allowed_channels = (830188895374278686,771083740217999371, 803031892235649044)
 		
 	@command(name="userinfo", aliases =["ui","whois"], help="Sends you the social security number, address, passport and bank account info of a member", brief="User Information")
 	@cooldown(3, 60, BucketType.user)

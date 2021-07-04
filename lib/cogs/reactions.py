@@ -21,7 +21,7 @@ class Reactions(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.giveaways = []
-	
+
 	def convert(self, time):
 		pos = ["s","m","h","d"]
 
@@ -40,7 +40,7 @@ class Reactions(Cog):
 
 	#GIVEAWAY COMMAND
 	@command(name="gstart", brief="Conduct Giveaways", help="Another useless command", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288, 833629835459821579)
+	@has_any_role(847565615329574913, 848311479941726288, 833629835459821579, 860287157418721311)
 	async def giveaway(self, ctx):
 		start_embed = Embed(title="🎉 Giveay Initiated", description="Let's start with this giveaway! Answer these questions within **15 seconds**!",color=0xBC0808)
 		await ctx.send(embed=start_embed)
@@ -124,7 +124,7 @@ class Reactions(Cog):
 
 	#GIVEAWAY REROLL COMMAND
 	@command(name="greroll",help="Reroll recently conducted giveaways", brief="Yes an associate of a useless command", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288, 833629835459821579)
+	@has_any_role(847565615329574913, 848311479941726288, 833629835459821579, 860287157418721311)
 	async def reroll(self, ctx, channel : discord.TextChannel, id_ : int):		
 		try:
 			new_msg = await channel.fetch_message(id_)
@@ -141,11 +141,13 @@ class Reactions(Cog):
 
 		embed = Embed(title="🎉 Giveaway Results", description=f"🎉 Results are in! {winner.mention} just won **{prize}** from the giveaway! GG", color=0xBC0808)
 		await channel.send(f"||{winner.mention}||",embed = embed)
-
 	
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
+			self.music_role = self.bot.get_guild(803028981698789407).get_role(859087650883633192)
+			self.music_commands_channel = self.bot.get_guild(803028981698789407).get_channel(803143531405377557)
+			self.slave_role = self.bot.get_guild(803028981698789407).get_role(803036313363939368)
 			self.guild = self.bot.get_guild(736258866504925306)
 			self.bot.cogs_ready.ready_up("reactions")
 

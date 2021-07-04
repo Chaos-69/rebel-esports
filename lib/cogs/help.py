@@ -72,9 +72,9 @@ class Help(Cog):
 	@command(name="help", brief="Help Categories", help="Responds to the call of help, imagine doing `+help help` though, gay af")
 	@cooldown(3, 60, BucketType.user)
 	async def show_help(self, ctx, cmd: Optional[str]):
-		self.allowed_channels = (771083740217999371, 819349982305189898)
+		self.allowed_channels = (771083740217999371, 819349982305189898, 803031892235649044)
 		if ctx.channel.id not in self.allowed_channels:
-			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use  <#771083740217999371>**", color=0xBC0808)
+			embed = Embed(title="Blacklisted Channel", description=f"{ctx.channel.mention}  **Is blacklisted for bot commands, please use either <#771083740217999371> or <#803031892235649044>**", color=0xBC0808)
 			await ctx.reply(embed=embed, delete_after=10)
 			await ctx.message.delete(delay=15)
 		

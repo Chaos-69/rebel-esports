@@ -22,7 +22,7 @@ class Misc(Cog):
 
 	#CHANGE PREFIX COMMAND
 	@command(name="prefix", brief="Change Guild Prefix",help="Why do you even want me to explain this ffs", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 839423177793077248)
 	async def change_prefix(self, ctx, new: str):
 		if len(new) > 5:
 			embed = Embed(text=":exclamation: The prefix can not be more than 5 characters in length.", color=0xffec00)
@@ -36,7 +36,7 @@ class Misc(Cog):
 	
 	#ADD BAN COMMAND
 	@command(name="addban",brief="Ban Users From Using Commands", help="Prevents users from using bot commands, i can bet my life this aint gonna be used until im alive", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 839423177793077248)
 	async def addban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
 			embed = Embed(description="**No targets specified**", color=0xBC0808)
@@ -56,7 +56,7 @@ class Misc(Cog):
 	
 	#DELETE BAN COMMAND
 	@command(name="delban",brief="Unban Users From Commands", help="Removes previously blacklisted users from using bot commands, another useless command yes", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 839423177793077248)
 	async def delban_command(self, ctx, targets: Greedy[Member]):
 		if not targets:
 			embed = Embed(description="**No targets specified**", color=0xBC0808)
@@ -76,7 +76,7 @@ class Misc(Cog):
 	
 	#TOGGLE COMMAND
 	@command(name="toggle", brief="Enable or Disable Commands", help="Enables or Disables commands, idk why u would want to do that but ok", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 839423177793077248)
 	async def toggle(self, ctx, *, command):
 		command = self.bot.get_command(command)
 
@@ -96,7 +96,7 @@ class Misc(Cog):
 
 	#SLOW MODE COMMAND
 	@command(name="slowmode", brief="Set Slowmode", help="You can definitely do the same thing from channel settings but using the bot is apparently a flex so sure", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def slowmode(self, ctx, seconds: int):
 			guild = self.bot.get_guild(736258866504925306)
 			for channels in guild.channels:
@@ -112,7 +112,8 @@ class Misc(Cog):
 				else:
 					embed = Embed(description=f"**Slowmode cannot be greater than 6 hours**", color=0xBC0808)
 					return await ctx.send(embed=embed)
-	
+
+
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:

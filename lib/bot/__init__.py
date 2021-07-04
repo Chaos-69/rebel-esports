@@ -210,14 +210,14 @@ class Bot(BotBase):
 
 			#CUSTOM BOT STATUSES
 			prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", self.guild.id)
-			statuses = [f"With {len(self.guilds)} Servers",f"With {len(self.users)} Members", "With Your Mom", "With Other Bots" ,  f"{prefix}help" , "Join Chads' Den", "With Gay Mods", "ModMail", "Version 0.0.1", "Developed By Chad",
-			"Join ESM丨CODM", "discord.gg/esm", "Follow res_codm On Insta", "Insta: res_codm"]
+			statuses = [f"With {len(self.guilds)} Servers",f"With {len(self.users)} Members", "With Your Mom", "With Other Bots" ,  f"{prefix}help" , "discord.gg/s3xy", "With Gay Mods", "ModMail", f"Version 6.9", "Developed By Chad",
+			"discord.gg/esm", "Follow res_codm On Insta", "Insta: res_codm", "With Bin Ladin", "9/11", "With Your Feelings", "With Your Mom", "Your Heart", "Taking Over The World"]
 			while not self.is_closed():
 				status = random.choice(statuses)
 				
 				await bot.change_presence(status = discord.Status.dnd ,activity=discord.Activity(type=discord.ActivityType.playing, name=status))
 
-				await asyncio.sleep(10)
+				await asyncio.sleep(30)
 
 			self.loop.create_task(status())
 			
@@ -245,7 +245,7 @@ class Bot(BotBase):
 		# 			else:
 		# 				print("Blacklisted Channel")
 			
-		#MODMAIL SYSTEM
+		#DM OPERATIONS
 		if not message.author.bot:
 			if isinstance(message.channel, DMChannel):
 				guild = bot.get_guild(736258866504925306)

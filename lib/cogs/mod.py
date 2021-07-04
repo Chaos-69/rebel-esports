@@ -32,7 +32,7 @@ class Mod(Cog):
 	#KICK COMMAND
 	@command(name="kick", brief="Kick Members", help="Kicks a member like u expect it to", hidden=True)
 	@bot_has_permissions(kick_members=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def kick_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -94,7 +94,7 @@ class Mod(Cog):
 	#BAN COMMAND
 	@command(name="ban", brief="Ban Members", help="Bans a memeber like u expect it to do", hidden=True)
 	@bot_has_permissions(ban_members=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def ban_members(self, ctx, targets: Greedy[Member], * , reason: Optional[str] = "No reason provided."):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -155,7 +155,7 @@ class Mod(Cog):
 	#PURGE COMMAND
 	@command(name="purge", brief="Purge Messages",help="Delete controversial messages through this command or hide your guilt", hidden=True)
 	@bot_has_permissions(manage_messages=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def clear_messages(self, ctx, limit: Optional[int] = 10):
 		with ctx.channel.typing():
 			try:
@@ -170,7 +170,7 @@ class Mod(Cog):
 	#MUTE COMMAND
 	@command(name="mute", brief="Mute Members", help="Mutes members for a specific amount of time in the guild." ,hidden=True)
 	@bot_has_permissions(manage_roles=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def mute_members(self, ctx, targets: Greedy[Member], minutes: Optional[int], *, reason: Optional[str] = "No reason provided"):
 		guild = self.bot.get_guild(736258866504925306)
 		if not len(targets):
@@ -198,7 +198,7 @@ class Mod(Cog):
 				unmutes = []
 
 				for target in targets:
-					if not self.mute_role in target.roles:
+					if not self.mute_role_1 in target.roles or self.mute_role_2 in target.roles:
 						if ctx.author.top_role.position >= target.top_role.position:
 							role_ids = ",".join([str(r.id) for r in target.roles])
 							end_time = datetime.utcnow() + timedelta(minutes=minutes) if minutes else None
@@ -206,7 +206,10 @@ class Mod(Cog):
 							db.execute("INSERT INTO mutes VALUES (?, ?, ?)",
 										target.id, role_ids, getattr(end_time, "isoformat", lambda: None)())
 
-							await target.edit(roles=[self.mute_role])
+							try:
+								await target.edit(roles=[self.mute_role_1])
+							except:
+								await target.edit(roles=[self.mute_role_2])
 							embed=Embed(title="Member Muted", color=0xff0000, timestamp=datetime.utcnow())
 							embed.set_thumbnail(url=target.avatar_url)
 							
@@ -250,7 +253,7 @@ class Mod(Cog):
 	async def unmute(self, ctx, targets, *, reason="Mute time expired."):
 		for target in targets:
 			if target != self.bot or ctx.author:
-				if self.mute_role in target.roles:
+				if self.mute_role_1 in target.roles or self.mute_role_2 in target.roles:
 					role_ids = db.field("SELECT RoleIDs FROM mutes WHERE UserID = ?", target.id)
 					roles = [ctx.guild.get_role(int(id_)) for id_ in role_ids.split(",") if len(id_)]
 
@@ -291,7 +294,7 @@ class Mod(Cog):
 	#UNMUTE COMMAND
 	@command(name="unmute", brief="Unmute Members", help="Yeah this doesnt work so dont try", hidden=True)
 	@bot_has_permissions(manage_roles=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def unmute_members(self, ctx, targets: Greedy[Member], *, reason: Optional[str] = "No reason provided"):
 			if not len(targets):
 				embed=Embed(title="Unmute",description=":x: One or more arguments are missing, use the below provided syntax.", color=0xffec00)
@@ -388,7 +391,7 @@ class Mod(Cog):
 		snipe_message_author = message.author.name
 		snipe_message_author_url = message.author.avatar_url
 		snipe_message_author_discriminator = message.author.discriminator
-		await asyncio.sleep(120)
+		await asyncio.sleep(60)
 		snipe_message_author = None
 		snipe_message_content = None
 	
@@ -408,7 +411,8 @@ class Mod(Cog):
 	async def on_ready(self):
 		if not self.bot.ready:
 			self.log_channel = self.bot.get_guild(736258866504925306).get_channel(761567095133306880) #YOUR CHANNEL HERE
-			self.mute_role = self.bot.get_guild(736258866504925306).get_role(803885096666005514)  #MUTE ROLE HERE
+			self.mute_role_1 = self.bot.get_guild(736258866504925306).get_role(803885096666005514)  #MUTE ROLE HERE
+			self.mute_role_1 = self.bot.get_guild(803028981698789407).get_role(829441095959314432)
 			self.role = self.bot.get_guild(736258866504925306).get_role(751028081233494107)  #COMMUNITY ROLE HERE
 			self.mod_log_channel = self.bot.get_channel(822428198989725727)
 			self.allowed_roles = [self.bot.get_guild(736258866504925306).get_role(810854901055225907),self.bot.get_guild(736258866504925306).get_role(751028067446554704),self.bot.get_guild(736258866504925306).get_role(776069302045769759),self.bot.get_guild(736258866504925306).get_role(806886607541633045),self.bot.get_guild(736258866504925306).get_role(772521546191208488)]

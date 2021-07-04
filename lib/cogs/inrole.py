@@ -27,7 +27,7 @@ class Inrole(Cog):
 
     #INROLE COMMAND
     @command(name = "inrole", alaises=["rm"],brief="Inrole Users", help="Shows all the gays witch a specific role", hidden=True)
-    @has_any_role(847565615329574913, 848311479941726288)
+    @has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
     async def inrole(self, ctx, *role):
         server = ctx.guild
         role_name = (' '.join(role))

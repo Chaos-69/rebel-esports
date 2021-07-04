@@ -78,7 +78,7 @@ class Main(Cog):
 	#DM COMMAND
 	@command(name="dm", brief="Dm people", help="Literally dms people, what else were you expecting you dumbfuck")
 	@cooldown(3, 30, BucketType.user)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def dm(self, ctx, targets: Greedy[Member], *, message):
 		for target in targets:
 			if target != ctx.author:
@@ -183,7 +183,7 @@ class Main(Cog):
 	
 	#SEND ANNOUNCEMENT EMBEDS COMMAND
 	@command(name="aembed",brief="Announcement Embeds",help="Send announcement embeds through the bot.", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def say_announcement_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
 		embed.set_thumbnail(url=f"{ctx.guild.icon_url}")
@@ -193,7 +193,7 @@ class Main(Cog):
 
 	#SEND EMBEDS COMMAND
 	@command(name="embed",brief="Plain Embeds",help="Send embeds through the bot.", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def say_embed(self, ctx, *, message):	
 		embed=Embed(description=f"{message}",color=embed_color)
 		await ctx.send(embed=embed)
@@ -202,15 +202,176 @@ class Main(Cog):
 
     #SEND MESSAGES COMMAND
 	@command(name="say",brief="Send Messages",help="Send a message through the bot\n \n**Required Roles** \n<@&776069302045769759> and above", hidden=True)
-	@has_any_role(847565615329574913, 848311479941726288)
+	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
 	async def say_message(self, ctx,*, message):		
 		await ctx.send(f"{message}")
 		await ctx.message.delete()
+
+	def convert(self, time):
+		pos = ["s","m","h","d"]
+
+		time_dict = {"s" : 1, "m" : 60, "h" : 3600, "d": 3600*24}
+
+		unit = time[-1]
+
+		if unit not in pos:
+			return -1
+		try:
+			val = int(time[:-1])
+		except:
+			return -2
+
+		return val * time_dict[unit]
+	
+	#CALLOUT COMMAND
+	@command(name="callout", brief="RES Callouts", help="Call out lineup members to play")
+	@has_any_role(848311479941726288, 860287157418721311, 859087645547954209, 808955841599766529 )
+	async def callouts(self, ctx):
+		
+		start_embed = Embed(title="<:salute:846442658263203880> Callout Initiated", description=f"Let's start with this callout! \n Answer these questions within **60 seconds**! \n Reply with `{ctx.prefix}cancel` if you wish to cancel this process anytime",color=embed_color)
+		start_message = await ctx.send(embed=start_embed)
+		
+		role_embed = Embed(title="<:res:860644959241240576>  RES Role",description=f"Which lineup **role** would you like to send a callout for? \nFor example `S` , `3` , `X` or `Y` \n **Note:** Do not add `RES |` before the role name", color=embed_color)
+		role_embed.set_footer(text=f"Question 1/5")
+		
+		time_embed = Embed(title=":watch: Time",description="Lets decide a **time** for the callout\n When do you want players to come? \n For example in `2h`, `30m` , `5h` , `45m` \n **Note:** Only add `s`, `m` or `h` after the integer", color=embed_color)
+		time_embed.set_footer(text=f"Question 2/5")
+
+		mode_embed = Embed(title="<a:pepe_pew:782343942745489448>  Gamemode", description="Which **gamemode** do you want to post a callout for? \n Mention a gamemode like `Scrims`, `Tourney`, `Ranked`, `Inners`", color=embed_color)
+		mode_embed.set_footer(text=f"Question 3/5")
+
+		slots_embed = Embed(title="<:RES_cheemsThiccMhm:823612526775238666> Slots", description="How many **slots** are avaliable?", color=embed_color)
+		slots_embed.set_footer(text=f"Question 4/5")		
+
+		message_embed = Embed(title=":scroll: Message", description="What is your **message** for the callout? \n **Note:** You can include the room link aswell", color=embed_color)
+		message_embed.set_footer(text=f"Question 5/5")
+
+		questions = [role_embed , time_embed , mode_embed, slots_embed, message_embed,]
+
+		answers = []
+		
+		def check(m):
+			return m.author == ctx.author and m.channel == ctx.channel
+		
+		for i in questions:
+			await ctx.send(f"||{ctx.author.mention}||", embed=i)
+
+			try:
+				msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+			
+			except asyncio.TimeoutError:
+				embed = Embed(title=":exclamation: Process Canceled", description="You didn\'t answer in the given time!\nPlease answer in under **60 seconds** next time!",color=0x000000)
+				await ctx.send(embed = embed,delete_after=10)
+				return
+			
+			else:
+				if msg.content == f"{ctx.prefix}cancel":
+					embed = Embed(title=":exclamation: Process Canceled",description="Process has been canceled sucessfully", color=0x000000)
+					await ctx.send(embed = embed,delete_after=10)
+					return
+				answers.append(msg.content)
+
+		role = answers[0]
+		role_mention = "<@&857698644291485766>"
+		role_name = "RES | Y"
+
+		if role == "s" or role == "S":
+			role_mention = "<@&857698639169978379>"
+			role_name = "RES | S"
+		
+		elif role == "3":
+			role_mention = "<@&857698642638798890>"
+			role_name = "RES | 3"
+		
+		elif role == "x" or role == "X":
+			role_mention = "<@&857698643308970004>"
+			role_name = "RES | X"
+		
+		elif role == "y" or role == "Y":
+			role_mention == "<@&857698644291485766>"
+			role_name = "RES | Y"
+
+		else:
+			embed = Embed(title=":exclamation: Process Canceled",description=f"You didn\'t answer with a proper role! Use either `S`, `3`, `X` or `Y`", color=0xBC0808)
+			await ctx.send(embed=embed)
+			return
+
+		time = self.convert(answers[1])
+		display_time = answers[1]
+		
+		if time == -1:
+			embed = Embed(title=":exclamation: Process Canceled",description=f"You didn\'t answer with a proper unit! Use either **(s|m|h|d)**\n For example `2h` , `4d` , `30m`", color=0xBC0808)
+			await ctx.send(embed=embed,delete_after=10)
+			return
+		
+		elif time == -2:
+			embed = Embed(title=":exclamation: Process Canceled", description=f"The time must be an integer. Please enter an integer next time.",color=0xBC0808)
+			await ctx.send(embed =embed,delete_after=10)
+			return
+		
+		mode = answers[2]
+		slots = answers[3]
+		message = answers[4]
+		
+		await ctx.channel.purge(limit=12)
+
+		try:
+			embed = Embed(title="<a:Check:856282490670284802> Callout Posted", description=f"**Your callout has been posted in {self.callout_channel.mention}** \n I will remind **{role_name}** before the match!",color=embed_color)
+			await ctx.author.send(embed=embed)
+		
+		except:
+			embed = Embed(title="<a:Check:856282490670284802> Callout Posted", description=f"**Your callout has been posted in {self.callout_channel.mention}** \n I will remind **{role_name}** before the match! \n On a side note, enable your dms noob",color=embed_color)
+			await ctx.channel.send(embed=embed)
+		
+		embed = Embed(title = "Callout",color = ctx.author.color, timestamp=datetime.utcnow())
+		
+		fields = [("Time", f"Match starting in {display_time}", False),
+				("Gamemode", mode, False),
+				("Available Slots", slots, False),
+				("Message", message, False)]
+		for name , value, inline in fields:
+			embed.add_field(name=name, value=value, inline=inline)
+		
+		embed.set_thumbnail(url="https://images-ext-2.discordapp.net/external/I_vJq0oj4jpiz4DszZU4LTAlhQKWgBwWSMEPVLWVdlE/%3Fv%3D1/https/cdn.discordapp.com/emojis/851381516700221450.png")
+		embed.set_footer(text = f"Called By {ctx.author.display_name}", icon_url=f"{ctx.author.avatar_url}")
+
+		my_msg = await self.callout_channel.send(f"{role_mention}",embed=embed)
+
+		await my_msg.add_reaction(":halal:834154424393531392")
+		await my_msg.add_reaction(":haram:834154339392028692")
+
+		try:
+			await asyncio.sleep(time-5*60)
+
+			embed = Embed(title=f"Match Reminder!", 
+				description=f"**{mode}** match will start in **5 minutes** \n **Avaliable Slots:** {slots} \n Contact {ctx.author.mention} for room link",
+				color=embed_color)
+			embed.set_thumbnail(url="https://images-ext-2.discordapp.net/external/I_vJq0oj4jpiz4DszZU4LTAlhQKWgBwWSMEPVLWVdlE/%3Fv%3D1/https/cdn.discordapp.com/emojis/851381516700221450.png")
+			await self.callout_channel.send(f"{role_mention}", embed=embed)
+			try:
+				await ctx.author.send(f"__**Reminder**__ \n **{mode}** match for **{role_name}** is starting in **5 minutes** \n Send the room link in <#840353352466038814>")
+			
+			except:
+				await ctx.channel.send(f"{ctx.author.mention} Please send the room link")
+		
+
+		await asyncio.sleep(5*60)
+
+		embed = Embed(title=f"Match Starting Soon!", 
+			description=f"**{mode}** match is about to start! \n **Avaliable Slots:** {slots} \n {ctx.author.mention} will provide the room link soon \n Good Luck nibbas <a:pet:801495732233961492> ",
+			color=embed_color)
+		embed.set_thumbnail(url="https://images-ext-2.discordapp.net/external/I_vJq0oj4jpiz4DszZU4LTAlhQKWgBwWSMEPVLWVdlE/%3Fv%3D1/https/cdn.discordapp.com/emojis/851381516700221450.png")
+		await self.callout_channel.send(f"{role_mention}", embed=embed)
+		try:
+			await ctx.author.send(f"__**Reminder**__ \n **{mode}** match for **{role_name}** is starting soon! \n Send the room link in <#840353352466038814> asap! \n Good Luck!")
+		except:
+			await ctx.channel.send(f"{ctx.author.mention} Please send the room link")
 	
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.bot.cogs_ready.ready_up("main") #IMPORTANT! - ("Fun") is the FILE NAME, NOT print name. 
+			self.callout_channel = self.bot.get_guild(803028981698789407).get_channel(840353352466038814)
+			self.bot.cogs_ready.ready_up("main")
 
 def setup(bot):
 	bot.add_cog(Main(bot))
