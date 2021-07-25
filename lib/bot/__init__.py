@@ -176,12 +176,12 @@ class Bot(BotBase):
 			# if isinstance(exc.original, HTTPException):
 			# 	await ctx.send("Unable to send message.")
 
-			if isinstance(exc.original, Forbidden):
-				await ctx.message.delete(delay=15)
-				await ctx.send("**I do not have permission to do that altough i am still admin\nFuck you gay boi**", delete_after=10)
+			# if isinstance(exc.original, Forbidden):
+			# 	await ctx.message.delete(delay=15)
+			# 	await ctx.send("**I do not have permission to do that altough i am still admin\nFuck you gay boi**", delete_after=10)
 
-			else:
-				raise exc.original
+			# else:
+			raise exc.original
 
 		else:
 			raise exc
