@@ -154,7 +154,7 @@ class Suggestions(Cog):
 
 		#AI CHAT
 		if not self.bot.user == message.author:
-			if message.channel == self.ai_chat_channel_1 or message.channel == self.ai_chat_channel_2 or message.channel == self.ai_chat_channel_3:
+			if message.channel == self.ai_chat_channel_1 or message.channel == self.ai_chat_channel_2:
 				if "@everyone" not in message.content and "@here" not in message.content:
 					try:
 						async with randomstuff.AsyncClient(api_key="tQeJ9s1ZRUQt") as client:
@@ -181,8 +181,7 @@ class Suggestions(Cog):
 			self.audit_log_channel= self.bot.get_channel(761567095133306880) # CHANNEL HERE
 			self.community_suggestions_channel = self.bot.get_guild(736258866504925306).get_channel(827960572330377233)
 			self.ai_chat_channel_1 = self.bot.get_guild(736258866504925306).get_channel(759470480981229598)
-			self.ai_chat_channel_2 = self.bot.get_guild(795726142161944637).get_channel(861194200413110303)
-			self.ai_chat_channel_3 = self.bot.get_guild(803028981698789407).get_channel(861223245335363594)
+			self.ai_chat_channel_2 = self.bot.get_guild(803028981698789407).get_channel(861223245335363594)
 			self.config_channel = self.bot.get_guild(736258866504925306).get_channel(830188895374278686)
 			self.bot.cogs_ready.ready_up("suggestions")
 

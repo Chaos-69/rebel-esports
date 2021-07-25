@@ -204,8 +204,7 @@ class Bot(BotBase):
 			print("Bot Is Online!")
 			print("Setting Up Bot Status...")
 			print("Bot Is Ready!")
-			embed = Embed(description="**Now Online**", color=embed_color) 
-			await self.config_channel.send(embed=embed, delete_after=60)
+			await self.config_channel.send("<:res:861176629446049822>")
 			self.ready = True
 
 			#CUSTOM BOT STATUSES
