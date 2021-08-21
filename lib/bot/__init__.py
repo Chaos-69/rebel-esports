@@ -190,10 +190,11 @@ class Bot(BotBase):
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(736258866504925306) #SERVER ID HERE
-			self.config_channel = self.get_guild(795726142161944637).get_channel(819349982305189898) #CHANNEL ID HERR
-			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=0, minute=0, second=10))
+			self.config_channel = self.get_guild(869913291126874143).get_channel(876087881934962738) #CHANNEL ID HERR
+			self.empty_channel = self.get_guild(795726142161944637).get_channel(819349982305189898)
+			# self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=0, minute=0, second=10))
 			self.allowed_channels = (830188895374278686)
-			self.scheduler.start()
+			# self.scheduler.start()
 
 			self.update_db()
 			
@@ -205,6 +206,7 @@ class Bot(BotBase):
 			print("Setting Up Bot Status...")
 			print("Bot Is Ready!")
 			await self.config_channel.send("<:res:861176629446049822>")
+			await self.empty_channel.send("<:res:861176629446049822>")
 			self.ready = True
 
 			#CUSTOM BOT STATUSES
