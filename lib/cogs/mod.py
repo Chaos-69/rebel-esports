@@ -167,145 +167,145 @@ class Mod(Cog):
 			except NotFound:
 				pass
 
-	#MUTE COMMAND
-	@command(name="mute", brief="Mute Members", help="Mutes members for a specific amount of time in the guild." ,hidden=True)
-	@bot_has_permissions(manage_roles=True)
-	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
-	async def mute_members(self, ctx, targets: Greedy[Member], minutes: Optional[int], *, reason: Optional[str] = "No reason provided"):
-		guild = self.bot.get_guild(736258866504925306)
-		if not len(targets):
-			embed=Embed(title="Mute",description=":x: One or more arguments are missing, use the below provided syntax.", color=0xffec00)
-			fields = [("Syntax", "```?mute <targets> [minutes] [reason]```", False)]
-			for name, value, inline in fields:
-				embed.add_field(name=name, value=value, inline=inline)
-			await ctx.message.delete(delay=15)
-			await ctx.reply(embed=embed,delete_after=10)
+	# #MUTE COMMAND
+	# @command(name="mute", brief="Mute Members", help="Mutes members for a specific amount of time in the guild." ,hidden=True)
+	# @bot_has_permissions(manage_roles=True)
+	# @has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
+	# async def mute_members(self, ctx, targets: Greedy[Member], minutes: Optional[int], *, reason: Optional[str] = "No reason provided"):
+	# 	guild = self.bot.get_guild(736258866504925306)
+	# 	if not len(targets):
+	# 		embed=Embed(title="Mute",description=":x: One or more arguments are missing, use the below provided syntax.", color=0xffec00)
+	# 		fields = [("Syntax", "```?mute <targets> [minutes] [reason]```", False)]
+	# 		for name, value, inline in fields:
+	# 			embed.add_field(name=name, value=value, inline=inline)
+	# 		await ctx.message.delete(delay=15)
+	# 		await ctx.reply(embed=embed,delete_after=10)
 
-		for target in targets:
-			if target == guild.me:
-	  			embed = Embed(description="**:x: You cannot mute the bot**", color=0xffec00)
-	  			message = await ctx.reply(embed=embed, delete_after=10)
-	  			await ctx.message.delete(delay=15)
-	  			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
+	# 	for target in targets:
+	# 		if target == guild.me:
+	#   			embed = Embed(description="**:x: You cannot mute the bot**", color=0xffec00)
+	#   			message = await ctx.reply(embed=embed, delete_after=10)
+	#   			await ctx.message.delete(delay=15)
+	#   			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 			
-			elif target == ctx.author:
-				embed = Embed(description="**:x: You cannot mute yourself**", color=0xffec00)
-				message = await ctx.reply(embed=embed, delete_after=10)	
-				await ctx.message.delete(delay=15)
-				return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
+	# 		elif target == ctx.author:
+	# 			embed = Embed(description="**:x: You cannot mute yourself**", color=0xffec00)
+	# 			message = await ctx.reply(embed=embed, delete_after=10)	
+	# 			await ctx.message.delete(delay=15)
+	# 			return await message.add_reaction("<:D_pepecringe~1:821795309784006678")
 			
-			else:
-				unmutes = []
+	# 		else:
+	# 			unmutes = []
 
-				for target in targets:
-					if not self.mute_role_1 in target.roles or self.mute_role_2 in target.roles:
-						if ctx.author.top_role.position >= target.top_role.position:
-							role_ids = ",".join([str(r.id) for r in target.roles])
-							end_time = datetime.utcnow() + timedelta(minutes=minutes) if minutes else None
+	# 			for target in targets:
+	# 				if not self.mute_role_1 in target.roles or self.mute_role_2 in target.roles:
+	# 					if ctx.author.top_role.position >= target.top_role.position:
+	# 						role_ids = ",".join([str(r.id) for r in target.roles])
+	# 						end_time = datetime.utcnow() + timedelta(minutes=minutes) if minutes else None
 
-							db.execute("INSERT INTO mutes VALUES (?, ?, ?)",
-										target.id, role_ids, getattr(end_time, "isoformat", lambda: None)())
+	# 						db.execute("INSERT INTO mutes VALUES (?, ?, ?)",
+	# 									target.id, role_ids, getattr(end_time, "isoformat", lambda: None)())
 
-							try:
-								await target.edit(roles=[self.mute_role_1])
-							except:
-								await target.edit(roles=[self.mute_role_2])
-							embed=Embed(title="Member Muted", color=0xff0000, timestamp=datetime.utcnow())
-							embed.set_thumbnail(url=target.avatar_url)
+	# 						try:
+	# 							await target.edit(roles=[self.mute_role_1])
+	# 						except:
+	# 							await target.edit(roles=[self.mute_role_2])
+	# 						embed=Embed(title="Member Muted", color=0xff0000, timestamp=datetime.utcnow())
+	# 						embed.set_thumbnail(url=target.avatar_url)
 							
-							fields = [("Member", f"{target.mention} __**AKA**__ {target.display_name}", False),
-								("Actioned By",f"{ctx.author.mention} __**AKA**__ {ctx.author.display_name}" , False),
-								("Duration",f"{minutes:,} minute(s)" if minutes else "Indefinite", False),
-								("Reason", reason , False)]
-							for name , value, inline in fields:
-								embed.add_field(name=name, value=value, inline=inline)
-							await self.mod_log_channel.send(embed=embed)
+	# 						fields = [("Member", f"{target.mention} __**AKA**__ {target.display_name}", False),
+	# 							("Actioned By",f"{ctx.author.mention} __**AKA**__ {ctx.author.display_name}" , False),
+	# 							("Duration",f"{minutes:,} minute(s)" if minutes else "Indefinite", False),
+	# 							("Reason", reason , False)]
+	# 						for name , value, inline in fields:
+	# 							embed.add_field(name=name, value=value, inline=inline)
+	# 						await self.mod_log_channel.send(embed=embed)
 							
-							try:
-								embed= Embed(title="Mute Report", description=f"You have been **muted** in {target.guild.name}\n**Reason:** {reason}", color=0xBC0808)
-								await target.send(embed=embed)
+	# 						try:
+	# 							embed= Embed(title="Mute Report", description=f"You have been **muted** in {target.guild.name}\n**Reason:** {reason}", color=0xBC0808)
+	# 							await target.send(embed=embed)
 							
-							except Forbidden:
-								pass
+	# 						except Forbidden:
+	# 							pass
 							
-							embed=Embed(description=f":white_check_mark: ***{target.display_name} has been muted***.", color=0x43b581)
-							await ctx.send(ctx.author.mention,embed=embed)
-							await self.gulag_channel.send(f"**Welcome to the gulag {target.mention} \n If you survive you earn you freedom\n ||Tag any @RES | Moderater or @RES | Staff to be freed||**")
-							if minutes:
-								unmutes.append(target)
+	# 						embed=Embed(description=f":white_check_mark: ***{target.display_name} has been muted***.", color=0x43b581)
+	# 						await ctx.send(ctx.author.mention,embed=embed)
+	# 						await self.gulag_channel.send(f"**Welcome to the gulag {target.mention} \n If you survive you earn you freedom\n ||Tag any @RES | Moderater or @RES | Staff to be freed||**")
+	# 						if minutes:
+	# 							unmutes.append(target)
 						
-						else:
-							embed=Embed(title="Task Unsuccessful", description=f":x: **You are unable to mute {target.display_name}**.", color=0xffec00)
-							await ctx.message.delete(delay=15)
-							await ctx.reply(embed=embed,delete_after=10)
+	# 					else:
+	# 						embed=Embed(title="Task Unsuccessful", description=f":x: **You are unable to mute {target.display_name}**.", color=0xffec00)
+	# 						await ctx.message.delete(delay=15)
+	# 						await ctx.reply(embed=embed,delete_after=10)
 
-					else:
-						embed=Embed(title="Task Unsuccessful", description=f":x: **{target.display_name} is already muted**", color=0xffec00)
-						await ctx.message.delete(delay=15)
-						await ctx.reply(embed=embed,delete_after=10)
+	# 				else:
+	# 					embed=Embed(title="Task Unsuccessful", description=f":x: **{target.display_name} is already muted**", color=0xffec00)
+	# 					await ctx.message.delete(delay=15)
+	# 					await ctx.reply(embed=embed,delete_after=10)
 
 				
-				if len(unmutes):
-					await sleep(minutes*60)
-					await self.unmute(ctx, targets)								
+	# 			if len(unmutes):
+	# 				await sleep(minutes*60)
+	# 				await self.unmute(ctx, targets)								
 
 	
-	async def unmute(self, ctx, targets, *, reason="Mute time expired."):
-		for target in targets:
-			if target != self.bot or ctx.author:
-				if self.mute_role_1 in target.roles or self.mute_role_2 in target.roles:
-					role_ids = db.field("SELECT RoleIDs FROM mutes WHERE UserID = ?", target.id)
-					roles = [ctx.guild.get_role(int(id_)) for id_ in role_ids.split(",") if len(id_)]
+	# async def unmute(self, ctx, targets, *, reason="Mute time expired."):
+	# 	for target in targets:
+	# 		if target != self.bot or ctx.author:
+	# 			if self.mute_role_1 in target.roles or self.mute_role_2 in target.roles:
+	# 				role_ids = db.field("SELECT RoleIDs FROM mutes WHERE UserID = ?", target.id)
+	# 				roles = [ctx.guild.get_role(int(id_)) for id_ in role_ids.split(",") if len(id_)]
 
-					db.execute("DELETE FROM mutes WHERE UserID = ?", target.id)
+	# 				db.execute("DELETE FROM mutes WHERE UserID = ?", target.id)
 
-					await target.edit(roles=roles)
-					embed=Embed(title="Member Unmuted", color=0x11ff00, timestamp=datetime.utcnow())
-					embed.set_thumbnail(url=target.avatar_url)
+	# 				await target.edit(roles=roles)
+	# 				embed=Embed(title="Member Unmuted", color=0x11ff00, timestamp=datetime.utcnow())
+	# 				embed.set_thumbnail(url=target.avatar_url)
 							
-					fields = [("Member", f"{target.mention} __**AKA**__ {target.display_name}", False),
-					("Reason", reason , False)]
+	# 				fields = [("Member", f"{target.mention} __**AKA**__ {target.display_name}", False),
+	# 				("Reason", reason , False)]
 					
-					for name , value, inline in fields:
-						embed.add_field(name=name, value=value, inline=inline)
-					await self.mod_log_channel.send(embed=embed)
+	# 				for name , value, inline in fields:
+	# 					embed.add_field(name=name, value=value, inline=inline)
+	# 				await self.mod_log_channel.send(embed=embed)
 					
-					try:
+	# 				try:
 
-						embed= Embed(title="Unmute Report", description=f"You have been **unmuted** in {target.guild.name}\n**Reason:** {reason}", color=0xBC0808)
-						await target.send(embed=embed)
+	# 					embed= Embed(title="Unmute Report", description=f"You have been **unmuted** in {target.guild.name}\n**Reason:** {reason}", color=0xBC0808)
+	# 					await target.send(embed=embed)
 					
-					except Forbidden:
-						pass
+	# 				except Forbidden:
+	# 					pass
 
-					embed=Embed(description=f":white_check_mark: ***{target.display_name} has been unmuted***.", color=0x43b581)
-					await ctx.message.delete()
-					await ctx.send(embed=embed)
+	# 				embed=Embed(description=f":white_check_mark: ***{target.display_name} has been unmuted***.", color=0x43b581)
+	# 				await ctx.message.delete()
+	# 				await ctx.send(embed=embed)
 				
-				else:
-					embed=Embed(title="Task Unsuccessful", description=f":x: **{target.display_name} is already Unmuted**", color=0xffec00)
-					await ctx.message.delete(delay=15)
-					await ctx.reply(embed=embed,delete_after=10)
-			else:
-				embed = Embed(description="**You cannot kick yourself or the bot**", color=0xBC0808)
-				await ctx.reply(embed=embed, delete_after=10)
-				await ctx.message.delete(delay=15)
+	# 			else:
+	# 				embed=Embed(title="Task Unsuccessful", description=f":x: **{target.display_name} is already Unmuted**", color=0xffec00)
+	# 				await ctx.message.delete(delay=15)
+	# 				await ctx.reply(embed=embed,delete_after=10)
+	# 		else:
+	# 			embed = Embed(description="**You cannot kick yourself or the bot**", color=0xBC0808)
+	# 			await ctx.reply(embed=embed, delete_after=10)
+	# 			await ctx.message.delete(delay=15)
 	
-	#UNMUTE COMMAND
-	@command(name="unmute", brief="Unmute Members", help="Yeah this doesnt work so dont try", hidden=True)
-	@bot_has_permissions(manage_roles=True)
-	@has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
-	async def unmute_members(self, ctx, targets: Greedy[Member], *, reason: Optional[str] = "No reason provided"):
-			if not len(targets):
-				embed=Embed(title="Unmute",description=":x: One or more arguments are missing, use the below provided syntax.", color=0xffec00)
-				fields = [("Syntax", "```unmute <targets> [reason]```", False)]
-				for name, value, inline in fields:
-					embed.add_field(name=name, value=value, inline=inline)
-				await ctx.message.delete(delay=15)
-				await ctx.reply(embed=embed,delete_after=10)
+	# #UNMUTE COMMAND
+	# @command(name="unmute", brief="Unmute Members", help="Yeah this doesnt work so dont try", hidden=True)
+	# @bot_has_permissions(manage_roles=True)
+	# @has_any_role(847565615329574913, 848311479941726288, 860287157418721311)
+	# async def unmute_members(self, ctx, targets: Greedy[Member], *, reason: Optional[str] = "No reason provided"):
+	# 		if not len(targets):
+	# 			embed=Embed(title="Unmute",description=":x: One or more arguments are missing, use the below provided syntax.", color=0xffec00)
+	# 			fields = [("Syntax", "```unmute <targets> [reason]```", False)]
+	# 			for name, value, inline in fields:
+	# 				embed.add_field(name=name, value=value, inline=inline)
+	# 			await ctx.message.delete(delay=15)
+	# 			await ctx.reply(embed=embed,delete_after=10)
 
-			else:
-				await self.unmute(ctx, targets, reason=reason)
+	# 		else:
+	# 			await self.unmute(ctx, targets, reason=reason)
 
 	
 #	#ADD BLACKLIST WORDS COMMAND
@@ -411,8 +411,8 @@ class Mod(Cog):
 	async def on_ready(self):
 		if not self.bot.ready:
 			self.log_channel = self.bot.get_guild(736258866504925306).get_channel(761567095133306880) #YOUR CHANNEL HERE
-			self.mute_role_1 = self.bot.get_guild(736258866504925306).get_role(803885096666005514)  #MUTE ROLE HERE
-			self.mute_role_1 = self.bot.get_guild(803028981698789407).get_role(829441095959314432)
+			# self.mute_role_1 = self.bot.get_guild(736258866504925306).get_role(803885096666005514)  #MUTE ROLE HERE
+			# self.mute_role_1 = self.bot.get_guild(803028981698789407).get_role(829441095959314432)
 			self.role = self.bot.get_guild(736258866504925306).get_role(751028081233494107)  #COMMUNITY ROLE HERE
 			self.mod_log_channel = self.bot.get_channel(822428198989725727)
 			self.allowed_roles = [self.bot.get_guild(736258866504925306).get_role(810854901055225907),self.bot.get_guild(736258866504925306).get_role(751028067446554704),self.bot.get_guild(736258866504925306).get_role(776069302045769759),self.bot.get_guild(736258866504925306).get_role(806886607541633045),self.bot.get_guild(736258866504925306).get_role(772521546191208488)]

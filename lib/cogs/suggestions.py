@@ -152,22 +152,22 @@ class Suggestions(Cog):
 
 
 
-		#AI CHAT
-		if not self.bot.user == message.author:
-			if message.channel == self.ai_chat_channel_1 or message.channel == self.ai_chat_channel_2:
-				if "@everyone" not in message.content and "@here" not in message.content:
-					try:
-						async with randomstuff.AsyncClient(api_key="tQeJ9s1ZRUQt") as client:
-							response = await client.get_ai_response(message.content)
-							await message.reply(response.message)
+		# #AI CHAT
+		# if not self.bot.user == message.author:
+		# 	if message.channel == self.ai_chat_channel_1: #or message.channel == self.ai_chat_channel_2:
+		# 		if "@everyone" not in message.content and "@here" not in message.content:
+		# 			try:
+		# 				async with randomstuff.AsyncClient(api_key="tQeJ9s1ZRUQt") as client:
+		# 					response = await client.get_ai_response(message.content)
+		# 					await message.reply(response.message)
 					
-					except:
-						await message.channel.send("Try again later")
-						await self.config_channel.send(f"{message.author.mention} tried to use ai-chat \n Ai-chat being gay again, smfh")
-				else:
-					await message.reply("You really thought that would work? <:cringe_2:789523123389202452>")
-					embed = Embed(description=f"{message.author.name}#{message.author.discriminator} tried to ping `@everyone` or `@here` in <#826537727104253993>", color=0xBC0808, timestamp=datetime.utcnow())
-					await self.audit_log_channel.send(embed=embed)
+		# 			except:
+		# 				await message.channel.send("Try again later")
+		# 				await self.config_channel.send(f"{message.author.mention} tried to use ai-chat \n Ai-chat being gay again, smfh")
+		# 		else:
+		# 			await message.reply("You really thought that would work? <:cringe_2:789523123389202452>")
+		# 			embed = Embed(description=f"{message.author.name}#{message.author.discriminator} tried to ping `@everyone` or `@here` in <#826537727104253993>", color=0xBC0808, timestamp=datetime.utcnow())
+		# 			await self.audit_log_channel.send(embed=embed)
 		
 		else:	
 			return 
@@ -180,8 +180,8 @@ class Suggestions(Cog):
 			self.pcmr_loop.start()
 			self.audit_log_channel= self.bot.get_channel(761567095133306880) # CHANNEL HERE
 			self.community_suggestions_channel = self.bot.get_guild(736258866504925306).get_channel(827960572330377233)
-			self.ai_chat_channel_1 = self.bot.get_guild(736258866504925306).get_channel(759470480981229598)
-			self.ai_chat_channel_2 = self.bot.get_guild(803028981698789407).get_channel(861223245335363594)
+			# self.ai_chat_channel_1 = self.bot.get_guild(736258866504925306).get_channel(759470480981229598)
+			# self.ai_chat_channel_2 = self.bot.get_guild(803028981698789407).get_channel(861223245335363594)
 			self.config_channel = self.bot.get_guild(736258866504925306).get_channel(830188895374278686)
 			self.bot.cogs_ready.ready_up("suggestions")
 

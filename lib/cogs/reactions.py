@@ -145,9 +145,9 @@ class Reactions(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.music_role = self.bot.get_guild(803028981698789407).get_role(859087650883633192)
-			self.music_commands_channel = self.bot.get_guild(803028981698789407).get_channel(803143531405377557)
-			self.slave_role = self.bot.get_guild(803028981698789407).get_role(803036313363939368)
+			# self.music_role = self.bot.get_guild(803028981698789407).get_role(859087650883633192)
+			# self.music_commands_channel = self.bot.get_guild(803028981698789407).get_channel(803143531405377557)
+			# self.slave_role = self.bot.get_guild(803028981698789407).get_role(803036313363939368)
 			self.guild = self.bot.get_guild(736258866504925306)
 			self.bot.cogs_ready.ready_up("reactions")
 
