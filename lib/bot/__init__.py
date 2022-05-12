@@ -204,7 +204,7 @@ class Bot(BotBase):
 			print("Bot Is Online!")
 			print("Setting Up Bot Status...")
 			print("Bot Is Ready!")
-			await self.config_channel.send("https://images-ext-2.discordapp.net/external/YgZHIagMtnL-aDmCA3Kd-d4B3IJjFJYZIkEbJM2WCzA/%3Fsize%3D96%26quality%3Dlossless/https/cdn.discordapp.com/emojis/974218606739083264.webp")
+			await self.config_channel.send("https://cdn.discordapp.com/emojis/974219543222321183.webp?size=96&quality=lossless")
 			self.ready = True
 
 			#CUSTOM BOT STATUSES
