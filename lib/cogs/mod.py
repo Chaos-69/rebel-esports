@@ -352,8 +352,8 @@ class Mod(Cog):
 	async def on_message_delete(self, message):
 		guild = self.bot.get_guild(736258866504925306)
 		if message.mentions and not message.content.startswith("?"):
-			guild = self.bot.get_guild(736258866504925306)
 			if not message.author == guild.me:
+				
 				for role in message.author.roles:
 					if role in self.allowed_roles:
 						return
@@ -361,6 +361,9 @@ class Mod(Cog):
 				for channel in guild.channels:
 					if message.channel.id in self.ping_not_allowed_channels:
 						return
+						if message.guild.id != guild.id:
+							return
+				
 				for s in message.mentions:
 					channel_embed=Embed(title="<:RES_cheemsPimg:823612649098575872> Ghost Ping Detected",
 						description=f"**{s.mention} was ghost pinged by {message.author.mention}**",
