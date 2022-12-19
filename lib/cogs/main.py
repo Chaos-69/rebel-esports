@@ -63,6 +63,22 @@ class Main(Cog):
 	# async def spam(self,ctx,*, message):
 	# 	for i in range(10000000000):
 	# 		await ctx.send(message)
+
+	# @command(name = "temp")
+	# async def change_names(self, ctx):		#PRANK HO GAYA
+	# 	count = 0
+	# 	nickname = "#Decay teray mon wich lul"
+	# 	server = self.bot.get_guild(736258866504925306)
+
+	# 	for member in server.members:
+	# 		count += 1
+			
+	# 		try:
+	# 			await member.edit(nick = nickname)
+	# 			print(f"Changed {member.name}#{member.discriminator}'s name to {nickname} - {count}")
+			
+	# 		except Forbidden:
+	# 			print(f"I cant change **{member.name}#{member.discriminator}**'s name")
 	
 	
 	#AV COMMAND

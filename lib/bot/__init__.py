@@ -55,6 +55,7 @@ class Bot(BotBase):
 		try:
 			with open("./data/banlist.txt", "r", encoding="utf-8") as f:
 				self.banlist = [int(line.strip()) for line in f.readlines()]
+		
 		except FileNotFoundError:
 			self.banlist = []
 
@@ -193,7 +194,7 @@ class Bot(BotBase):
 			self.config_channel = self.get_guild(929473357311795310).get_channel(929702945111568435) #CHANNEL ID HERR
 			# self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=0, minute=0, second=10))
 			self.allowed_channels = (830188895374278686)
-			# self.scheduler.start()
+			self.scheduler.start()
 
 			self.update_db()
 			
@@ -207,6 +208,7 @@ class Bot(BotBase):
 			await self.config_channel.send("https://cdn.discordapp.com/emojis/974219543222321183.webp?size=96&quality=lossless")
 			self.ready = True
 
+			
 			#CUSTOM BOT STATUSES
 			prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", self.guild.id)
 			statuses = [f"With {len(self.guilds)} Servers",f"With {len(self.users)} Members", "With Your Mom", "With Other Bots" ,  f"{prefix}help" , "discord.gg/s3xy", "With Gay Mods", "ModMail", f"Version 6.9", "Developed By Chad",
