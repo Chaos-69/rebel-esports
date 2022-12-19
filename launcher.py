@@ -1,7 +1,5 @@
 from lib.bot import bot
 
-VERSION = "6.9"
+VERSION = "7.0"
 
 bot.run(VERSION)
-
-# RES | BOT

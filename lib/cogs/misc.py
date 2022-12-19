@@ -10,9 +10,7 @@ import asyncio
 import discord
 from discord.ext.commands.errors import MissingAnyRole
 
-# |CUSTOM|
 embed_color = 0xBC0808
-# |CUSTOM|
 
 class Misc(Cog):
 	def __init__(self, bot):

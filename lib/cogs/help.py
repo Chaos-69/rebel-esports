@@ -9,9 +9,7 @@ from discord.ext.commands import cooldown, BucketType
 from discord.ext.commands import has_any_role, has_role
 from ..db import db
 
-# |CUSTOM|
 embed_color = 0xBC0808
-# |CUSTOM|
 
 def syntax(command):
 	cmd_and_aliases = "|".join([str(command), *command.aliases])

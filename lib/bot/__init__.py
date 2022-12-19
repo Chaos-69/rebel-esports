@@ -19,10 +19,11 @@ from prsaw import RandomStuff
 from pathlib import Path
 from discord.ext import tasks
 
+#	Made with love. 
+#	 ~Chaos
 
-# |CUSTOM|
 embed_color = 0xBC0808
-# |CUSTOM|
+
 
 OWNER_IDS = [726480855689724105]
 COGS = [p.stem for p in Path(".").glob("./lib/cogs/*.py")]
